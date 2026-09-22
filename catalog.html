@@ -1,35 +1,35 @@
-<!-- «Вініл-Клуб» — Каталог платівок, списки категорій, інструкція замовлення та термінологічний глосарій. -->
+<!-- «Вініл-Клуб» — Сторінка «Альбоми»: жанри, таблиця видань за лейблами та детальні треклісти. -->
 <!DOCTYPE html>
 <html lang="uk">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог платівок — Вініл-Клуб</title>
-    <link rel="icon" href="images/favicon.png">
+    <title>Альбоми — Вініл-Клуб</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 
 <body>
 
-    <!-- Шапка сайту з ідентичним меню -->
+    <!-- Шапка сайту -->
     <header>
         <h1 id="top">Вініл-Клуб</h1>
         <nav aria-label="Головне меню">
             <ul>
                 <li><a href="index.html">Головна</a></li>
-                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="catalog.html">Альбоми</a></li>
                 <li><a href="about.html">Про проєкт</a></li>
                 <li><a href="index.html#offers">Що ми пропонуємо</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Основний вміст каталогу -->
+    <!-- Основний вміст сторінки -->
     <main>
 
-        <!-- Секція 1: Багаторівневий маркований список -->
-        <section id="categories">
-            <h2>Розділи каталогу</h2>
+        <!-- Секція 1: Список жанрів (багаторівневий маркований список) -->
+        <section id="genres">
+            <h2>Музичні жанри каталогу</h2>
             <ul>
                 <li>Електронна музика
                     <ul>
@@ -41,7 +41,6 @@
                             </ul>
                         </li>
                         <li>Ембієнт та Дроун</li>
-                        <li>Індастріал та Текно</li>
                         <li>Вейпорвейв</li>
                     </ul>
                 </li>
@@ -50,127 +49,163 @@
                         <li>Постпанк та Нью-вейв</li>
                         <li>Шуґейз та Дрім-поп</li>
                         <li>Мат-рок</li>
-                        <li>Ґрандж</li>
                     </ul>
                 </li>
-                <li>Джаз та Експериментальна музика</li>
+                <li>Експериментальна музика</li>
             </ul>
         </section>
 
-        <!-- Секція 2: Послідовність дій із продовженням нумерації -->
-        <section id="order-guide">
-            <h2>Як замовити платівку</h2>
-            <ol>
-                <li>Знайдіть потрібний реліз у каталозі за жанром або скористайтеся артикулом.</li>
-                <li>Перевірте технічні параметри видання: вагу вінілу, швидкість програвання та стан конверта.</li>
-                <li>Додайте платівку до кошика й натисніть кнопку переходу до оформлення.</li>
-                <li>Вкажіть дані отримувача та номер найближчого поштового відділення.</li>
-                <li>Виберіть спосіб розрахунку (онлайн-оплата картою або післяплата).</li>
-            </ol>
-
-            <p>Зверніть увагу: перед відправкою кожна посилка упаковується у спеціальний захисний бокс із демпферними вкладками, щоб уникнути пошкодження конверта.</p>
-
-            <ol start="6">
-                <li>Отримайте SMS або сповіщення з номером товарно-транспортної накладної (ТТН).</li>
-                <li>Огляньте цілісність заводської плівки або захисного пакування у відділенні пошти та заберіть замовлення.</li>
-            </ol>
-        </section>
-
-        <!-- Секція 3: Словник термінів -->
-        <section id="glossary">
-            <h2>Словник термінів вінілової культури</h2>
-            <dl>
-                <dt>180-грамовий вініл (Heavyweight Vinyl)</dt>
-                <dd>Стандарт виготовлення важких платівок, який зменшує резонанси та забезпечує довговічність доріжок.</dd>
-
-                <dt>Гейтфолд (Gatefold)</dt>
-                <dd>Тип розкладного картонного конверта для платівок, що відкривається подібно до книги.</dd>
-
-                <!-- Два dt до одного dd -->
-                <dt>Матриця</dt>
-                <dt>Штампер (Stamper)</dt>
-                <dd>Металевий негативний відбиток звукових доріжок, який використовується на пресі для друку вінілових дисків.</dd>
-
-                <!-- Один dt до двох dd -->
-                <dt>Яблуко (Label)</dt>
-                <dd>Паперова кругла етикетка в центрі диска з назвою альбому, треклістом і логотипом видавця.</dd>
-                <dd>Основний візуальний орієнтир для розпізнавання автентичності та року випуску першопресів.</dd>
-            </dl>
-        </section>
-
-<!-- Секція 4: Таблиця характеристик видань -->
-        <section id="table-data">
-            <h2>Порівняльні характеристики та наявність платівок</h2>
+        <!-- Секція 2: Таблиця «альбом — виконавець — рік — лейбл» -->
+        <section id="albums-table">
+            <h2>Каталог видань</h2>
 
             <table>
-                <caption>Зведена таблиця параметрів і вартості вінілових релізів</caption>
+                <caption>Зведена таблиця альбомів, виконавців, дат випуску та видавництв</caption>
                 <thead>
                     <tr>
-                        <th rowspan="2" scope="col">Альбом і виконавець</th>
-                        <th rowspan="2" scope="col">Жанр</th>
-                        <th colspan="3" scope="colgroup">Характеристики видання</th>
-                        <th rowspan="2" scope="col">Ціна</th>
+                        <th rowspan="2" scope="col">Альбом</th>
+                        <th rowspan="2" scope="col">Виконавець</th>
+                        <th rowspan="2" scope="col">Рік</th>
+                        <th colspan="2" scope="colgroup">Дані лейблу</th>
                     </tr>
                     <tr>
-                        <th scope="col">Формат</th>
-                        <th scope="col">Вага вінілу</th>
-                        <th scope="col">Швидкість</th>
+                        <th scope="col">Лейбл</th>
+                        <th scope="col">Каталожний номер</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">Sewerslvt — We Had Good Times Together</th>
-                        <td rowspan="2">Електронна музика</td>
-                        <td>2×LP, 12"</td>
-                        <td>180 г</td>
-                        <td>33⅓ RPM</td>
-                        <td>1850 грн</td>
+                        <th scope="row">Draining Love Story</th>
+                        <td rowspan="2">Sewerslvt</td>
+                        <td>2020</td>
+                        <td>Geometric Lullaby</td>
+                        <td>GEO-069</td>
                     </tr>
                     <tr>
-                        <th scope="row">Cynthoni — Cyberia Lyr 1</th>
-                        <td>1×LP, 12"</td>
-                        <td>180 г</td>
-                        <td>45 RPM</td>
-                        <td>1400 грн</td>
+                        <th scope="row">we had good times together, don't forget that</th>
+                        <td>2021</td>
+                        <td>Not On Label</td>
+                        <td>SLVT-002</td>
                     </tr>
                     <tr>
-                        <th scope="row">Joy Division — Unknown Pleasures</th>
-                        <td rowspan="2">Постпанк</td>
-                        <td>1×LP, 12"</td>
-                        <td>180 г</td>
-                        <td>33⅓ RPM</td>
-                        <td>1250 грн</td>
+                        <th scope="row">Lamenting Malice</th>
+                        <td>Tokyopill</td>
+                        <td>2023</td>
+                        <td>Lost Frog Productions</td>
+                        <td>LFP-012</td>
                     </tr>
                     <tr>
-                        <th scope="row">The Cure — Disintegration</th>
-                        <td>2×LP, 12"</td>
-                        <td>140 г</td>
-                        <td>33⅓ RPM</td>
-                        <td>1600 грн</td>
+                        <th scope="row">Ultraviolet</th>
+                        <td>Usedcvnt</td>
+                        <td>2023</td>
+                        <td>Not On Label</td>
+                        <td>UV-LP01</td>
                     </tr>
                 </tbody>
             </table>
         </section>
 
-<!-- Секція 5: Питання та відповіді (FAQ) -->
-        <section id="faq">
-            <h2>Питання та відповіді</h2>
+        <!-- Секція 3: Реальні треклісти альбомів (details / summary) -->
+        <section id="tracklists">
+            <h2>Треклісти альбомів</h2>
 
             <details open>
-                <summary>Як упаковуються платівки для безпечної доставки?</summary>
-                <p>Кожне замовлення пакується у спеціальний поштовий бокс із тришарового гофрокартону з додатковими демпферними вкладками, що унеможливлює пошкодження кутів конверта та деформацію вінілового диску під час транспортування.</p>
+                <summary>Cynthoni — Lamenting Malice (2026)</summary>
+                <p>Подвійне лімітоване вінілове видання (Black Ice & White Marbled) на власному лейблі Cynthoni (CYN003-V) у стилях брейккор, драм-енд-бейс, джангл та габбер.</p>
+                <ol>
+                    <li>Unbirthing — 1:06</li>
+                    <li>The Fucking Apocalypse — 4:02</li>
+                    <li>Enshittification — 4:04</li>
+                    <li>BleakReality — 3:48</li>
+                    <li>Hell Sings — 4:28</li>
+                    <li>MentallyILL — 5:23</li>
+                    <li>Imminent Eradication — 4:51</li>
+                    <li>Nihilism Extremist — 4:00</li>
+                    <li>Dead Doom Scrolls — 4:41</li>
+                    <li>Endlessly Dying Machine — 4:48</li>
+                    <li>(emotion)2 — 5:12</li>
+                    <li>Shut Your Bitch Ass Up: Prolapse Of The Mind — 1:06</li>
+                    <li>Fearful Avoidant Disorganised Attachment — 4:23</li>
+                    <li>Disappearing — 6:48</li>
+                    <li>It Is 0 Seconds To Midnight — 7:03</li>
+                </ol>
             </details>
 
             <details>
-                <summary>Що означає маркування 180-грамового вінілу?</summary>
-                <p>Вага 180 грамів вказує на підвищену товщину та міцність платівки. Такий вініл менш вразливий до викривлень від перепаду температур і забезпечує більш стабільний контакт голки з доріжкою звукознімача.</p>
+                <summary>Usedcvnt — Ultraviolet (2023)</summary>
+                <p>Атмосферний реліз на перетині ембієнту, драм-енд-бейсу та джанглу з колабораціями та фірмовими мелодійними текстурами.</p>
+                <ol>
+                    <li>Usedcvnt w/ Aak3 — Inhuman (2:07)</li>
+                    <li>Usedcvnt — 143 Ways To Lose Urself (2:27)</li>
+                    <li>Usedcvnt w/ Akiba (3) — Limited In Love (2:52)</li>
+                    <li>Usedcvnt w/ DXRKWRLD — You're My Friend Now (2:23)</li>
+                    <li>Usedcvnt — Kittens (2:29)</li>
+                    <li>Usedcvnt w/ Eden FM — Pls Tell Me What Is Ur Dream (2:38)</li>
+                    <li>Usedcvnt — Just Leave Me To Bleed (3:01)</li>
+                    <li>Usedcvnt — Sorry Mom, I'm Making Breakcore XD (1:55)</li>
+                    <li>Usedcvnt w/ Iwakura — Illusion Of Control (2:27)</li>
+                    <li>Usedcvnt w/ Abyssal.angel — Yours Forever (2:59)</li>
+                    <li>Usedcvnt w/ Enkei — It's 2am, I Can't Sleep (1:55)</li>
+                    <li>Usedcvnt — I Want To Eat Ur Heart Couse I Love U (1:55)</li>
+                    <li>Usedcvnt w/ Sabuze — Taste Of Blood (1:36)</li>
+                    <li>Usedcvnt — Overthinking (2:24)</li>
+                    <li>Usedcvnt — Disappearing Until I Feel Better (2:59)</li>
+                </ol>
             </details>
 
             <details>
-                <summary>Чи можна обміняти або повернути платівку із заводським браком?</summary>
-                <p>Так, якщо на релізі виявлено дефекти пресування чи глибокі механічні пошкодження доріжок, ми здійснюємо безкоштовний обмін або повне повернення коштів протягом 14 днів після отримання замовлення.</p>
+                <summary>Sewerslvt — Draining Love Story (2020)</summary>
+                <p>Культовий альбом на 9 композицій загальною тривалістю 52 хвилини, що закріпив фірмовий стиль виконавиці на стику атмосферного драм-енд-бейсу та брейккору.</p>
+                <ol>
+                    <li>Love Is a Mighty Big Word — 2:18</li>
+                    <li>Yandere Complex — 4:10</li>
+                    <li>Ecifircas — 5:47</li>
+                    <li>Lexapro Delirium — 7:15</li>
+                    <li>This Fleeting Feeling — 3:31</li>
+                    <li>Swinging in His Cell — 5:22</li>
+                    <li>Mr. Kill Myself — 7:51</li>
+                    <li>Down the Drain — 8:08</li>
+                    <li>Slowdeath — 8:12</li>
+                </ol>
             </details>
         </section>
+
+ <!-- Секція 3: Інструкція замовлення (обов'язкові списки ol з start) -->
+        <section id="order-guide">
+            <h2>Як оформити замовлення платівки</h2>
+            <ol>
+                <li>Оберіть потрібний альбом у каталозі та ознайомтеся з треклістом.</li>
+                <li>Перевірте тип видання, рік тиражу та наявність на складі.</li>
+                <li>Додайте платівку до замовлення.</li>
+                <li>Вкажіть поштові реквізити для доставки.</li>
+                <li>Підтвердьте бронювання та здійсніть оплату.</li>
+            </ol>
+
+            <p>Усі релізи проходять візуальний контроль стану вінілу перед запаковуванням у надійний картонний короб.</p>
+
+            <ol start="6">
+                <li>Отримайте номер поштової накладної.</li>
+                <li>Заберіть посилку у відділенні та перевірте конверт.</li>
+            </ol>
+        </section>
+
+        <!-- Секція 4: Глосарій (список визначень dl) -->
+        <section id="glossary">
+            <h2>Словник термінів</h2>
+            <dl>
+                <dt>Лейбл (Record Label)</dt>
+                <dd>Компанія або самостійне видавництво, що фінансує запис, виготовляє тираж та займається дистрибуцією релізів.</dd>
+
+                <dt>Not On Label</dt>
+                <dt>Self-released</dt>
+                <dd>Позначення релізів, випущених артистом самостійно без участі офіційних звукозаписних компаній.</dd>
+
+                <dt>Трекліст (Tracklist)</dt>
+                <dd>Повний перелік композицій альбому із зазначенням сторін (A/B) та хронометражу.</dd>
+                <dd>Слугує стандартом для перевірки повноти авторського матеріалу на фізичному носії.</dd>
+            </dl>
+        </section>
+
 
     </main>
 
