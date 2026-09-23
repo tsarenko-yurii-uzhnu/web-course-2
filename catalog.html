@@ -27,6 +27,18 @@
     <!-- Основний вміст сторінки -->
     <main>
 
+        <!-- Друга навігація: зміст каталогу за секціями -->
+        <nav aria-label="Навігація по сторінці">
+            <h2>Зміст розділу</h2>
+            <ul>
+                <li><a href="#genres">Музичні жанри</a></li>
+                <li><a href="#albums-table">Таблиця видань</a></li>
+                <li><a href="#tracklists">Видання та треклісти</a></li>
+                <li><a href="#vinyl-care">Правила догляду</a></li>
+                <li><a href="#glossary">Термінологічний словник</a></li>
+            </ul>
+        </nav>
+
         <!-- Секція 1: Список жанрів (багаторівневий маркований список) -->
         <section id="genres">
             <h2>Музичні жанри каталогу</h2>
@@ -135,6 +147,14 @@
                         <td>SLVT-002</td>
                     </tr>
                 </tbody>
+                </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="3">Разом релізів у каталозі</th>
+                    <td colspan="2">4 платівки (2020–2026 рр.)</td>
+                </tr>
+            </tfoot>
+        </table>
             </table>
         </section>
 
@@ -154,6 +174,15 @@
                         loading="lazy">
                     <figcaption>Фізичний вигляд подвійного мармурового вінілу Lamenting Malice (Black Ice & White Marbled)</figcaption>
                 </figure>
+
+                <section>
+                    <h4>Відеопрев'ю треку (The Fucking Apocalypse)</h4>
+                    <video controls width="360" poster="images/cynthoni-LM-prev.webp" preload="metadata">
+                        <source src="media/cynthoni-drop.mp4" type="video/mp4">
+                        <source src="media/cynthoni-drop.ogg" type="video/ogg">
+                        <p>Ваш браузер не підтримує відтворення відео. Ви можете <a href="media/cynthoni-drop.mp4">завантажити відео дропу Cynthoni</a>.</p>
+                    </video>
+                </section>
 
                 <details open>
                     <summary>Переглянути трекліст альбому (15 треків)</summary>
@@ -281,8 +310,16 @@
     </main>
 
     <!-- Підвал сайту -->
+    <aside>
+        <h2>Зворотний зв'язок</h2>
+        <p>Маєте пропозиції щодо нових позицій каталогу або рідкісних пресів? Напишіть нашій редакції.</p>
+    </aside>
+
     <footer>
         <hr>
+        <address>
+            м. Ужгород | Email: <a href="mailto:yurii.tsarenko@student.uzhnu.edu.ua">yurii.tsarenko@student.uzhnu.edu.ua</a> | Telegram: <a href="https://t.me/althik">althik</a>
+        </address>
         <p>Підгрупа 2, Царенко, 2026 рік</p>
     </footer>
 
