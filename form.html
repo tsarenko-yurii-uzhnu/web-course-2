@@ -26,13 +26,147 @@
         <h1>Замовлення вінілової платівки</h1>
         <p>Ця форма призначена для оформлення замовлення або бронювання колекційних вінілових платівок із нашого каталогу. Після надсилання заявки менеджер перевірить фізичну наявність екземпляра на складі та зв'яжеться з вами впродовж робочого дня для підтвердження даних доставки й надання платіжних реквізитів.</p>
 
-        <!-- Тут розміщуватиметься безпосередньо форма <form> (наступні кроки лаби) -->
+        <form action="/submit" method="post">
+            <!-- method="post": форма створює нове замовлення платівки, тому конфіденційні контактні дані не повинні потрапляти в URL, а запит не має дублюватися при оновленні сторінки -->
+
+            <!-- Група 1: Контактні дані замовника та доставка -->
+            <fieldset>
+                <legend>Контактні дані покупця</legend>
+
+                <!-- minlength та maxlength для імені (вимога 2), autocomplete="name" (вимога 8) -->
+                <p>
+                    <label for="customer-fullname">Прізвище та ім'я:</label><br>
+                    <input type="text" id="customer-fullname" name="customer_fullname" placeholder="Антон Барабас" minlength="2" maxlength="60" autocomplete="name" required>
+                </p>
+
+                <!-- autocomplete="email" (вимога 8) -->
+                <p>
+                    <label for="customer-email">Електронна пошта:</label><br>
+                    <input type="email" id="customer-email" name="customer_email" placeholder="name@example.com" autocomplete="email" required>
+                </p>
+
+                <!-- Розбір регулярного виразу для телефону (вимога 7):
+                    pattern="^\+380[0-9]{9}$"
+                    \+       - буквальний знак плюса
+                    380      - міжнародний телефонний код України
+                    [0-9]    - будь-яка цифра від 0 до 9
+                    {9}      - рівно дев'ять цифр номера поспіль
+                    Разом: +380991234567
+                -->
+                <p>
+                    <label for="customer-phone">Номер телефону:</label><br>
+                    <input type="tel" id="customer-phone" name="customer_phone" pattern="\+380[0-9]{9}" title="Формат: +380XXXXXXXXX (знак плюс, міжнародний код 380 та 9 цифр номера телефону)" placeholder="+380XXXXXXXXX" autocomplete="tel" required>
+                </p>
+
+                <!-- min та max для дати (вимога 3: період навчального року) -->
+                <p>
+                    <label for="delivery-date">Бажана дата доставки:</label><br>
+                    <input type="date" id="delivery-date" name="delivery_date" min="2026-10-01" max="2027-06-30" required>
+                </p>
+
+                <!-- required для списку доставки (вимога 1) -->
+                <p>
+                    <label for="delivery-method">Спосіб доставки:</label><br>
+                    <select id="delivery-method" name="delivery_method" required>
+                        <option value="">— оберіть спосіб доставки —</option>
+                        <option value="nova-poshta">Нова Пошта</option>
+                        <option value="ukrposhta">Укрпошта</option>
+                        <option value="meest-poshta">Міст Пошта</option>
+                        <option value="warehouse-pickup">Самовивіз зі складу</option>
+                    </select>
+                </p>
+            </fieldset>
+
+            <!-- Група 2: Предметні дані замовлення платівки -->
+            <fieldset>
+                <legend>Параметри видання та комплектація</legend>
+
+                <!-- required для списку релізів (вимога 1) -->
+                <p>
+                    <label for="album-select">Альбом із каталогу:</label><br>
+                    <select id="album-select" name="album" required>
+                        <option value="">— оберіть платівку —</option>
+                        <option value="cynthoni-lamenting-malice">Cynthoni — Lamenting Malice (2026)</option>
+                        <option value="usedcvnt-ultraviolet">Usedcvnt — Ultraviolet (2023)</option>
+                        <option value="sewerslvt-draining-love-story">Sewerslvt — Draining Love Story (2020)</option>
+                        <option value="sewerslvt-good-times">Sewerslvt — We had good times together, don't forget that (2021)</option>
+                    </select>
+                </p>
+
+                <!-- Розбір регулярного виразу для каталожного номера (вимога 7):
+                    pattern="^UA-LP-[0-9]{5}$"
+                    UA       - великі літери коду країни
+                    -        - буквальний дефіс
+                    LP       - позначення формату вінілової платівки (Long Play)
+                    -        - буквальний дефіс
+                    [0-9]    - будь-яка цифра від 0 до 9
+                    {5}      - рівно п'ять цифр інвентарного номера
+                    Разом: UA-LP-01178
+                -->
+                <p>
+                    <label for="catalog-number">Каталожний номер екземпляра (формат UA-LP-01178):</label><br>
+                    <input type="text" id="catalog-number" name="catalog_number" pattern="UA-LP-[0-9]{5}" title="Формат: UA-LP-01178 (літери UA, дефіс, літери LP, дефіс та 5 цифр)" placeholder="UA-LP-01178" required>
+                </p>
+
+                <!-- min, max (вимога 3) та step (вимога 4) для числового поля -->
+                <p>
+                    <label for="album-quantity">Кількість примірників:</label><br>
+                    <input type="number" id="album-quantity" name="quantity" min="1" max="5" step="1" value="1" required>
+                </p>
+
+                <p><strong>Стан платівки:</strong></p>
+                <p>
+                    <input type="radio" id="condition-new" name="condition" value="new" checked>
+                    <label for="condition-new">Нова (Mint / Sealed — запечатана заводська плівка)</label><br>
+
+                    <input type="radio" id="condition-used-nm" name="condition" value="used_near_mint">
+                    <label for="condition-used-nm">Б/в у відмінному стані (Near Mint — без подряпин)</label><br>
+
+                    <input type="radio" id="condition-used-vg" name="condition" value="used_very_good">
+                    <label for="condition-used-vg">Б/в у доброму стані (Very Good+ — незначні сліди використання)</label>
+                </p>
+
+                <p><strong>Додаткові опції:</strong></p>
+                <p>
+                    <input type="checkbox" id="opt-sleeve" name="extra_options" value="protective_sleeve">
+                    <label for="opt-sleeve">Захисний конверт (зовнішній щільний чохол 350 мкм)</label><br>
+
+                    <input type="checkbox" id="opt-poster" name="extra_options" value="poster">
+                    <label for="opt-poster">Постер альбому в комплекті</label><br>
+
+                    <input type="checkbox" id="opt-gift-wrap" name="extra_options" value="gift_wrap">
+                    <label for="opt-gift-wrap">Подарункове паковання</label>
+                </p>
+            </fieldset>
+
+            <!-- Група 3: Коментар та згода з правилами -->
+            <fieldset>
+                <legend>Додаткова інформація та підтвердження</legend>
+
+                <!-- minlength та maxlength на <textarea> (вимога 2) -->
+                <p>
+                    <label for="order-comment">Коментар до замовлення:</label><br>
+                    <textarea id="order-comment" name="order_comment" rows="4" cols="50" minlength="10" maxlength="300" placeholder="Наприклад, уточнити номер відділення або зателефонувати перед відправкою"></textarea>
+                </p>
+
+                <!-- required на прапорці згоди (вимога 1) -->
+                <p>
+                    <input type="checkbox" id="return-consent" name="return_consent" value="agreed" required>
+                    <label for="return-consent">Я погоджуюся з умовами повернення товару та правилами замовлення</label>
+                </p>
+            </fieldset>
+
+            <p>
+                <button type="submit">Оформити замовлення</button>
+                <button type="reset">Очистити форму</button>
+            </p>
+        </form>
     </main>
 
     <footer>
         <hr>
         <address>
-            м. Ужгород | Email: <a href="mailto:contact@vinylclub.ua">contact@vinylclub.ua</a> | Telegram: <a href="https://t.me">@vinylclub</a>
+            м. Ужгород | Email: <a href="mailto:yurii.tsarenko@student.uzhnu.edu.ua">yurii.tsarenko@student.uzhnu.edu.ua</a> | Telegram: <a href="https://t.me/althik">althik</a>
         </address>
         <p>Підгрупа 2, Царенко, 2026 рік</p>
     </footer>
