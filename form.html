@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Замовлення платівки — Вініл-Клуб</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
+    <style>
+        input:focus:invalid { border: 2px solid #c0392b; background: #fdf0ef; }
+        input:focus:valid { border: 2px solid #27ae60; background: #eefaf2; }
+    </style>
 </head>
 
 <body>
@@ -27,7 +31,7 @@
         <p>Ця форма призначена для оформлення замовлення або бронювання колекційних вінілових платівок із нашого каталогу. Після надсилання заявки менеджер перевірить фізичну наявність екземпляра на складі та зв'яжеться з вами впродовж робочого дня для підтвердження даних доставки й надання платіжних реквізитів.</p>
 
         <!-- Основна форма 1: Замовлення платівки -->
-        <form action="/submit" method="post">
+        <form action="/submit" method="post" enctype="multipart/form-data">
             <!-- method="post": форма створює нове замовлення платівки, тому конфіденційні контактні дані не повинні потрапляти в URL, а запит не має дублюватися при оновленні сторінки -->
 
             <!-- Група 1: Контактні дані замовника та доставка -->
@@ -159,6 +163,12 @@
                     <input type="checkbox" id="return-consent" name="return_consent" value="agreed" required>
                     <label for="return-consent">Я погоджуюся з умовами повернення товару та правилами замовлення</label>
                 </p>
+
+                <p>
+                    <label for="custom-slipmat-art">Прикріпити зображення для кастомного сліпмату або принт-паковання (PNG, JPG):</label><br>
+                    <input type="file" id="custom-slipmat-art" name="custom_art" accept="image/*">
+                </p>
+                
             </fieldset>
 
             <p>
@@ -205,6 +215,7 @@
                 <p>
                     <button type="submit">Надіслати повідомлення</button>
                 </p>
+                
             </form>
         </section>
     </main>
