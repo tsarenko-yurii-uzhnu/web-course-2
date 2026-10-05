@@ -1,0 +1,533 @@
+/* ==========================================================================
+   Проєкт: «Вініл-Клуб»
+   Варіант: №11 (Музичні альбоми)
+   Студент: Царенко Юрій
+   Дата: 2026-10-05
+   Тема 4: CSS-основи, селектори, каскад, текст і шрифти
+   ========================================================================== */
+
+/* Моноширинний шрифт Google Fonts із кирилицею: Anonymous Pro — лише для
+   треклістів і коду (накреслення 400 і 700); решта сайту — системний стек */
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&subset=cyrillic&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. Палітра у custom properties (:root) та нетипові змінні
+   -------------------------------------------------------------------------- */
+:root {
+  /* Обов'язкова 6-колірна HSL-палітра та допоміжні стани */
+  --color-brand: hsl(0, 0%, 12%);           /* Чорний вініл */
+  --color-accent: hsl(16, 85%, 36%);        /* Палений бурштин / теракота */
+  --color-accent-hover: hsl(16, 90%, 50%);  /* Світліший акцент для ховерів */
+  --color-visited: hsl(340, 50%, 35%);      /* Відвідані посилання (LVHFA) */
+  --color-bg: hsl(40, 42%, 93%);            /* Кремовий папір (основний фон) */
+  --color-surface: hsl(38, 28%, 87%);       /* Картон конверта (картки, таблиці) */
+  --color-text: hsl(0, 0%, 14%);            /* Графітовий текст */
+  --color-muted: hsl(32, 14%, 40%);         /* Зістарений папір для підписів/дат */
+  --color-border: hsl(36, 20%, 75%);        /* Межі блоків і комірок */
+  --color-highlight: hsl(42, 90%, 75%);     /* Підсвічування тексту <mark> */
+  --color-danger: hsl(0, 70%, 50%);         /* Колір помилки валідації */
+
+  /* Нетипові змінні (шрифти, геометрія, тіні) */
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Anonymous Pro", "Courier New", Courier, monospace;
+  --radius: 4px;
+  --space: 16px;
+  --space-sm: 8px;
+  --space-md: 20px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Базова тінь та тінь підйому карток при ховері */
+  --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
+  --shadow-lift: 0 4px 12px rgb(0 0 0 / 12%), 0 12px 24px rgb(0 0 0 / 14%);
+}
+
+/* --------------------------------------------------------------------------
+   2. Базові стилі та типографіка (rem, line-height числом)
+   -------------------------------------------------------------------------- */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 12rem; /* місце під футер, що лежить внизу body */
+  font-family: var(--font-body);
+  font-size: 1rem;       /* 16px */
+  line-height: 1.6;      /* комфортний інтерліньяж числом */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* Заголовки */
+h1, h2, h3 {
+  line-height: 1.2;
+  color: var(--color-brand);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.65rem; }
+h3 { font-size: 1.25rem; }
+
+p {
+  max-width: 40rem;
+  line-height: 1.6;
+}
+
+figure {
+  margin-left: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* --------------------------------------------------------------------------
+   3. Наскрізна шапка та горизонтальне меню (display: inline-block)
+   -------------------------------------------------------------------------- */
+
+body > header {
+  background-color: var(--color-brand);
+  color: var(--color-bg);
+  padding: var(--space) 0;
+}
+
+/* Вміст шапки й підвалу — тієї ж ширини, що й main */
+body > header > *,
+body > footer > * {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space);
+  padding-right: var(--space);
+}
+
+/* Єдиний вигляд назви сайту для всіх сторінок */
+body > header .logo {
+  display: block;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+body > header nav {
+  background-color: var(--color-brand);
+}
+
+body > header nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 0 -8px; /* вирівнює текст першого пункту з логотипом */
+}
+
+body > header nav li {
+  display: inline-block;
+  margin-right: var(--space-sm);
+}
+
+body > header .logo:link,
+body > header .logo:visited,
+body > header nav a:link,
+body > header nav a:visited {
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+body > header nav a {
+  display: inline-block;
+  padding: var(--space-sm);
+}
+
+body > header .logo:hover {
+  color: var(--color-accent-hover);
+}
+
+body > header nav a:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Поточна сторінка (клас current стоїть на посиланні в кожному HTML) */
+body > header nav a.current:link,
+body > header nav a.current:visited {
+  background-color: var(--color-surface);
+  color: var(--color-brand);
+}
+
+/* Пункт 4.6 методички: letter-spacing рівно в одному правилі з uppercase */
+nav a, th {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* --------------------------------------------------------------------------
+   4. Посилання: порядок LVHFA + :focus-visible
+   -------------------------------------------------------------------------- */
+
+a:link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:visited {
+  color: var(--color-visited);
+}
+
+a:hover {
+  color: var(--color-brand);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+a:active {
+  color: var(--color-accent-hover);
+}
+
+/* --------------------------------------------------------------------------
+   5. Головний контейнер та блочна розкладка (inline-block замість flex)
+   -------------------------------------------------------------------------- */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space);
+}
+
+main h1 {
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+main > p {
+  margin-bottom: var(--space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   6. Картки: строго article, fieldset, table та .card
+   -------------------------------------------------------------------------- */
+
+/* Картками робимо ТІЛЬКИ платівки, поля форм, таблицю та блок «Що ми пропонуємо» */
+/* Запасне значення (fallback): якщо змінну --shadow не оголошено в :root,
+   браузер підставить значення після коми, і тінь не зникне */
+article, fieldset, table, .card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow, 0 2px 8px rgb(0 0 0 / 10%));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+article:hover, fieldset:hover, .card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lift, 0 8px 24px rgb(0 0 0 / 14%));
+}
+
+legend {
+  font-weight: 700;
+  color: var(--color-brand);
+  padding: 0 var(--space-sm);
+}
+
+article header {
+  background: transparent;
+  padding: 0;
+  margin-bottom: var(--space-sm);
+}
+
+article header h3,
+article h3,
+.card h2 {
+  color: var(--color-brand);
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+/* Скидання подвійних рамок і карток усередині релізів */
+article section,
+article fieldset {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: var(--space) 0;
+}
+
+article section:hover,
+article fieldset:hover {
+  border: none;
+  box-shadow: none;
+}
+
+article video,
+article audio {
+  max-width: 100%;
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+/* Цитата: повністю чиста без фонової заливки */
+blockquote {
+  margin: var(--space) 0;
+  padding: var(--space-sm) 0 var(--space-sm) var(--space);
+  border-left: 3px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+mark {
+  background-color: var(--color-highlight);
+  color: var(--color-brand);
+  padding: 1px 4px;
+  border-radius: var(--radius);
+}
+
+small {
+  color: var(--color-muted);
+}
+
+/* --------------------------------------------------------------------------
+   7. Моноширинний трекліст (варіант №11)
+   -------------------------------------------------------------------------- */
+
+pre, code, .tracklist {
+  font-family: var(--font-mono);
+}
+
+/* --------------------------------------------------------------------------
+   8. Оформлення зведеної таблиці
+   -------------------------------------------------------------------------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+thead th, tfoot th {
+  background-color: var(--color-brand);
+  color: var(--color-bg);
+}
+
+tbody th {
+  background-color: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+td.num, th.num {
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   9. Елементи форм та псевдокласи стану
+   -------------------------------------------------------------------------- */
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color 0.2s ease;
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: var(--color-accent);
+}
+
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+input:focus:invalid,
+select:focus:invalid,
+textarea:focus:invalid {
+  outline: 2px solid var(--color-danger);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  vertical-align: middle;
+  margin-right: var(--space-sm);
+}
+
+fieldset label {
+  cursor: pointer;
+  display: inline;
+  vertical-align: middle;
+  transition: color 0.15s ease;
+}
+
+fieldset label:hover {
+  color: var(--color-accent);
+}
+
+fieldset label:has(input:checked),
+input:checked + label {
+  font-weight: 700;
+  color: var(--color-brand);
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--color-brand);
+}
+
+/* --------------------------------------------------------------------------
+   10. Списки правил догляду та словник термінів
+   -------------------------------------------------------------------------- */
+
+ol {
+  padding-left: 1.5rem;
+  margin: var(--space) 0;
+}
+
+ol li {
+  margin-bottom: var(--space-sm);
+  line-height: 1.5;
+}
+
+ol li::marker {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+dl {
+  margin: var(--space) 0;
+}
+
+dt {
+  font-weight: 700;
+  color: var(--color-brand);
+  margin-top: var(--space);
+  font-size: 1.05rem;
+}
+
+dt:first-child {
+  margin-top: 0;
+}
+
+dd {
+  margin-left: 0;
+  margin-top: 4px;
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space);
+  border-left: 2px solid var(--color-border);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   11. Бічна панель (<aside>) — чистий текст без рамок, карток і підкладок
+   -------------------------------------------------------------------------- */
+
+aside {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space);
+}
+
+/* Картки article/fieldset усередині aside — без рамок і тіні */
+aside article,
+aside section {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+aside article:hover,
+aside section:hover {
+  border: none;
+  box-shadow: none;
+}
+
+aside h2,
+aside h3 {
+  color: var(--color-brand);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+aside h2:first-child,
+aside h3:first-child {
+  margin-top: 0;
+}
+
+aside ul {
+  padding-left: 1.25rem;
+  margin: var(--space-sm) 0 var(--space) 0;
+}
+
+aside ul li {
+  margin-bottom: var(--space-sm);
+  line-height: 1.5;
+}
+
+aside p {
+  margin: var(--space-sm) 0;
+}
+
+/* --------------------------------------------------------------------------
+   12. Підвал сайту (<footer>)
+   -------------------------------------------------------------------------- */
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-lg) 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+footer p {
+  margin-top: var(--space-sm);
+  margin-bottom: 0;
+}

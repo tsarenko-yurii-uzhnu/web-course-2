@@ -6,22 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Замовлення платівки — Вініл-Клуб</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <style>
-        input:focus:invalid { border: 2px solid #c0392b; background: #fdf0ef; }
-        input:focus:valid { border: 2px solid #27ae60; background: #eefaf2; }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
-    <header>
-        <p><strong>Вініл-Клуб</strong></p>
+    <header id="top">
+        <a href="index.html" class="logo">Вініл-Клуб</a>
         <nav aria-label="Головне меню">
             <ul>
                 <li><a href="index.html">Головна</a></li>
                 <li><a href="catalog.html">Каталог</a></li>
                 <li><a href="about.html">Про проєкт</a></li>
-                <li><a href="form.html">Замовлення</a></li>
+                <li><a href="form.html" class="current" aria-current="page">Замовлення</a></li>
             </ul>
         </nav>
     </header>
@@ -49,7 +46,7 @@
                 </p>
 
                 <!-- Розбір регулярного виразу для телефону:
-                    pattern="^\+380[0-9]{9}$"
+                    pattern="\+380[0-9]{9}"
                     \+       - буквальний знак плюса
                     380      - міжнародний телефонний код України
                     [0-9]    - будь-яка цифра від 0 до 9
@@ -63,7 +60,7 @@
 
                 <p>
                     <label for="delivery-date">Бажана дата доставки:</label><br>
-                    <input type="date" id="delivery-date" name="delivery_date" min="2026-10-01" max="2027-06-30" required>
+                    <input type="date" id="delivery-date" name="delivery_date" min="2026-10-06" max="2027-06-30" required>
                 </p>
 
                 <p>
@@ -106,7 +103,7 @@
                 </p>
 
                 <!-- Розбір регулярного виразу для каталожного номера:
-                    pattern="^UA-LP-[0-9]{5}$"
+                    pattern="UA-LP-[0-9]{5}"
                     UA       - великі літери коду країни
                     -        - буквальний дефіс
                     LP       - позначення формату вінілової платівки (Long Play)
@@ -166,7 +163,7 @@
 
                 <p>
                     <label for="custom-slipmat-art">Прикріпити зображення для кастомного сліпмату або принт-паковання (PNG, JPG):</label><br>
-                    <input type="file" id="custom-slipmat-art" name="custom_art" accept="image/*">
+                    <input type="file" id="custom-slipmat-art" name="custom_art" accept="image/png, image/jpeg">
                 </p>
                 
             </fieldset>
@@ -221,7 +218,6 @@
     </main>
 
     <footer>
-        <hr>
         <address>
             м. Ужгород | Email: <a href="mailto:yurii.tsarenko@student.uzhnu.edu.ua">yurii.tsarenko@student.uzhnu.edu.ua</a> | Telegram: <a href="https://t.me/althik">althik</a>
         </address>
