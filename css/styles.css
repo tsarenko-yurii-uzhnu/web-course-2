@@ -46,6 +46,27 @@
   --shadow-lift: 0 4px 12px rgb(0 0 0 / 12%), 0 12px 24px rgb(0 0 0 / 14%);
 }
 
+/* БОНУС 1. Темна тема другим набором змінних: вмикається класом dark-theme
+   на <body> (вручну; перемикач буде в темі 9). Усі правила нижче вже
+   використовують var(...), тому дублювати їх не потрібно */
+body.dark-theme {
+  --color-brand: hsl(40, 30%, 90%);
+  --color-accent: hsl(16, 75%, 55%);
+  --color-accent-hover: hsl(16, 85%, 65%);
+  --color-visited: hsl(340, 50%, 68%);
+  --color-bg: hsl(20, 10%, 9%);
+  --color-surface: hsl(20, 8%, 15%);
+  --color-text: hsl(40, 20%, 88%);
+  --color-muted: hsl(32, 10%, 66%);
+  --color-border: hsl(24, 8%, 28%);
+  --color-highlight: hsl(42, 45%, 26%);
+  --color-row-hover: hsl(16, 28%, 24%);
+  --color-danger: hsl(0, 70%, 62%);
+  --color-danger-bg: hsl(0, 35%, 20%);
+  --color-success: hsl(85, 35%, 60%);
+  --color-success-bg: hsl(85, 20%, 18%);
+}
+
 /* --------------------------------------------------------------------------
    2. Базові стилі та типографіка (rem, line-height числом)
    -------------------------------------------------------------------------- */
@@ -247,6 +268,13 @@ article, fieldset, table, .card {
 }
 
 article:hover, fieldset:hover, .card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lift, 0 8px 24px rgb(0 0 0 / 14%));
+}
+
+/* БОНУС 2. «Батьківський селектор» :has(): картка з розкритим треклістом
+   (<details open>) отримує акцентну рамку й піднесену тінь — без JavaScript */
+article:has(details[open]) {
   border-color: var(--color-accent);
   box-shadow: var(--shadow-lift, 0 8px 24px rgb(0 0 0 / 14%));
 }
@@ -504,6 +532,8 @@ input:checked + label {
   color: var(--color-brand);
 }
 
+/* БОНУС 4. Вкладені правила (nesting): блок кнопок із & замість
+   повторення selector-префікса button у кожному правилі */
 button {
   font-family: inherit;
   font-size: 1rem;
@@ -513,26 +543,26 @@ button {
   cursor: pointer;
   font-weight: 700;
   transition: background-color 0.2s ease;
-}
 
-/* Кнопки розрізняються атрибутним селектором, без доданих класів */
-button[type="submit"] {
-  background-color: var(--color-accent);
-  color: var(--color-bg);
-}
+  /* Кнопки розрізняються атрибутним селектором, без доданих класів */
+  &[type="submit"] {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
 
-button[type="submit"]:hover {
-  background-color: var(--color-brand);
-}
+    &:hover {
+      background-color: var(--color-brand);
+    }
+  }
 
-button[type="reset"] {
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  border-color: var(--color-border);
-}
+  &[type="reset"] {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
 
-button[type="reset"]:hover {
-  background-color: var(--color-border);
+    &:hover {
+      background-color: var(--color-border);
+    }
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -547,6 +577,15 @@ ol {
 ol li {
   margin-bottom: var(--space-sm);
   line-height: 1.5;
+}
+
+/* БОНУС 5. Власні маркери через ::marker (список порад на головній):
+   колір і розмір. Варіант із підміною маркера (для порівняння, закоментовано):
+   aside ul { list-style: none; }
+   aside ul li::before { content: "\25CF "; color: var(--color-accent); }  */
+aside ul li::marker {
+  color: var(--color-accent);
+  font-size: 1.25em;
 }
 
 /* [8.2] Псевдоелемент ::marker — колір і товщина номерів у списках */
@@ -707,3 +746,28 @@ a[href^="http"]::after {
 /* h2         { color: var(--color-text); } */
 /* .card h2   { color: var(--color-muted); } */
 #offers h2    { color: var(--color-accent); }
+
+/* Поганий спосіб (лишається закоментованим прикладом):
+   <h2 style="color: var(--color-muted);">Що ми пропонуємо</h2>
+   Inline-стиль важить вище за будь-який селектор — (1,0,0,0), тож переміг би всі три
+   правила вище. Виграти ним — погано: він діє на один елемент і не
+   перевикористовується, не вміє :hover і медіазапитів, ламає розділення розмітки
+   й оформлення, а збити його можна лише !important. */
+
+/* БОНУС 3. Неоморфна картка (цитата на головній): фон точно збігається
+   з фоном сторінки, об'єм дають дві протилежні тіні — темна знизу-справа
+   й світла зверху-зліва; у стані :active картка «втискається» (inset) */
+.neo {
+  background-color: var(--color-bg);
+  border-left: none;
+  border-radius: 12px;
+  padding: var(--space-md);
+  margin: var(--space-lg) 0;
+  box-shadow: 8px 8px 16px rgb(0 0 0 / 15%),
+              -8px -8px 16px rgb(255 255 255 / 70%);
+
+  &:active {
+    box-shadow: inset 8px 8px 16px rgb(0 0 0 / 15%),
+                inset -8px -8px 16px rgb(255 255 255 / 70%);
+  }
+}
