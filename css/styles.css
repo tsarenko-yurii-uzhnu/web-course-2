@@ -28,8 +28,8 @@
   --color-row-hover: hsl(16, 45%, 84%);     /* Рядок таблиці під курсором: світлий відтінок акценту */
   --color-danger: hsl(0, 70%, 50%);         /* Колір помилки валідації */
   --color-danger-bg: hsl(0, 70%, 95%);      /* Світлий фон поля з помилкою */
-  --color-success: hsl(140, 45%, 30%);      /* Колір коректно заповненого поля */
-  --color-success-bg: hsl(140, 40%, 91%);   /* Світлий фон коректного поля */
+  --color-success: hsl(85, 28%, 32%);       /* Коректне поле: приглушений оливковий, у тон кремовій палітрі */
+  --color-success-bg: hsl(85, 30%, 89%);    /* Світлий оливковий фон коректного поля */
 
   /* Нетипові змінні (шрифти, геометрія, тіні) */
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -104,6 +104,8 @@ img {
    3. Наскрізна шапка та горизонтальне меню (display: inline-block)
    -------------------------------------------------------------------------- */
 
+/* [8.3] Комбінатор > (дитина): стилі лише для шапки, що є прямою дитиною body,
+   а не для <header> усередині карток article */
 body > header {
   background-color: var(--color-brand);
   color: var(--color-bg);
@@ -183,6 +185,8 @@ nav a, th {
    4. Посилання: порядок LVHFA + :focus-visible
    -------------------------------------------------------------------------- */
 
+/* Порядок LVHFA критичний, бо в усіх п'яти правил однакова специфічність,
+   тож лишається вирішувати черговістю в файлі: пізніше правило перемагає раніше. */
 a:link {
   color: var(--color-accent);
   text-decoration: underline;
@@ -259,10 +263,16 @@ article header {
   margin-bottom: var(--space-sm);
 }
 
+/* Пробіл (нащадок): article h3 — заголовок будь-якої глибини всередині картки */
 article header h3,
-article h3,
-.card h2 {
+article h3 {
   color: var(--color-brand);
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+/* Відступи заголовка блоку «Що ми пропонуємо» (колір — у демонстрації п. 9) */
+.card h2 {
   margin-top: 0;
   margin-bottom: var(--space-sm);
 }
@@ -316,6 +326,31 @@ small {
 
 pre, code, .tracklist {
   font-family: var(--font-mono);
+}
+
+/* Варіант №11: окремий стиль назв треків — моноширинний шрифт
+   із вирівняною по правому краю тривалістю (float: right) */
+.tracklist {
+  max-width: 32rem;
+  padding-left: 2rem;
+}
+
+.tracklist li {
+  padding: 6px 0;
+}
+
+.track-duration {
+  float: right;
+  color: var(--color-accent);
+  font-weight: 700;
+  margin-left: var(--space);
+}
+
+/* Скидання обтікання: рядок треку охоплює float із тривалістю */
+.tracklist li::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 /* --------------------------------------------------------------------------
@@ -420,9 +455,13 @@ textarea:focus:invalid {
   outline: 2px solid var(--color-danger);
 }
 
-input:focus:valid,
+/* Зелений (валідний) стан — лише для полів із placeholder, куди вже щось введено:
+   порожнє поле (навіть необов'язкове), вибір файлу, число зі значенням за
+   замовчуванням формально «валідні», але підсвічувати їх як правильно
+   заповнені безглуздо */
+input[placeholder]:focus:valid:not(:placeholder-shown),
 select:focus:valid,
-textarea:focus:valid {
+textarea:focus:valid:not(:placeholder-shown) {
   border-color: var(--color-success);
   background-color: var(--color-success-bg);
   outline: 2px solid var(--color-success);
@@ -430,6 +469,7 @@ textarea:focus:valid {
 
 /* Обов'язкові поля: зірочка через ::after, без тексту в розмітці.
    Поле стоїть після label і <br>; чекбокс — одразу перед своїм label */
+/* [8.2] Псевдоелемент ::after (декор, content) — зірочка біля обов'язкових полів */
 label:has(+ br + :required)::after,
 input:required + label::after {
   content: " *";
@@ -455,6 +495,9 @@ fieldset label:hover {
   color: var(--color-accent);
 }
 
+/* [8.3] Комбінатор + (наступний сусід): <label>, що стоїть одразу після
+   вибраного input, стає жирним; пробіл (нащадок): fieldset label — усі підписи
+   всередині fieldset */
 fieldset label:has(input:checked),
 input:checked + label {
   font-weight: 700;
@@ -506,6 +549,7 @@ ol li {
   line-height: 1.5;
 }
 
+/* [8.2] Псевдоелемент ::marker — колір і товщина номерів у списках */
 ol li::marker {
   color: var(--color-accent);
   font-weight: 700;
@@ -607,3 +651,59 @@ footer p {
   margin-top: var(--space-sm);
   margin-bottom: 0;
 }
+
+
+/* ==========================================================================
+   8. ОБОВ'ЯЗКОВИЙ НАБІР СЕЛЕКТОРІВ (пункти позначені як [8.x])
+   [8.1] Псевдокласи — нижче, плюс :focus:valid/:invalid, :hover, :nth-child
+         у пп. 6–7; [8.2] ::after і ::marker — у пп. 7 і 10; [8.3] комбінатори
+         >, +, пробіл — позначені в коді; [8.4] атрибутні селектори — нижче
+         й button[type="submit"] у п. 7; [8.5] LVHFA — розділ 4.
+   ========================================================================== */
+
+/* [8.1] :first-child — рядок треку, що стоїть першим, має верхню межу */
+.tracklist li:first-child {
+  border-top: 1px dotted var(--color-border);
+}
+
+/* [8.1] :not(:last-child) — пунктирна межа знизу в усіх рядків треклісту,
+   крім останнього (разом із :last-child нижче межі не подвоюються) */
+.tracklist li:not(:last-child) {
+  border-bottom: 1px dotted var(--color-border);
+}
+
+/* [8.1] :last-child — останній пункт нумерованого списку без зайвого відступу */
+ol li:last-child {
+  margin-bottom: 0;
+}
+
+/* [8.1] :disabled — вимкнені поля й кнопки виглядають неактивними */
+input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* [8.4] Атрибутний селектор a[href^="http"] — зовнішні посилання
+   отримують значок через ::after (він же — псевдоелемент із content) */
+a[href^="http"]::after {
+  content: " \2197";
+}
+
+/* --------------------------------------------------------------------------
+   9. ДЕМОНСТРАЦІЯ СПЕЦИФІЧНОСТІ
+   Претенденти на колір заголовка блоку «Що ми пропонуємо» (<h2> у #offers):
+
+   h2          → (0,0,1)
+   .card h2    → (0,1,1)
+   #offers h2  → (1,0,1)  ← перемагає
+
+   Порівнюємо трійки зліва направо, як номер версії, а не сумою:
+   у #offers одиниця в першій колонці, тому решта вже не має значення,
+   скільки б класів у селекторі не було.
+   -------------------------------------------------------------------------- */
+/* h2         { color: var(--color-text); } */
+/* .card h2   { color: var(--color-muted); } */
+#offers h2    { color: var(--color-accent); }
