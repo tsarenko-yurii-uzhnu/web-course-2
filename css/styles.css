@@ -1,0 +1,791 @@
+/* ==========================================================================
+   Проєкт: «Вініл-Клуб»
+   Варіант: №11 (Музичні альбоми)
+   Студент: Царенко Юрій
+   Дата: 2026-10-05
+   Тема 4: CSS-основи, селектори, каскад, текст і шрифти
+   ========================================================================== */
+
+/* Моноширинний шрифт Google Fonts із кирилицею: Anonymous Pro — лише для
+   треклістів і коду (накреслення 400 і 700); решта сайту — системний стек */
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&subset=cyrillic&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. Палітра у custom properties (:root) та нетипові змінні
+   -------------------------------------------------------------------------- */
+:root {
+  /* Обов'язкова 6-колірна HSL-палітра та допоміжні стани */
+  --color-brand: hsl(0, 0%, 12%);           /* Чорний вініл */
+  --color-accent: hsl(16, 85%, 36%);        /* Палений бурштин / теракота */
+  --color-accent-hover: hsl(16, 90%, 50%);  /* Світліший акцент для ховерів */
+  --color-visited: hsl(340, 50%, 35%);      /* Відвідані посилання (LVHFA) */
+  --color-bg: hsl(40, 42%, 93%);            /* Кремовий папір (основний фон) */
+  --color-surface: hsl(38, 28%, 87%);       /* Картон конверта (картки, таблиці) */
+  --color-text: hsl(0, 0%, 14%);            /* Графітовий текст */
+  --color-muted: hsl(32, 14%, 40%);         /* Зістарений папір для підписів/дат */
+  --color-border: hsl(36, 20%, 75%);        /* Межі блоків і комірок */
+  --color-highlight: hsl(42, 90%, 75%);     /* Підсвічування тексту <mark> */
+  --color-row-hover: hsl(16, 45%, 84%);     /* Рядок таблиці під курсором: світлий відтінок акценту */
+  --color-danger: hsl(0, 70%, 50%);         /* Колір помилки валідації */
+  --color-danger-bg: hsl(0, 70%, 95%);      /* Світлий фон поля з помилкою */
+  --color-success: hsl(85, 28%, 32%);       /* Коректне поле: приглушений оливковий, у тон кремовій палітрі */
+  --color-success-bg: hsl(85, 30%, 89%);    /* Світлий оливковий фон коректного поля */
+
+  /* Нетипові змінні (шрифти, геометрія, тіні) */
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Anonymous Pro", "Courier New", Courier, monospace;
+  --radius: 4px;
+  --space: 16px;
+  --space-sm: 8px;
+  --space-md: 20px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Базова тінь та тінь підйому карток при ховері */
+  --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
+  --shadow-lift: 0 4px 12px rgb(0 0 0 / 12%), 0 12px 24px rgb(0 0 0 / 14%);
+}
+
+/* БОНУС 1. Темна тема другим набором змінних: вмикається класом dark-theme
+   на <body> (вручну; перемикач буде в темі 9). Усі правила нижче вже
+   використовують var(...), тому дублювати їх не потрібно */
+body.dark-theme {
+  --color-brand: hsl(40, 30%, 90%);
+  --color-accent: hsl(16, 75%, 55%);
+  --color-accent-hover: hsl(16, 85%, 65%);
+  --color-visited: hsl(340, 50%, 68%);
+  --color-bg: hsl(20, 10%, 9%);
+  --color-surface: hsl(20, 8%, 15%);
+  --color-text: hsl(40, 20%, 88%);
+  --color-muted: hsl(32, 10%, 66%);
+  --color-border: hsl(24, 8%, 28%);
+  --color-highlight: hsl(42, 45%, 26%);
+  --color-row-hover: hsl(16, 28%, 24%);
+  --color-danger: hsl(0, 70%, 62%);
+  --color-danger-bg: hsl(0, 35%, 20%);
+  --color-success: hsl(85, 35%, 60%);
+  --color-success-bg: hsl(85, 20%, 18%);
+}
+
+/* --------------------------------------------------------------------------
+   2. Базові стилі та типографіка (rem, line-height числом)
+   -------------------------------------------------------------------------- */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 12rem; /* місце під футер, що лежить внизу body */
+  font-family: var(--font-body);
+  font-size: 1rem;       /* 16px */
+  line-height: 1.6;      /* комфортний інтерліньяж числом */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* Заголовки */
+h1, h2, h3 {
+  line-height: 1.2;
+  color: var(--color-brand);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.65rem; }
+h3 { font-size: 1.25rem; }
+
+p {
+  max-width: 40rem;
+  line-height: 1.6;
+}
+
+figure {
+  margin-left: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* --------------------------------------------------------------------------
+   3. Наскрізна шапка та горизонтальне меню (display: inline-block)
+   -------------------------------------------------------------------------- */
+
+/* [8.3] Комбінатор > (дитина): стилі лише для шапки, що є прямою дитиною body,
+   а не для <header> усередині карток article */
+body > header {
+  background-color: var(--color-brand);
+  color: var(--color-bg);
+  padding: var(--space) 0;
+}
+
+/* Вміст шапки й підвалу — тієї ж ширини, що й main */
+body > header > *,
+body > footer > * {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space);
+  padding-right: var(--space);
+}
+
+/* Єдиний вигляд назви сайту для всіх сторінок */
+body > header .logo {
+  display: block;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+body > header nav {
+  background-color: var(--color-brand);
+}
+
+body > header nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 0 -8px; /* вирівнює текст першого пункту з логотипом */
+}
+
+body > header nav li {
+  display: inline-block;
+  margin-right: var(--space-sm);
+}
+
+body > header .logo:link,
+body > header .logo:visited,
+body > header nav a:link,
+body > header nav a:visited {
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+body > header nav a {
+  display: inline-block;
+  padding: var(--space-sm);
+}
+
+body > header .logo:hover {
+  color: var(--color-accent-hover);
+}
+
+body > header nav a:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Поточна сторінка (клас current стоїть на посиланні в кожному HTML) */
+body > header nav a.current:link,
+body > header nav a.current:visited {
+  background-color: var(--color-surface);
+  color: var(--color-brand);
+}
+
+/* Пункт 4.6 методички: letter-spacing рівно в одному правилі з uppercase */
+nav a, th {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* --------------------------------------------------------------------------
+   4. Посилання: порядок LVHFA + :focus-visible
+   -------------------------------------------------------------------------- */
+
+/* Порядок LVHFA критичний, бо в усіх п'яти правил однакова специфічність,
+   тож лишається вирішувати черговістю в файлі: пізніше правило перемагає раніше. */
+a:link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:visited {
+  color: var(--color-visited);
+}
+
+a:hover {
+  color: var(--color-brand);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+a:active {
+  color: var(--color-accent-hover);
+}
+
+/* --------------------------------------------------------------------------
+   5. Головний контейнер та блочна розкладка (inline-block замість flex)
+   -------------------------------------------------------------------------- */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space);
+}
+
+main h1 {
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+main > p {
+  margin-bottom: var(--space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   6. Картки: строго article, fieldset, table та .card
+   -------------------------------------------------------------------------- */
+
+/* Картками робимо ТІЛЬКИ платівки, поля форм, таблицю та блок «Що ми пропонуємо» */
+/* Запасне значення (fallback): якщо змінну --shadow не оголошено в :root,
+   браузер підставить значення після коми, і тінь не зникне */
+article, fieldset, table, .card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow, 0 2px 8px rgb(0 0 0 / 10%));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+article:hover, fieldset:hover, .card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lift, 0 8px 24px rgb(0 0 0 / 14%));
+}
+
+/* БОНУС 2. «Батьківський селектор» :has(): картка з розкритим треклістом
+   (<details open>) отримує акцентну рамку й піднесену тінь — без JavaScript */
+article:has(details[open]) {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lift, 0 8px 24px rgb(0 0 0 / 14%));
+}
+
+legend {
+  font-weight: 700;
+  color: var(--color-brand);
+  padding: 0 var(--space-sm);
+}
+
+article header {
+  background: transparent;
+  padding: 0;
+  margin-bottom: var(--space-sm);
+}
+
+/* Пробіл (нащадок): article h3 — заголовок будь-якої глибини всередині картки */
+article header h3,
+article h3 {
+  color: var(--color-brand);
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+/* Відступи заголовка блоку «Що ми пропонуємо» (колір — у демонстрації п. 9) */
+.card h2 {
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+/* Скидання подвійних рамок і карток усередині релізів */
+article section,
+article fieldset {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: var(--space) 0;
+}
+
+article section:hover,
+article fieldset:hover {
+  border: none;
+  box-shadow: none;
+}
+
+article video,
+article audio {
+  max-width: 100%;
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+/* Цитата: повністю чиста без фонової заливки */
+blockquote {
+  margin: var(--space) 0;
+  padding: var(--space-sm) 0 var(--space-sm) var(--space);
+  border-left: 3px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+mark {
+  background-color: var(--color-highlight);
+  color: var(--color-brand);
+  padding: 1px 4px;
+  border-radius: var(--radius);
+}
+
+small {
+  color: var(--color-muted);
+}
+
+/* --------------------------------------------------------------------------
+   7. Моноширинний трекліст (варіант №11)
+   -------------------------------------------------------------------------- */
+
+/* Моноширинний шрифт — для назв треків, коду та рядка метаданих релізу
+   (артикул, ціна, носії, дата) */
+pre, code, .tracklist, article footer {
+  font-family: var(--font-mono);
+}
+
+article footer {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* Варіант №11: окремий стиль назв треків — моноширинний шрифт
+   із вирівняною по правому краю тривалістю (float: right) */
+.tracklist {
+  max-width: 32rem;
+  padding-left: 2rem;
+}
+
+.tracklist li {
+  padding: 6px 0;
+}
+
+.track-duration {
+  float: right;
+  color: var(--color-accent);
+  font-weight: 700;
+  margin-left: var(--space);
+}
+
+/* Скидання обтікання: рядок треку охоплює float із тривалістю */
+.tracklist li::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* --------------------------------------------------------------------------
+   8. Оформлення зведеної таблиці
+   -------------------------------------------------------------------------- */
+
+/* Таблиця оформлена лише селекторами по структурі, без класів у комірках.
+   Фон таблиці — var(--color-bg), щоб зебра з var(--color-surface) була помітна */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-bg);
+}
+
+caption {
+  text-align: left;
+  font-weight: 700;
+  padding-bottom: var(--space-sm);
+}
+
+th, td {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+thead th, tfoot th {
+  background-color: var(--color-brand);
+  color: var(--color-bg);
+}
+
+tbody th {
+  background-color: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* Числова колонка «Рік» — по структурі, без класів у комірках:
+   у кожному рядку tbody рік стоїть третім з кінця (:nth-last-child(3)),
+   навіть коли клітинка виконавця об'єднана через rowspan;
+   у шапці це третій th першого рядка */
+tbody td:nth-last-child(3),
+thead tr:first-child th:nth-child(3) {
+  text-align: right;
+}
+
+/* Зебра: :nth-child(an+b) — «кожен a-й рядок, починаючи з b-го», n = 0, 1, 2, 3…
+   even — це те саме, що 2n: n = 0 дає 0 (такого рядка немає), далі 2, 4, 6…
+   тобто фарбуємо кожен другий рядок, починаючи з другого */
+tbody tr:nth-child(even) {
+  background-color: var(--color-surface);
+}
+
+/* Підсвітка рядка під курсором (після зебри, щоб перемагати за порядком).
+   Рядки, об'єднані через rowspan (один виконавець — кілька альбомів),
+   підсвічуються разом: з будь-якого з них видно всю групу.
+   :has(td[rowspan]) — рядок, де починається об'єднана клітинка;
+   + tr — наступний за ним рядок; :has(+ tr:hover) — рядок перед тим, що під курсором */
+tbody tr:hover,
+tbody tr:hover:has(td[rowspan]) + tr,
+tbody tr:has(td[rowspan]):has(+ tr:hover) {
+  background-color: var(--color-row-hover);
+}
+
+/* --------------------------------------------------------------------------
+   9. Елементи форм та псевдокласи стану
+   -------------------------------------------------------------------------- */
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color 0.2s ease;
+}
+
+/* Усі поля (крім чекбоксів і радіокнопок) — однакової ширини */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  width: 100%;
+  max-width: 400px;
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: var(--color-accent);
+}
+
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* Чому :focus:invalid, а не просто :invalid: браузер перевіряє поле одразу
+   після завантаження, тож порожні обов'язкові поля одразу були б «невалідні»
+   і вся форма стала б червоною, поки користувач ще нічого не ввів.
+   Без :focus підсвітка лишалася б на всіх полях відразу, а з ним з'являється
+   лише в тому полі, у якому користувач зараз друкує. */
+input:focus:invalid,
+select:focus:invalid,
+textarea:focus:invalid {
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+  outline: 2px solid var(--color-danger);
+}
+
+/* Зелений (валідний) стан — лише для полів із placeholder, куди вже щось введено:
+   порожнє поле (навіть необов'язкове), вибір файлу, число зі значенням за
+   замовчуванням формально «валідні», але підсвічувати їх як правильно
+   заповнені безглуздо */
+input[placeholder]:focus:valid:not(:placeholder-shown),
+select:focus:valid,
+textarea:focus:valid:not(:placeholder-shown) {
+  border-color: var(--color-success);
+  background-color: var(--color-success-bg);
+  outline: 2px solid var(--color-success);
+}
+
+/* Обов'язкові поля: зірочка через ::after, без тексту в розмітці.
+   Поле стоїть після label і <br>; чекбокс — одразу перед своїм label */
+/* [8.2] Псевдоелемент ::after (декор, content) — зірочка біля обов'язкових полів */
+label:has(+ br + :required)::after,
+input:required + label::after {
+  content: " *";
+  color: var(--color-danger);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  vertical-align: middle;
+  margin-right: var(--space-sm);
+}
+
+fieldset label {
+  cursor: pointer;
+  display: inline;
+  vertical-align: middle;
+  transition: color 0.15s ease;
+}
+
+fieldset label:hover {
+  color: var(--color-accent);
+}
+
+/* [8.3] Комбінатор + (наступний сусід): <label>, що стоїть одразу після
+   вибраного input, стає жирним; пробіл (нащадок): fieldset label — усі підписи
+   всередині fieldset */
+fieldset label:has(input:checked),
+input:checked + label {
+  font-weight: 700;
+  color: var(--color-brand);
+}
+
+/* БОНУС 4. Вкладені правила (nesting): блок кнопок із & замість
+   повторення selector-префікса button у кожному правилі */
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+
+  /* Кнопки розрізняються атрибутним селектором, без доданих класів */
+  &[type="submit"] {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+
+    &:hover {
+      background-color: var(--color-brand);
+    }
+  }
+
+  &[type="reset"] {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
+
+    &:hover {
+      background-color: var(--color-border);
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. Списки правил догляду та словник термінів
+   -------------------------------------------------------------------------- */
+
+ol {
+  padding-left: 1.5rem;
+  margin: var(--space) 0;
+}
+
+ol li {
+  margin-bottom: var(--space-sm);
+  line-height: 1.5;
+}
+
+/* БОНУС 5. Власні маркери через ::marker (список порад на головній):
+   колір і розмір. Варіант із підміною маркера (для порівняння, закоментовано):
+   aside ul { list-style: none; }
+   aside ul li::before { content: "\25CF "; color: var(--color-accent); }  */
+aside ul li::marker {
+  color: var(--color-accent);
+  font-size: 1.25em;
+}
+
+/* [8.2] Псевдоелемент ::before (декор, content) — нота перед назвою релізу */
+article header h3::before {
+  content: "\266A\00A0";
+  color: var(--color-accent);
+}
+
+/* [8.2] Псевдоелемент ::marker — колір і товщина номерів у списках */
+ol li::marker {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+dl {
+  margin: var(--space) 0;
+}
+
+dt {
+  font-weight: 700;
+  color: var(--color-brand);
+  margin-top: var(--space);
+  font-size: 1.05rem;
+}
+
+dt:first-child {
+  margin-top: 0;
+}
+
+dd {
+  margin-left: 0;
+  margin-top: 4px;
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space);
+  border-left: 2px solid var(--color-border);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   11. Бічна панель (<aside>) — чистий текст без рамок, карток і підкладок
+   -------------------------------------------------------------------------- */
+
+aside {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space);
+}
+
+/* Картки article/fieldset усередині aside — без рамок і тіні */
+aside article,
+aside section {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+aside article:hover,
+aside section:hover {
+  border: none;
+  box-shadow: none;
+}
+
+aside h2,
+aside h3 {
+  color: var(--color-brand);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+aside h2:first-child,
+aside h3:first-child {
+  margin-top: 0;
+}
+
+aside ul {
+  padding-left: 1.25rem;
+  margin: var(--space-sm) 0 var(--space) 0;
+}
+
+aside ul li {
+  margin-bottom: var(--space-sm);
+  line-height: 1.5;
+}
+
+aside p {
+  margin: var(--space-sm) 0;
+}
+
+/* --------------------------------------------------------------------------
+   12. Підвал сайту (<footer>)
+   -------------------------------------------------------------------------- */
+
+body > footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-lg) 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+body > footer p {
+  margin-top: var(--space-sm);
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================================
+   8. ОБОВ'ЯЗКОВИЙ НАБІР СЕЛЕКТОРІВ (пункти позначені як [8.x])
+   [8.1] Псевдокласи — нижче, плюс :focus:valid/:invalid, :hover, :nth-child
+         у пп. 6–7; [8.2] ::after і ::marker — у пп. 7 і 10; [8.3] комбінатори
+         >, +, пробіл — позначені в коді; [8.4] атрибутні селектори — нижче
+         й button[type="submit"] у п. 7; [8.5] LVHFA — розділ 4.
+   ========================================================================== */
+
+/* [8.1] :first-child — рядок треку, що стоїть першим, має верхню межу */
+.tracklist li:first-child {
+  border-top: 1px dotted var(--color-border);
+}
+
+/* [8.1] :not(:last-child) — пунктирна межа знизу в усіх рядків треклісту,
+   крім останнього (разом із :last-child нижче межі не подвоюються) */
+.tracklist li:not(:last-child) {
+  border-bottom: 1px dotted var(--color-border);
+}
+
+/* [8.1] :last-child — останній пункт нумерованого списку без зайвого відступу */
+ol li:last-child {
+  margin-bottom: 0;
+}
+
+/* [8.1] :disabled — вимкнені поля й кнопки виглядають неактивними */
+input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* [8.4] Атрибутний селектор a[href^="http"] — зовнішні посилання
+   отримують значок через ::after (він же — псевдоелемент із content) */
+a[href^="http"]::after {
+  content: " \2197";
+}
+
+/* --------------------------------------------------------------------------
+   9. ДЕМОНСТРАЦІЯ СПЕЦИФІЧНОСТІ
+   Претенденти на колір заголовка блоку «Що ми пропонуємо» (<h2> у #offers):
+
+   h2          → (0,0,1)
+   .card h2    → (0,1,1)
+   #offers h2  → (1,0,1)  ← перемагає
+
+   Порівнюємо трійки зліва направо, як номер версії, а не сумою:
+   у #offers одиниця в першій колонці, тому решта вже не має значення,
+   скільки б класів у селекторі не було.
+   -------------------------------------------------------------------------- */
+/* h2         { color: var(--color-text); } */
+/* .card h2   { color: var(--color-muted); } */
+#offers h2    { color: var(--color-accent); }
+
+/* Поганий спосіб (лишається закоментованим прикладом):
+   <h2 style="color: var(--color-muted);">Що ми пропонуємо</h2>
+   Inline-стиль важить вище за будь-який селектор — (1,0,0,0), тож переміг би всі три
+   правила вище. Виграти ним — погано: він діє на один елемент і не
+   перевикористовується, не вміє :hover і медіазапитів, ламає розділення розмітки
+   й оформлення, а збити його можна лише декларацією з пріоритетом important. */
+
+/* БОНУС 3. Неоморфна картка (цитата на головній): фон точно збігається
+   з фоном сторінки, об'єм дають дві протилежні тіні — темна знизу-справа
+   й світла зверху-зліва; у стані :active картка «втискається» (inset) */
+.neo {
+  background-color: var(--color-bg);
+  border-left: none;
+  border-radius: 12px;
+  padding: var(--space-md);
+  margin: var(--space-lg) 0;
+  box-shadow: 8px 8px 16px rgb(0 0 0 / 15%),
+              -8px -8px 16px rgb(255 255 255 / 70%);
+
+  &:active {
+    box-shadow: inset 8px 8px 16px rgb(0 0 0 / 15%),
+                inset -8px -8px 16px rgb(255 255 255 / 70%);
+  }
+}

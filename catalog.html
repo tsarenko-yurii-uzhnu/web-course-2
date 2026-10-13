@@ -1,23 +1,24 @@
-<!-- «Вініл-Клуб» — Сторінка «Альбоми»: жанри, таблиця видань за лейблами та детальні треклісти. -->
 <!DOCTYPE html>
+<!-- «Вініл-Клуб» — Сторінка «Альбоми»: жанри, таблиця видань за лейблами та детальні треклісти. -->
 <html lang="uk">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Альбоми — Вініл-Клуб</title>
+    <title>Каталог — Вініл-Клуб</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
     <!-- Шапка сайту -->
-    <header>
-        <h1 id="top">Вініл-Клуб</h1>
+    <header id="top">
+        <a href="index.html" class="logo">Вініл-Клуб</a>
         <nav aria-label="Головне меню">
             <ul>
                 <li><a href="index.html">Головна</a></li>
-                <li><a href="catalog.html">Каталог</a></li>
+                <li><a href="catalog.html" class="current" aria-current="page">Каталог</a></li>
                 <li><a href="about.html">Про проєкт</a></li>
                 <li><a href="form.html">Замовлення</a></li>
             </ul>
@@ -26,6 +27,7 @@
 
     <!-- Основний вміст сторінки -->
     <main>
+        <h1>Каталог платівок</h1>
 
         <!-- Друга навігація: зміст каталогу за секціями -->
         <nav aria-label="Навігація по сторінці">
@@ -100,66 +102,56 @@
             </ul>
         </section>
 
-        <!-- Секція 2: Таблиця «альбом — виконавець — рік — лейбл» за реальними даними Discogs -->
-        <section id="albums-table">
-            <h2>Каталог видань</h2>
-
-            <table>
-                <caption>Зведена таблиця альбомів, виконавців, дат випуску та видавництв</caption>
-                <thead>
-                    <tr>
-                        <th rowspan="2" scope="col">Альбом</th>
-                        <th rowspan="2" scope="col">Виконавець</th>
-                        <th rowspan="2" scope="col">Рік</th>
-                        <th colspan="2" scope="colgroup">Дані лейблу</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">Лейбл</th>
-                        <th scope="col">Каталожний номер</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Lamenting Malice</th>
-                        <td>Cynthoni</td>
-                        <td>2026</td>
-                        <td>Not On Label (Cynthoni Self-released)</td>
-                        <td>CYN003-V</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Ultraviolet</th>
-                        <td>Usedcvnt</td>
-                        <td>2023</td>
-                        <td>Not On Label (Usedcvnt Self-released)</td>
-                        <td>UV-LP01</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Draining Love Story</th>
-                        <td rowspan="2">Sewerslvt</td>
-                        <td>2020</td>
-                        <td>Geometric Lullaby</td>
-                        <td>GEO-069</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">We had good times together, don't forget that</th>
-                        <td>2021</td>
-                        <td>Not On Label (Sewerslvt Self-released)</td>
-                        <td>SLVT-002</td>
-                    <tr>
-                        <th scope="row">We had good times together, don't forget that</th>
-                        <td>2021</td>
-                        <td>Not On Label (Sewerslvt Self-released)</td>
-                        <td>SLVT-002</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="row" colspan="3">Разом релізів у каталозі</th>
-                        <td colspan="2">4 платівки (2020–2026 рр.)</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </section>
+       <table id="albums-table">
+  <caption>Зведена таблиця альбомів, виконавців, дат випуску та видавництв</caption>
+  <thead>
+    <tr>
+      <th rowspan="2" scope="col">Альбом</th>
+      <th rowspan="2" scope="col">Виконавець</th>
+      <th rowspan="2" scope="col">Рік</th>
+      <th colspan="2" scope="colgroup">Дані лейблу</th>
+    </tr>
+    <tr>
+      <th scope="col">Лейбл</th>
+      <th scope="col">Каталожний номер</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">LAMENTING MALICE</th>
+      <td>Cynthoni</td>
+      <td>2026</td>
+      <td>Not On Label (Cynthoni Self-released)</td>
+      <td>CYN003-V</td>
+    </tr>
+    <tr>
+      <th scope="row">ULTRAVIOLET</th>
+      <td>Usedcvnt</td>
+      <td>2023</td>
+      <td>Not On Label (Usedcvnt Self-released)</td>
+      <td>UV-LP01</td>
+    </tr>
+    <tr>
+      <th scope="row">DRAINING LOVE STORY</th>
+      <td rowspan="2">Sewerslvt</td>
+      <td>2020</td>
+      <td>Geometric Lullaby</td>
+      <td>GEO-069</td>
+    </tr>
+    <tr>
+      <th scope="row">WE HAD GOOD TIMES TOGETHER, DON'T FORGET THAT</th>
+      <td>2021</td>
+      <td>Not On Label (Sewerslvt Self-released)</td>
+      <td>SLVT-002</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="3" scope="row">Разом релізів у каталозі</th>
+      <td colspan="2">4 платівки (2020–2026 рр.)</td>
+    </tr>
+  </tfoot>
+</table>
 
          <!-- Секція 3: треклісти альбомів -->
         <section id="tracklists">
@@ -168,14 +160,14 @@
             <!-- Альбом 1: Cynthoni (єдиний figure з figcaption за вимогою лаби) -->
             <article>
                 <h3>Cynthoni — Lamenting Malice (2026)</h3>
-                <p>Подвійне лімітоване вінілове видання (Black Ice & White Marbled) на власному лейблі Cynthoni (CYN003-V) у стилях брейккор, драм-енд-бейс, джангл та габбер.</p>
+                <p>Подвійне лімітоване вінілове видання (Black Ice &amp; White Marbled) на власному лейблі Cynthoni (CYN003-V) у стилях брейккор, драм-енд-бейс, джангл та габбер.</p>
 
-                <figure style="margin-left: 0;">
+                <figure>
                     <img src="images/lamenting-malice-vinyl.jpg"
                         alt="Подвійний мармуровий вініловий диск альбому Cynthoni Lamenting Malice"
                         width="360" height="360"
                         loading="lazy">
-                    <figcaption>Фізичний вигляд подвійного мармурового вінілу Lamenting Malice (Black Ice & White Marbled)</figcaption>
+                    <figcaption>Фізичний вигляд подвійного мармурового вінілу Lamenting Malice (Black Ice &amp; White Marbled)</figcaption>
                 </figure>
 
                 <section>
@@ -194,22 +186,22 @@
 
                 <details open>
                     <summary>Переглянути трекліст альбому (15 треків)</summary>
-                    <ol>
-                        <li>Unbirthing — 1:06</li>
-                        <li>The F***ing Apocalypse — 4:02</li>
-                        <li>Ensh***ification — 4:04</li>
-                        <li>BleakReality — 3:48</li>
-                        <li>Hell Sings — 4:28</li>
-                        <li>MentallyILL — 5:23</li>
-                        <li>Imminent Eradication — 4:51</li>
-                        <li>Nihilism Extremist — 4:00</li>
-                        <li>Dead Doom Scrolls — 4:41</li>
-                        <li>Endlessly Dying Machine — 4:48</li>
-                        <li>(emotion)2 — 5:12</li>
-                        <li>Shut Your B***h A** Up: Prolapse Of The Mind — 1:06</li>
-                        <li>Fearful Avoidant Disorganised Attachment — 4:23</li>
-                        <li>Disappearing — 6:48</li>
-                        <li>It Is 0 Seconds To Midnight — 7:03</li>
+                    <ol class="tracklist">
+                        <li>Unbirthing <span class="track-duration">1:06</span></li>
+                        <li>The F***ing Apocalypse <span class="track-duration">4:02</span></li>
+                        <li>Ensh***ification <span class="track-duration">4:04</span></li>
+                        <li>BleakReality <span class="track-duration">3:48</span></li>
+                        <li>Hell Sings <span class="track-duration">4:28</span></li>
+                        <li>MentallyILL <span class="track-duration">5:23</span></li>
+                        <li>Imminent Eradication <span class="track-duration">4:51</span></li>
+                        <li>Nihilism Extremist <span class="track-duration">4:00</span></li>
+                        <li>Dead Doom Scrolls <span class="track-duration">4:41</span></li>
+                        <li>Endlessly Dying Machine <span class="track-duration">4:48</span></li>
+                        <li>(emotion)2 <span class="track-duration">5:12</span></li>
+                        <li>Shut Your B***h A** Up: Prolapse Of The Mind <span class="track-duration">1:06</span></li>
+                        <li>Fearful Avoidant Disorganised Attachment <span class="track-duration">4:23</span></li>
+                        <li>Disappearing <span class="track-duration">6:48</span></li>
+                        <li>It Is 0 Seconds To Midnight <span class="track-duration">7:03</span></li>
                     </ol>
                 </details>
             </article>
@@ -226,22 +218,22 @@
 
                 <details>
                     <summary>Переглянути трекліст альбому (15 треків)</summary>
-                    <ol>
-                        <li>Usedcvnt w/ Aak3 — Inhuman (2:07)</li>
-                        <li>Usedcvnt — 143 Ways To Lose Urself (2:27)</li>
-                        <li>Usedcvnt w/ Akiba (3) — Limited In Love (2:52)</li>
-                        <li>Usedcvnt w/ DXRKWRLD — You're My Friend Now (2:23)</li>
-                        <li>Usedcvnt — Kittens (2:29)</li>
-                        <li>Usedcvnt w/ Eden FM — Pls Tell Me What Is Ur Dream (2:38)</li>
-                        <li>Usedcvnt — Just Leave Me To Bleed (3:01)</li>
-                        <li>Usedcvnt — Sorry Mom, I'm Making Breakcore XD (1:55)</li>
-                        <li>Usedcvnt w/ Iwakura — Illusion Of Control (2:27)</li>
-                        <li>Usedcvnt w/ Abyssal.angel — Yours Forever (2:59)</li>
-                        <li>Usedcvnt w/ Enkei — It's 2am, I Can't Sleep (1:55)</li>
-                        <li>Usedcvnt — I Want To Eat Ur Heart Couse I Love U (1:55)</li>
-                        <li>Usedcvnt w/ Sabuze — Taste Of Blood (1:36)</li>
-                        <li>Usedcvnt — Overthinking (2:24)</li>
-                        <li>Usedcvnt — Disappearing Until I Feel Better (2:59)</li>
+                    <ol class="tracklist">
+                        <li>Usedcvnt w/ Aak3 — Inhuman <span class="track-duration">2:07</span></li>
+                        <li>Usedcvnt — 143 Ways To Lose Urself <span class="track-duration">2:27</span></li>
+                        <li>Usedcvnt w/ Akiba (3) — Limited In Love <span class="track-duration">2:52</span></li>
+                        <li>Usedcvnt w/ DXRKWRLD — You're My Friend Now <span class="track-duration">2:23</span></li>
+                        <li>Usedcvnt — Kittens <span class="track-duration">2:29</span></li>
+                        <li>Usedcvnt w/ Eden FM — Pls Tell Me What Is Ur Dream <span class="track-duration">2:38</span></li>
+                        <li>Usedcvnt — Just Leave Me To Bleed <span class="track-duration">3:01</span></li>
+                        <li>Usedcvnt — Sorry Mom, I'm Making Breakcore XD <span class="track-duration">1:55</span></li>
+                        <li>Usedcvnt w/ Iwakura — Illusion Of Control <span class="track-duration">2:27</span></li>
+                        <li>Usedcvnt w/ Abyssal.angel — Yours Forever <span class="track-duration">2:59</span></li>
+                        <li>Usedcvnt w/ Enkei — It's 2am, I Can't Sleep <span class="track-duration">1:55</span></li>
+                        <li>Usedcvnt — I Want To Eat Ur Heart Couse I Love U <span class="track-duration">1:55</span></li>
+                        <li>Usedcvnt w/ Sabuze — Taste Of Blood <span class="track-duration">1:36</span></li>
+                        <li>Usedcvnt — Overthinking <span class="track-duration">2:24</span></li>
+                        <li>Usedcvnt — Disappearing Until I Feel Better <span class="track-duration">2:59</span></li>
                     </ol>
                 </details>
             </article>
@@ -258,16 +250,16 @@
 
                 <details>
                     <summary>Переглянути трекліст альбому (9 треків)</summary>
-                    <ol>
-                        <li>Love Is a Mighty Big Word — 2:18</li>
-                        <li>Yandere Complex — 4:10</li>
-                        <li>Ecifircas — 5:47</li>
-                        <li>Lexapro Delirium — 7:15</li>
-                        <li>This Fleeting Feeling — 3:31</li>
-                        <li>Swinging in His Cell — 5:22</li>
-                        <li>Mr. Kill Myself — 7:51</li>
-                        <li>Down the Drain — 8:08</li>
-                        <li>Slowdeath — 8:12</li>
+                    <ol class="tracklist">
+                        <li>Love Is a Mighty Big Word <span class="track-duration">2:18</span></li>
+                        <li>Yandere Complex <span class="track-duration">4:10</span></li>
+                        <li>Ecifircas <span class="track-duration">5:47</span></li>
+                        <li>Lexapro Delirium <span class="track-duration">7:15</span></li>
+                        <li>This Fleeting Feeling <span class="track-duration">3:31</span></li>
+                        <li>Swinging in His Cell <span class="track-duration">5:22</span></li>
+                        <li>Mr. Kill Myself <span class="track-duration">7:51</span></li>
+                        <li>Down the Drain <span class="track-duration">8:08</span></li>
+                        <li>Slowdeath <span class="track-duration">8:12</span></li>
                     </ol>
                 </details>
             </article>
@@ -318,14 +310,14 @@
 
     </main>
 
-    <!-- Підвал сайту -->
+    <!-- Блок зворотного зв'язку -->
     <aside>
         <h2>Зворотний зв'язок</h2>
-        <p>Маєте пропозиції щодо нових позицій каталогу або рідкісних пресів? Напишіть нашій редакції.</p>
+        <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?
+        <a href="form.html#feedback-section">Надішліть нам повідомлення</a>.</p>
     </aside>
 
     <footer>
-        <hr>
         <address>
             м. Ужгород | Email: <a href="mailto:yurii.tsarenko@student.uzhnu.edu.ua">yurii.tsarenko@student.uzhnu.edu.ua</a> | Telegram: <a href="https://t.me/althik">althik</a>
         </address>
