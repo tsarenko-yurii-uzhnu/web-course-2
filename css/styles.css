@@ -813,27 +813,34 @@ a[href^="http"]::after {
 }
 
 
-/* ==========================================================================
-   13. Сітка карток каталогу (ЛР 5)
-   ========================================================================== */
+/* ===== Картки каталогу ===== */
 
 .catalog {
   margin-top: var(--space-xl);
 }
 
+/* Контейнер карток: сам нічого не малює, лише тримає картки одну за одною.
+   Поки немає Flexbox і Grid, картки стають у рядок через inline-block;
+   коли ряд заповнений, наступна картка переноситься на новий. */
 .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
-  gap: var(--space-md);
   margin-top: var(--space);
 }
 
+/* Картка. Селектор .cards .card, а не просто .card, бо клас card ще є
+   в блоці «Що ми пропонуємо» на головній — йому ширина картки не потрібна. */
 .cards .card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin-bottom: 0;
+  display: inline-block;
+  vertical-align: top; /* картки різної висоти вирівнюються по верхньому краю */
+  position: relative;  /* опорна точка для абсолютно позиціонованого бейджа */
+  width: var(--card-width);
+  margin: 0 var(--space-md) var(--space-lg) 0;
+  padding: 0;          /* відступи — лише в .card__body, щоб фото йшло до самого краю */
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  /* overflow: hidden потрібен разом із border-radius, щоб кути зображення
+     обрізалися по закругленню рамки й не виступали за неї. */
   overflow: hidden;
 }
 
@@ -853,18 +860,17 @@ a[href^="http"]::after {
 }
 
 .card__img {
+  display: block;
   width: 100%;
   height: var(--card-img-height);
   object-fit: cover;
   border-bottom: 1px solid var(--color-border);
-  border-radius: var(--radius) var(--radius) 0 0;
+  border-radius: 0;
 }
 
+/* Внутрішні відступи задає тільки тіло картки, а не сама картка */
 .card__body {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  padding: var(--space);
+  padding: var(--space-md);
 }
 
 .card__title {
@@ -881,7 +887,6 @@ a[href^="http"]::after {
 }
 
 .card__meta {
-  flex-grow: 1;
   margin-top: 0;
   margin-bottom: var(--space-sm);
   font-size: 0.9rem;
