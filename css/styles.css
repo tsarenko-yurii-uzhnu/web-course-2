@@ -63,7 +63,8 @@
   --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
   --page-width: 1100px;     /* максимальна ширина вмісту сторінки */
   --card-width: 260px;      /* мінімальна ширина картки в сітці */
-  --card-img-height: 220px; /* висота зображень карток і галереї */
+  --card-img-height: 170px; /* висота зображень у картках каталогу */
+  --gallery-img-height: 220px; /* висота ілюстрацій у галереї видання */
 
   /* Базова тінь та тінь підйому карток при ховері */
   --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
@@ -826,12 +827,20 @@ a[href^="http"]::after {
   margin-top: var(--space);
 }
 
+/* Експеримент із position: relative. Абсолютно позиціонований бейдж рахує
+   top/right відносно найближчого предка з position, відмінним від static;
+   коли я закоментував цей рядок, такого предка не стало, і всі бейджі
+   «злетіли» в правий верхній кут усієї сторінки. З relative точкою відліку
+   стає сама картка, тому бейдж опиняється в її правому верхньому куті. */
+.cards .card {
+  position: relative;
+}
+
 /* Картка. Селектор .cards .card, а не просто .card, бо клас card ще є
    в блоці «Що ми пропонуємо» на головній — йому ширина картки не потрібна. */
 .cards .card {
   display: inline-block;
   vertical-align: top; /* картки різної висоти вирівнюються по верхньому краю */
-  position: relative;  /* опорна точка для абсолютно позиціонованого бейджа */
   width: var(--card-width);
   margin: 0 var(--space-md) var(--space-lg) 0;
   padding: 0;          /* відступи — лише в .card__body, щоб фото йшло до самого краю */
@@ -852,18 +861,22 @@ a[href^="http"]::after {
   background-color: var(--color-accent);
   color: var(--color-bg);
   padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--space-xs);
-  font-size: 0.75rem;
+  border-radius: 999px; /* повністю закруглені краї — «пігулка» */
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
+/* display: block потрібен, бо img за природою рядковий (inline): такий елемент
+   стоїть на базовій лінії тексту, і під ним лишається зайвий проміжок у
+   кілька пікселів під рядок; блоковий img цей проміжок прибирає. */
 .card__img {
   display: block;
   width: 100%;
   height: var(--card-img-height);
   object-fit: cover;
+  object-position: center;
   border-bottom: 1px solid var(--color-border);
   border-radius: 0;
 }
@@ -873,14 +886,12 @@ a[href^="http"]::after {
   padding: var(--space-md);
 }
 
+/* Назва — рівно в один рядок; усе, що не вмістилося, замінюють три крапки */
 .card__title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
-  margin-top: 0;
-  margin-bottom: var(--space-sm);
+  text-overflow: ellipsis;
+  margin: 0 0 var(--space-sm); /* відступ лише знизу, як і в решти абзаців картки */
   font-size: 1.1rem;
   line-height: 1.4;
   color: var(--color-brand);
@@ -930,7 +941,7 @@ a[href^="http"]::after {
 .gallery__items img {
   width: auto;
   max-width: 100%;
-  height: var(--card-img-height);
+  height: var(--gallery-img-height);
   object-fit: cover;
   border: 1px solid var(--color-border);
 }
