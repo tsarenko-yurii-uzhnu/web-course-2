@@ -4,11 +4,29 @@
    Студент: Царенко Юрій
    Дата: 2026-10-05
    Тема 4: CSS-основи, селектори, каскад, текст і шрифти
+   Тема 5 (ЛР 5): нормалізація box-sizing, змінні розмірів, галерея в виданнях
    ========================================================================== */
 
 /* Моноширинний шрифт Google Fonts із кирилицею: Anonymous Pro — лише для
    треклістів і коду (накреслення 400 і 700); решта сайту — системний стек */
 @import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&subset=cyrillic&display=swap');
+
+/* --------------------------------------------------------------------------
+   0. Глобальна нормалізація коробок (ЛР 5)
+   -------------------------------------------------------------------------- */
+
+/* Що змінює це правило. За замовчуванням (box-sizing: content-box) властивість
+   width задає ширину лише вмісту, а padding і border браузер додає зверху.
+   Тому блок із width: 50% та padding: 20px насправді займає 50% + 40px + рамки,
+   і дві такі колонки разом виходять ширшими за 100% — друга падає на новий рядок.
+   У моделі border-box width вже включає padding і border: блок із width: 50%
+   лишається рівно половиною контейнера, а внутрішні відступи «з'їдають» місце
+   зсередини. Саме тому дві колонки по 50% з відступами нарешті стоять в одному
+   рядку. Правило стоїть перед :root і діє на всі елементи та їхні
+   псевдоелементи (@import вище — бо імпорт у CSS має йти першим у файлі). */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 /* --------------------------------------------------------------------------
    1. Палітра у custom properties (:root) та нетипові змінні
@@ -34,12 +52,18 @@
   /* Нетипові змінні (шрифти, геометрія, тіні) */
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Anonymous Pro", "Courier New", Courier, monospace;
-  --radius: 4px;
+  --radius: 12px;
   --space: 16px;
   --space-sm: 8px;
   --space-md: 20px;
   --space-lg: 24px;
   --space-xl: 32px;
+
+  /* Нові змінні розмірів (ЛР 5): жодних «магічних чисел» у відступах і сітці */
+  --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
+  --page-width: 1100px;     /* максимальна ширина вмісту сторінки */
+  --card-width: 260px;      /* мінімальна ширина картки в сітці */
+  --card-img-height: 220px; /* висота зображень карток і галереї */
 
   /* Базова тінь та тінь підйому карток при ховері */
   --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
@@ -70,10 +94,6 @@ body.dark-theme {
 /* --------------------------------------------------------------------------
    2. Базові стилі та типографіка (rem, line-height числом)
    -------------------------------------------------------------------------- */
-
-*, *::before, *::after {
-  box-sizing: border-box;
-}
 
 html {
   height: 100%;
@@ -136,7 +156,7 @@ body > header {
 /* Вміст шапки й підвалу — тієї ж ширини, що й main */
 body > header > *,
 body > footer > * {
-  max-width: 1100px;
+  max-width: var(--page-width);
   margin-left: auto;
   margin-right: auto;
   padding-left: var(--space);
@@ -236,7 +256,7 @@ a:active {
    -------------------------------------------------------------------------- */
 
 main {
-  max-width: 1100px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: var(--space-lg) var(--space);
 }
@@ -402,7 +422,9 @@ table {
 
 caption {
   text-align: left;
+  font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1.3;
   padding-bottom: var(--space-sm);
 }
 
@@ -642,7 +664,7 @@ dd {
    -------------------------------------------------------------------------- */
 
 aside {
-  max-width: 1100px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 0 var(--space);
 }
@@ -788,4 +810,122 @@ a[href^="http"]::after {
     box-shadow: inset 8px 8px 16px rgb(0 0 0 / 15%),
                 inset -8px -8px 16px rgb(255 255 255 / 70%);
   }
+}
+
+
+/* ==========================================================================
+   13. Сітка карток каталогу (ЛР 5)
+   ========================================================================== */
+
+.catalog {
+  margin-top: var(--space-xl);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space);
+}
+
+.cards .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.card__badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 2;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--space-xs);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card__img {
+  width: 100%;
+  height: var(--card-img-height);
+  object-fit: cover;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: var(--space);
+}
+
+.card__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: var(--color-brand);
+}
+
+.card__meta {
+  flex-grow: 1;
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.card__id {
+  margin: 0;
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ==========================================================================
+   14. Видання як «товар»: позначка в заголовку та галерея ілюстрацій
+   ========================================================================== */
+
+.edition-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--space-xs);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gallery__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.gallery__items img {
+  width: auto;
+  max-width: 100%;
+  height: var(--card-img-height);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
 }
