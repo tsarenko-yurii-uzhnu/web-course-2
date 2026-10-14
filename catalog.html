@@ -30,7 +30,7 @@
         <h1>Каталог платівок</h1>
 
         <!-- Друга навігація: зміст каталогу за секціями -->
-        <nav aria-label="Навігація по сторінці">
+        <nav class="page-nav" aria-label="Навігація по сторінці">
             <h2>Зміст розділу</h2>
             <ul>
                 <li><a href="#genres">Музичні жанри</a></li>
@@ -45,62 +45,111 @@
         <!-- Секція 1: Список жанрів (багаторівневий маркований список) -->
         <section id="genres">
             <h2>Музичні жанри каталогу</h2>
-            <ul>
-                <li>Breaks
-                    <ul>
-                        <li>Drum &amp; Bass та Jungle
-                            <ul>
-                                <li>Liquid Funk</li>
-                                <li>Neuro Funk</li>
-                                <li>Jungle</li>
-                            </ul>
-                        </li>
-                        <li>Breakbeat та брейки
-                            <ul>
-                                <li>Breakcore</li>
-                                <li>Big Beat</li>
-                                <li>Nu Skool Breaks</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>Hardcore
-                    <ul>
-                        <li>Класичний та швидкий рейв
-                            <ul>
-                                <li>Gabber</li>
-                                <li>Happy Hardcore</li>
-                                <li>Speedcore</li>
-                            </ul>
-                        </li>
-                        <li>Важкі та індустріальні форми
-                            <ul>
-                                <li>Industrial Hardcore</li>
-                                <li>Breakbeat Hardcore</li>
-                                <li>Hardtek</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>Downtempo
-                    <ul>
-                        <li>Експериментальна ритміка
-                            <ul>
-                                <li>IDM</li>
-                                <li>Illbient</li>
-                                <li>Chillwave</li>
-                            </ul>
-                        </li>
-                        <li>Атмосферний звук
-                            <ul>
-                                <li>Ambient</li>
-                                <li>Psybient</li>
-                                <li>Chill Out</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+            <p>Спектр жанрів по колу: від центру до краю — напрям, група, жанр. Жирним підписано жанри, що вже є в каталозі, решта лише в переліку.</p>
+
+            <div class="sunburst-wrap">
+                <svg class="sunburst" viewBox="0 0 980 980" role="img" aria-labelledby="sb-title sb-desc">
+                    <title id="sb-title">Спектр музичних жанрів каталогу</title>
+                    <desc id="sb-desc">Кругова діаграма: у центрі три напрями (Breaks, Hardcore, Downtempo), далі групи жанрів і самі жанри по краю кола. Те саме є списком нижче.</desc>
+                    <defs><path id="sb-arc-0-0" d="M496.3,310.9A179.2,179.2 0 0 1 642.0,395.0"/><path id="sb-arc-0-1" d="M495.7,327.8A162.2,162.2 0 0 1 627.6,404.0"/><path id="sb-arc-1-0" d="M648.3,405.8A179.2,179.2 0 0 1 648.3,574.2"/><path id="sb-arc-1-1" d="M633.3,413.8A162.2,162.2 0 0 1 633.3,566.2"/><path id="sb-arc-main-0" d="M494.5,403.4A86.7,86.7 0 0 1 567.3,529.4"/><path id="sb-arc-2-0" d="M496.0,662.6A172.8,172.8 0 0 0 636.5,581.5"/><path id="sb-arc-2-1" d="M496.6,679.6A189.8,189.8 0 0 0 650.9,590.6"/><path id="sb-arc-3-0" d="M350.7,577.0A164.2,164.2 0 0 0 484.3,654.1"/><path id="sb-arc-3-1" d="M336.3,586.0A181.2,181.2 0 0 0 483.7,671.1"/><path id="sb-arc-3-2" d="M321.9,595.1A198.2,198.2 0 0 0 483.1,688.1"/><path id="sb-arc-main-1" d="M406.7,544.1A99.3,99.3 0 0 0 573.3,544.1"/><path id="sb-arc-4-0" d="M331.7,574.2A179.2,179.2 0 0 1 331.7,405.8"/><path id="sb-arc-4-1" d="M346.7,566.2A162.2,162.2 0 0 1 346.7,413.8"/><path id="sb-arc-5-0" d="M338.0,395.0A179.2,179.2 0 0 1 483.7,310.9"/><path id="sb-arc-5-1" d="M352.4,404.0A162.2,162.2 0 0 1 484.3,327.8"/><path id="sb-arc-main-2" d="M412.7,529.4A86.7,86.7 0 0 1 485.5,403.4"/></defs>
+                    
+<g id="sb-3-0" class="sb-seg sb-off"><path d="M490.0,190.0A300,300 0 0 1 592.6,208.1L565.9,281.4A222,222 0 0 0 490.0,268.0Z" fill="hsl(35,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Liquid Funk</title><text class="sb-l3" transform="translate(543.5,186.7) rotate(-80.0)" text-anchor="start" dominant-baseline="central">Liquid Funk</text></g>                    <g id="sb-3-1" class="sb-seg sb-off"><path d="M592.6,208.1A300,300 0 0 1 682.8,260.2L632.7,319.9A222,222 0 0 0 565.9,281.4Z" fill="hsl(31,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Neuro Funk</title><text class="sb-l3" transform="translate(644.0,223.3) rotate(-60.0)" text-anchor="start" dominant-baseline="central">Neuro Funk</text></g>                    <g id="sb-3-2" class="sb-seg"><path d="M682.8,260.2A300,300 0 0 1 749.8,340.0L682.3,379.0A222,222 0 0 0 632.7,319.9Z" fill="hsl(27,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Jungle</title><text class="sb-l3 sb-has" transform="translate(725.9,292.0) rotate(-40.0)" text-anchor="start" dominant-baseline="central">Jungle</text></g>                    <g id="sb-3-3" class="sb-seg"><path d="M749.8,340.0A300,300 0 0 1 785.4,437.9L708.6,451.5A222,222 0 0 0 682.3,379.0Z" fill="hsl(23,42%,52%)"/><title>Breaks → Breakbeat та брейки → Breakcore</title><text class="sb-l3 sb-has" transform="translate(779.4,384.7) rotate(-20.0)" text-anchor="start" dominant-baseline="central">Breakcore</text></g>                    <g id="sb-3-4" class="sb-seg sb-off"><path d="M785.4,437.9A300,300 0 0 1 785.4,542.1L708.6,528.5A222,222 0 0 0 708.6,451.5Z" fill="hsl(19,42%,52%)"/><title>Breaks → Breakbeat та брейки → Big Beat</title><text class="sb-l3" transform="translate(798.0,490.0) rotate(0.0)" text-anchor="start" dominant-baseline="central">Big Beat</text></g>                    <g id="sb-3-5" class="sb-seg sb-off"><path d="M785.4,542.1A300,300 0 0 1 749.8,640.0L682.3,601.0A222,222 0 0 0 708.6,528.5Z" fill="hsl(15,42%,52%)"/><title>Breaks → Breakbeat та брейки → Nu Skool Breaks</title><text class="sb-l3" transform="translate(779.4,595.3) rotate(20.0)" text-anchor="start" dominant-baseline="central">Nu Skool Breaks</text></g>                    <g id="sb-3-6" class="sb-seg"><path d="M749.8,640.0A300,300 0 0 1 682.8,719.8L632.7,660.1A222,222 0 0 0 682.3,601.0Z" fill="hsl(355,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Gabber</title><text class="sb-l3 sb-has" transform="translate(725.9,688.0) rotate(40.0)" text-anchor="start" dominant-baseline="central">Gabber</text></g>                    <g id="sb-3-7" class="sb-seg sb-off"><path d="M682.8,719.8A300,300 0 0 1 592.6,771.9L565.9,698.6A222,222 0 0 0 632.7,660.1Z" fill="hsl(349,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Happy Hardcore</title><text class="sb-l3" transform="translate(644.0,756.7) rotate(60.0)" text-anchor="start" dominant-baseline="central">Happy Hardcore</text></g>                    <g id="sb-3-8" class="sb-seg sb-off"><path d="M592.6,771.9A300,300 0 0 1 490.0,790.0L490.0,712.0A222,222 0 0 0 565.9,698.6Z" fill="hsl(343,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Speedcore</title><text class="sb-l3" transform="translate(543.5,793.3) rotate(80.0)" text-anchor="start" dominant-baseline="central">Speedcore</text></g>                    <g id="sb-3-9" class="sb-seg sb-off"><path d="M490.0,790.0A300,300 0 0 1 387.4,771.9L414.1,698.6A222,222 0 0 0 490.0,712.0Z" fill="hsl(337,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Industrial Hardcore</title><text class="sb-l3" transform="translate(436.5,793.3) rotate(280.0)" text-anchor="end" dominant-baseline="central">Industrial Hardcore</text></g>                    <g id="sb-3-10" class="sb-seg sb-off"><path d="M387.4,771.9A300,300 0 0 1 297.2,719.8L347.3,660.1A222,222 0 0 0 414.1,698.6Z" fill="hsl(331,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Breakbeat Hardcore</title><text class="sb-l3" transform="translate(336.0,756.7) rotate(300.0)" text-anchor="end" dominant-baseline="central">Breakbeat Hardcore</text></g>                    <g id="sb-3-11" class="sb-seg sb-off"><path d="M297.2,719.8A300,300 0 0 1 230.2,640.0L297.7,601.0A222,222 0 0 0 347.3,660.1Z" fill="hsl(325,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Hardtek</title><text class="sb-l3" transform="translate(254.1,688.0) rotate(320.0)" text-anchor="end" dominant-baseline="central">Hardtek</text></g>                    <g id="sb-3-12" class="sb-seg sb-off"><path d="M230.2,640.0A300,300 0 0 1 194.6,542.1L271.4,528.5A222,222 0 0 0 297.7,601.0Z" fill="hsl(215,42%,52%)"/><title>Downtempo → Експериментальна ритміка → IDM</title><text class="sb-l3" transform="translate(200.6,595.3) rotate(340.0)" text-anchor="end" dominant-baseline="central">IDM</text></g>                    <g id="sb-3-13" class="sb-seg sb-off"><path d="M194.6,542.1A300,300 0 0 1 194.6,437.9L271.4,451.5A222,222 0 0 0 271.4,528.5Z" fill="hsl(205,42%,52%)"/><title>Downtempo → Експериментальна ритміка → Illbient</title><text class="sb-l3" transform="translate(182.0,490.0) rotate(360.0)" text-anchor="end" dominant-baseline="central">Illbient</text></g>                    <g id="sb-3-14" class="sb-seg sb-off"><path d="M194.6,437.9A300,300 0 0 1 230.2,340.0L297.7,379.0A222,222 0 0 0 271.4,451.5Z" fill="hsl(195,42%,52%)"/><title>Downtempo → Експериментальна ритміка → Chillwave</title><text class="sb-l3" transform="translate(200.6,384.7) rotate(380.0)" text-anchor="end" dominant-baseline="central">Chillwave</text></g>                    <g id="sb-3-15" class="sb-seg"><path d="M230.2,340.0A300,300 0 0 1 297.2,260.2L347.3,319.9A222,222 0 0 0 297.7,379.0Z" fill="hsl(185,42%,52%)"/><title>Downtempo → Атмосферний звук → Ambient</title><text class="sb-l3 sb-has" transform="translate(254.1,292.0) rotate(400.0)" text-anchor="end" dominant-baseline="central">Ambient</text></g>                    <g id="sb-3-16" class="sb-seg sb-off"><path d="M297.2,260.2A300,300 0 0 1 387.4,208.1L414.1,281.4A222,222 0 0 0 347.3,319.9Z" fill="hsl(175,42%,52%)"/><title>Downtempo → Атмосферний звук → Psybient</title><text class="sb-l3" transform="translate(336.0,223.3) rotate(420.0)" text-anchor="end" dominant-baseline="central">Psybient</text></g>                    <g id="sb-3-17" class="sb-seg sb-off"><path d="M387.4,208.1A300,300 0 0 1 490.0,190.0L490.0,268.0A222,222 0 0 0 414.1,281.4Z" fill="hsl(165,42%,52%)"/><title>Downtempo → Атмосферний звук → Chill Out</title><text class="sb-l3" transform="translate(436.5,186.7) rotate(440.0)" text-anchor="end" dominant-baseline="central">Chill Out</text></g>                    <g id="sb-2-0" class="sb-seg"><path d="M490.0,268.0A222,222 0 0 1 682.3,379.0L602.6,425.0A130,130 0 0 0 490.0,360.0Z" fill="hsl(31,42%,38%)"/><title>Breaks → Drum & Bass та Jungle</title><text class="sb-l2"><textPath href="#sb-arc-0-0" startOffset="50%" text-anchor="middle">Drum &amp; Bass</textPath></text><text class="sb-l2"><textPath href="#sb-arc-0-1" startOffset="50%" text-anchor="middle">та Jungle</textPath></text></g>                    <g id="sb-2-1" class="sb-seg"><path d="M682.3,379.0A222,222 0 0 1 682.3,601.0L602.6,555.0A130,130 0 0 0 602.6,425.0Z" fill="hsl(19,42%,38%)"/><title>Breaks → Breakbeat та брейки</title><text class="sb-l2"><textPath href="#sb-arc-1-0" startOffset="50%" text-anchor="middle">Breakbeat</textPath></text><text class="sb-l2"><textPath href="#sb-arc-1-1" startOffset="50%" text-anchor="middle">та брейки</textPath></text></g>                    <g id="sb-2-2" class="sb-seg"><path d="M682.3,601.0A222,222 0 0 1 490.0,712.0L490.0,620.0A130,130 0 0 0 602.6,555.0Z" fill="hsl(349,42%,38%)"/><title>Hardcore → Класичний та швидкий рейв</title><text class="sb-l2"><textPath href="#sb-arc-2-0" startOffset="50%" text-anchor="middle">Класичний та</textPath></text><text class="sb-l2"><textPath href="#sb-arc-2-1" startOffset="50%" text-anchor="middle">швидкий рейв</textPath></text></g>                    <g id="sb-2-3" class="sb-seg"><path d="M490.0,712.0A222,222 0 0 1 297.7,601.0L377.4,555.0A130,130 0 0 0 490.0,620.0Z" fill="hsl(331,42%,38%)"/><title>Hardcore → Важкі та індустріальні форми</title><text class="sb-l2"><textPath href="#sb-arc-3-0" startOffset="50%" text-anchor="middle">Важкі та</textPath></text><text class="sb-l2"><textPath href="#sb-arc-3-1" startOffset="50%" text-anchor="middle">індустріальні</textPath></text><text class="sb-l2"><textPath href="#sb-arc-3-2" startOffset="50%" text-anchor="middle">форми</textPath></text></g>                    <g id="sb-2-4" class="sb-seg"><path d="M297.7,601.0A222,222 0 0 1 297.7,379.0L377.4,425.0A130,130 0 0 0 377.4,555.0Z" fill="hsl(205,42%,38%)"/><title>Downtempo → Експериментальна ритміка</title><text class="sb-l2"><textPath href="#sb-arc-4-0" startOffset="50%" text-anchor="middle">Експериментальна</textPath></text><text class="sb-l2"><textPath href="#sb-arc-4-1" startOffset="50%" text-anchor="middle">ритміка</textPath></text></g>                    <g id="sb-2-5" class="sb-seg"><path d="M297.7,379.0A222,222 0 0 1 490.0,268.0L490.0,360.0A130,130 0 0 0 377.4,425.0Z" fill="hsl(175,42%,38%)"/><title>Downtempo → Атмосферний звук</title><text class="sb-l2"><textPath href="#sb-arc-5-0" startOffset="50%" text-anchor="middle">Атмосферний</textPath></text><text class="sb-l2"><textPath href="#sb-arc-5-1" startOffset="50%" text-anchor="middle">звук</textPath></text></g>                    <g id="sb-1-0" class="sb-seg"><path d="M490.0,360.0A130,130 0 0 1 602.6,555.0L538.5,518.0A56,56 0 0 0 490.0,434.0Z" fill="hsl(25,42%,30%)"/><title>Breaks</title><text class="sb-l1"><textPath href="#sb-arc-main-0" startOffset="50%" text-anchor="middle">Breaks</textPath></text></g>                    <g id="sb-1-1" class="sb-seg"><path d="M602.6,555.0A130,130 0 0 1 377.4,555.0L441.5,518.0A56,56 0 0 0 538.5,518.0Z" fill="hsl(340,42%,30%)"/><title>Hardcore</title><text class="sb-l1"><textPath href="#sb-arc-main-1" startOffset="50%" text-anchor="middle">Hardcore</textPath></text></g>                    <g id="sb-1-2" class="sb-seg"><path d="M377.4,555.0A130,130 0 0 1 490.0,360.0L490.0,434.0A56,56 0 0 0 441.5,518.0Z" fill="hsl(190,42%,30%)"/><title>Downtempo</title><text class="sb-l1"><textPath href="#sb-arc-main-2" startOffset="50%" text-anchor="middle">Downtempo</textPath></text></g>
+                    <circle class="sb-hub" cx="490" cy="490" r="54"/>
+                    <text class="sb-hub-text" x="490" y="490" text-anchor="middle" dominant-baseline="central">ЖАНРИ</text>
+                </svg>
+
+                <!-- Інфопанель: показується CSS-ом (:has), коли курсор над сегментом -->
+                <div class="sunburst-info" aria-hidden="true">
+                    <div class="info-default">Наведіть курсор на сегмент діаграми</div>
+                    <div class="info-sb-1-0"><strong>Breaks</strong><span>У каталозі: <strong>5</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, The World Is Fvcked, Presents: Cynthoni</span></div>
+                    <div class="info-sb-1-1"><strong>Hardcore</strong><span>У каталозі: <strong>1</strong> — Lamenting Malice</span></div>
+                    <div class="info-sb-1-2"><strong>Downtempo</strong><span>У каталозі: <strong>3</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked</span></div>
+                    <div class="info-sb-2-0"><strong>Drum &amp; Bass та Jungle</strong><span>Breaks</span><span>У каталозі: <strong>2</strong> — The World Is Fvcked, Presents: Cynthoni</span></div>
+                    <div class="info-sb-2-1"><strong>Breakbeat та брейки</strong><span>Breaks</span><span>У каталозі: <strong>4</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, Presents: Cynthoni</span></div>
+                    <div class="info-sb-2-2"><strong>Класичний та швидкий рейв</strong><span>Hardcore</span><span>У каталозі: <strong>1</strong> — Lamenting Malice</span></div>
+                    <div class="info-sb-2-3"><strong>Важкі та індустріальні форми</strong><span>Hardcore</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-2-4"><strong>Експериментальна ритміка</strong><span>Downtempo</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-2-5"><strong>Атмосферний звук</strong><span>Downtempo</span><span>У каталозі: <strong>3</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked</span></div>
+                    <div class="info-sb-3-0"><strong>Liquid Funk</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-1"><strong>Neuro Funk</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-2"><strong>Jungle</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: <strong>2</strong> — The World Is Fvcked, Presents: Cynthoni</span></div>
+                    <div class="info-sb-3-3"><strong>Breakcore</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: <strong>4</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, Presents: Cynthoni</span></div>
+                    <div class="info-sb-3-4"><strong>Big Beat</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-5"><strong>Nu Skool Breaks</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-6"><strong>Gabber</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: <strong>1</strong> — Lamenting Malice</span></div>
+                    <div class="info-sb-3-7"><strong>Happy Hardcore</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-8"><strong>Speedcore</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-9"><strong>Industrial Hardcore</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-10"><strong>Breakbeat Hardcore</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-11"><strong>Hardtek</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-12"><strong>IDM</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-13"><strong>Illbient</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-14"><strong>Chillwave</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-15"><strong>Ambient</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: <strong>3</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked</span></div>
+                    <div class="info-sb-3-16"><strong>Psybient</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: поки немає релізів</span></div>
+                    <div class="info-sb-3-17"><strong>Chill Out</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: поки немає релізів</span></div>
+                </div>
+            </div>
+
+            <details>
+                <summary>Переглянути жанри списком</summary>
+                <ul>
+                    <li>Breaks
+                        <ul>
+                            <li>Drum &amp; Bass та Jungle
+                                <ul>
+                                    <li>Liquid Funk</li>
+                                    <li>Neuro Funk</li>
+                                    <li>Jungle</li>
+                                </ul>
+                            </li>
+                            <li>Breakbeat та брейки
+                                <ul>
+                                    <li>Breakcore</li>
+                                    <li>Big Beat</li>
+                                    <li>Nu Skool Breaks</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Hardcore
+                        <ul>
+                            <li>Класичний та швидкий рейв
+                                <ul>
+                                    <li>Gabber</li>
+                                    <li>Happy Hardcore</li>
+                                    <li>Speedcore</li>
+                                </ul>
+                            </li>
+                            <li>Важкі та індустріальні форми
+                                <ul>
+                                    <li>Industrial Hardcore</li>
+                                    <li>Breakbeat Hardcore</li>
+                                    <li>Hardtek</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Downtempo
+                        <ul>
+                            <li>Експериментальна ритміка
+                                <ul>
+                                    <li>IDM</li>
+                                    <li>Illbient</li>
+                                    <li>Chillwave</li>
+                                </ul>
+                            </li>
+                            <li>Атмосферний звук
+                                <ul>
+                                    <li>Ambient</li>
+                                    <li>Psybient</li>
+                                    <li>Chill Out</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </details>
         </section>
 
         <!-- Каталог (ЛР 5): картки платівок; назва веде до детального видання нижче -->
@@ -150,6 +199,25 @@
                     </div>
                 </article>
 
+                <!-- Картки 5 і 6: дві частини однієї збірки, об'єднані спільним тегом двох авторів -->
+                <article class="card">
+                    <img class="card__img" src="images/card-11.jpg" alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками">
+                    <div class="card__body">
+                        <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 1</a></h3>
+                        <p class="card__meta"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span><br>Жанр: Trance, Jungle, Breakcore<br>Рік: 2024</p>
+                        <p class="card__id">Артикул: UA-LP-24001</p>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <img class="card__img" src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni">
+                    <div class="card__body">
+                        <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 2</a></h3>
+                        <p class="card__meta"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span><br>Жанр: Trance, Jungle, Breakcore<br>Рік: 2024</p>
+                        <p class="card__id">Артикул: UA-LP-24002</p>
+                    </div>
+                </article>
+
             </div>
         </section>
 
@@ -183,6 +251,13 @@
       <td>UV-LP01</td>
     </tr>
     <tr>
+      <th scope="row">SEWERSLVT PRESENTS: CYNTHONI (PT. 1 &amp; PT. 2)</th>
+      <td>Sewerslvt, Cynthoni</td>
+      <td>2024</td>
+      <td>Not On Label (Cynthoni Self-released)</td>
+      <td>CYN001</td>
+    </tr>
+    <tr>
       <th scope="row">DRAINING LOVE STORY</th>
       <td rowspan="3">Sewerslvt</td>
       <td>2020</td>
@@ -205,7 +280,7 @@
   <tfoot>
     <tr>
       <th colspan="3" scope="row">Разом релізів у каталозі</th>
-      <td colspan="2">5 платівок (2020–2026 рр.)</td>
+      <td colspan="2">6 платівок (2020–2026 рр.)</td>
     </tr>
   </tfoot>
 </table>
@@ -393,6 +468,54 @@
 
                 <footer>
                     <p>Артикул: <strong>UA-LP-02022</strong> | Жанр: <strong>Jungle, Ambient, Drum n Bass</strong> | Рік: <strong>2020</strong></p>
+                </footer>
+            </article>
+
+            <!-- Альбом 5: Sewerslvt Presents: Cynthoni — дві частини в одному виданні -->
+            <article id="edition-sewerslvt-presents-cynthoni">
+                <h3>Sewerslvt Presents: Cynthoni — Pt. 1 &amp; Pt. 2 (2024) <span class="edition-badge">Збірка</span></h3>
+                <p class="edition-tags"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span></p>
+                <p>Лімітована збірка з двох частин на одному вінілі (Blue/Purple Merge): Sewerslvt представляє Cynthoni. Випущена <time datetime="2024-10-03">3 жовтня 2024 року</time> на власному лейблі Cynthoni (CYN001) у стилях транс, джангл, брейккор та драм-енд-бейс; дванадцять треків загальною тривалістю близько 45 хвилин.</p>
+
+                <img src="images/card-11.jpg"
+                    alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками"
+                    width="360" height="360"
+                    loading="lazy">
+
+                <section class="gallery">
+                    <h4>Додаткові ілюстрації</h4>
+                    <div class="gallery__items">
+                        <img src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni" loading="lazy">
+                        <img src="images/card-13.jpg" alt="Темний конверт із голографічним написом sewerslvt presents: CYNThoni part 1/2" loading="lazy">
+                    </div>
+                </section>
+
+                <details>
+                    <summary>Переглянути трекліст, Pt. 1 (6 треків)</summary>
+                    <ol class="tracklist">
+                        <li>Theme Of Cynthoni <span class="track-duration">3:00</span></li>
+                        <li>Death Of The Endless <span class="track-duration">5:11</span></li>
+                        <li>Lychee Ice <span class="track-duration">2:21</span></li>
+                        <li>Flickering In The Gloom (feat. Projekt Melody) <span class="track-duration">3:48</span></li>
+                        <li>Grinding Of The Teeth <span class="track-duration">2:42</span></li>
+                        <li>Monolithic Cyan Tsunami <span class="track-duration">3:43</span></li>
+                    </ol>
+                </details>
+
+                <details>
+                    <summary>Переглянути трекліст, Pt. 2 (6 треків)</summary>
+                    <ol class="tracklist" start="7">
+                        <li>Nine Red Squares <span class="track-duration">3:33</span></li>
+                        <li>Dancing Dots <span class="track-duration">4:45</span></li>
+                        <li>System Link <span class="track-duration">2:50</span></li>
+                        <li>Meh.Tuhl.Hedz <span class="track-duration">6:02</span></li>
+                        <li>Ekstaasi <span class="track-duration">3:25</span></li>
+                        <li>Oublier <span class="track-duration">3:46</span></li>
+                    </ol>
+                </details>
+
+                <footer>
+                    <p>Артикули: <strong>UA-LP-24001</strong> (Pt. 1), <strong>UA-LP-24002</strong> (Pt. 2) | Жанр: <strong>Trance, Jungle, Breakcore, Drum n Bass</strong> | Рік: <strong>2024</strong></p>
                 </footer>
             </article>
         </section>

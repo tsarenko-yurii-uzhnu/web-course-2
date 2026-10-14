@@ -1084,8 +1084,218 @@ a[href^="http"]::after {
 .artist-tag--usedcvnt  { background-color: var(--artist-usedcvnt); }
 .artist-tag--sewerslvt { background-color: var(--artist-sewerslvt); }
 
+/* Спільний тег двох авторів: дві частини одного «капсула» з власним
+   кольором кожного автора, між ними тонкий проміжок */
+.artist-tag-group {
+  display: inline-flex;
+  gap: 2px;
+  margin-bottom: var(--space-xs);
+}
+
+.artist-tag-group .artist-tag {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+.artist-tag-group .artist-tag:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.artist-tag-group .artist-tag:last-child {
+  border-radius: 0 999px 999px 0;
+}
+
 .edition-tags {
   margin: 0 0 var(--space-sm);
+}
+
+/* ==========================================================================
+   18. Зміст сторінки кнопками та круговий спектр жанрів
+   ========================================================================== */
+
+/* Якір не ховається під липкою шапкою */
+[id] {
+  scroll-margin-top: 7rem;
+}
+
+.page-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-nav a:link,
+.page-nav a:visited {
+  display: inline-block;
+  padding: var(--space-sm) var(--space);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.page-nav a:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.sunburst-wrap {
+  overflow-x: auto;
+}
+
+.sunburst {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  max-width: 980px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.sunburst text {
+  font-family: var(--font-body);
+  pointer-events: none;
+}
+
+.sb-l1 {
+  fill: hsl(0, 0%, 100%);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sb-l2 {
+  fill: hsl(0, 0%, 100%);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sb-l3 {
+  fill: var(--color-muted);
+  font-size: 17px;
+}
+
+.sb-l3.sb-has {
+  fill: var(--color-text);
+  font-weight: 700;
+}
+
+.sb-hub {
+  fill: var(--color-surface);
+  stroke: var(--color-border);
+}
+
+.sb-hub-text {
+  fill: var(--color-muted);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.sunburst path {
+  stroke: var(--color-bg);
+  stroke-width: 2px;
+}
+
+.sb-seg {
+  transition: opacity 0.2s ease;
+}
+
+.sb-off path {
+  opacity: 0.4;
+}
+
+.sb-seg:hover path {
+  opacity: 1;
+  filter: brightness(1.12) saturate(1.2);
+}
+
+/* Інфопанель: усі блоки лежать в одній клітинці сітки й прозорі, а CSS
+   вмикає лише той, що відповідає сегменту під курсором */
+.sunburst-info {
+  display: grid;
+  max-width: 860px;
+  min-height: 6rem;
+  margin: var(--space) auto 0;
+  text-align: center;
+}
+
+.sunburst-info > * {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sunburst-info strong {
+  font-size: 1.15rem;
+  color: var(--color-brand);
+}
+
+.sunburst-info span {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.sunburst-info span strong {
+  font-size: inherit;
+  color: var(--color-text);
+}
+
+/* Стан за замовчуванням: підказка видима, поки курсор не на діаграмі */
+.sunburst-wrap:not(:has(.sb-seg:hover)) .info-default {
+  opacity: 1;
+}
+
+/* Під курсором: усі сегменти тьмяніють... */
+.sunburst-wrap:has(.sb-seg:hover) .sb-seg {
+  opacity: 0.2;
+}
+
+/* ...а для кожного сегмента повертається повна непрозорість його «гілки»
+   (він сам, предки й нащадки) та його інфоблока. Правила згенеровані. */
+.sunburst-wrap:has(#sb-1-0:hover) :is(#sb-1-0,#sb-2-0,#sb-2-1,#sb-3-0,#sb-3-1,#sb-3-2,#sb-3-3,#sb-3-4,#sb-3-5,.info-sb-1-0) { opacity: 1; }
+.sunburst-wrap:has(#sb-1-1:hover) :is(#sb-1-1,#sb-2-2,#sb-2-3,#sb-3-10,#sb-3-11,#sb-3-6,#sb-3-7,#sb-3-8,#sb-3-9,.info-sb-1-1) { opacity: 1; }
+.sunburst-wrap:has(#sb-1-2:hover) :is(#sb-1-2,#sb-2-4,#sb-2-5,#sb-3-12,#sb-3-13,#sb-3-14,#sb-3-15,#sb-3-16,#sb-3-17,.info-sb-1-2) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-0:hover) :is(#sb-1-0,#sb-2-0,#sb-3-0,#sb-3-1,#sb-3-2,.info-sb-2-0) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-1:hover) :is(#sb-1-0,#sb-2-1,#sb-3-3,#sb-3-4,#sb-3-5,.info-sb-2-1) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-2:hover) :is(#sb-1-1,#sb-2-2,#sb-3-6,#sb-3-7,#sb-3-8,.info-sb-2-2) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-3:hover) :is(#sb-1-1,#sb-2-3,#sb-3-10,#sb-3-11,#sb-3-9,.info-sb-2-3) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-4:hover) :is(#sb-1-2,#sb-2-4,#sb-3-12,#sb-3-13,#sb-3-14,.info-sb-2-4) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-5:hover) :is(#sb-1-2,#sb-2-5,#sb-3-15,#sb-3-16,#sb-3-17,.info-sb-2-5) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-0:hover) :is(#sb-1-0,#sb-2-0,#sb-3-0,.info-sb-3-0) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-1:hover) :is(#sb-1-0,#sb-2-0,#sb-3-1,.info-sb-3-1) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-2:hover) :is(#sb-1-0,#sb-2-0,#sb-3-2,.info-sb-3-2) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-3:hover) :is(#sb-1-0,#sb-2-1,#sb-3-3,.info-sb-3-3) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-4:hover) :is(#sb-1-0,#sb-2-1,#sb-3-4,.info-sb-3-4) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-5:hover) :is(#sb-1-0,#sb-2-1,#sb-3-5,.info-sb-3-5) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-6:hover) :is(#sb-1-1,#sb-2-2,#sb-3-6,.info-sb-3-6) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-7:hover) :is(#sb-1-1,#sb-2-2,#sb-3-7,.info-sb-3-7) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-8:hover) :is(#sb-1-1,#sb-2-2,#sb-3-8,.info-sb-3-8) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-9:hover) :is(#sb-1-1,#sb-2-3,#sb-3-9,.info-sb-3-9) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-10:hover) :is(#sb-1-1,#sb-2-3,#sb-3-10,.info-sb-3-10) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-11:hover) :is(#sb-1-1,#sb-2-3,#sb-3-11,.info-sb-3-11) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-12:hover) :is(#sb-1-2,#sb-2-4,#sb-3-12,.info-sb-3-12) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-13:hover) :is(#sb-1-2,#sb-2-4,#sb-3-13,.info-sb-3-13) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-14:hover) :is(#sb-1-2,#sb-2-4,#sb-3-14,.info-sb-3-14) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-15:hover) :is(#sb-1-2,#sb-2-5,#sb-3-15,.info-sb-3-15) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-16:hover) :is(#sb-1-2,#sb-2-5,#sb-3-16,.info-sb-3-16) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-17:hover) :is(#sb-1-2,#sb-2-5,#sb-3-17,.info-sb-3-17) { opacity: 1; }
+
+#genres details {
+  margin-top: var(--space);
 }
 
 /* ===== Демонстрація: схлопування відступів ===== */
