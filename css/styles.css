@@ -60,10 +60,11 @@
   --space-xl: 32px;
 
   /* Нові змінні розмірів (ЛР 5): жодних «магічних чисел» у відступах і сітці */
+  --color-on-dark: hsl(0, 0%, 100%);  /* білий текст на темних плашках (теги авторів, SVG-діаграма) */
   --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
   --page-width: 1100px;     /* максимальна ширина вмісту сторінки */
   --card-width: 260px;      /* мінімальна ширина картки в сітці */
-  --card-img-height: 170px; /* висота зображень у картках каталогу */
+  --card-img-height: 260px; /* висота зображень у картках: дорівнює ширині картки — майже квадратна обкладинка */
   --gallery-img-height: 220px; /* висота ілюстрацій у галереї видання */
 
   /* Кольори авторів для тегів: взяті з їхніх обкладинок і вінілу
@@ -279,7 +280,7 @@ main {
 }
 
 main h1 {
-  margin-top: var(--space-lg);
+  margin-top: 0;
   margin-bottom: var(--space-sm);
 }
 
@@ -349,7 +350,7 @@ article fieldset {
   border: none;
   box-shadow: none;
   padding: 0;
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 article section:hover,
@@ -361,13 +362,12 @@ article fieldset:hover {
 article video,
 article audio {
   max-width: 100%;
-  margin-top: var(--space-sm);
-  margin-bottom: var(--space-sm);
+  margin: 0 0 var(--space-sm);
 }
 
 /* Цитата: повністю чиста без фонової заливки */
 blockquote {
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
   padding: var(--space-sm) 0 var(--space-sm) var(--space);
   border-left: 3px solid var(--color-accent);
   font-style: italic;
@@ -622,7 +622,7 @@ button {
 
 ol {
   padding-left: 1.5rem;
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 ol li {
@@ -652,24 +652,18 @@ ol li::marker {
 }
 
 dl {
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 dt {
   font-weight: 700;
   color: var(--color-brand);
-  margin-top: var(--space);
+  margin: 0;
   font-size: 1.05rem;
 }
 
-dt:first-child {
-  margin-top: 0;
-}
-
 dd {
-  margin-left: 0;
-  margin-top: 4px;
-  margin-bottom: var(--space-sm);
+  margin: 0 0 var(--space);
   padding-left: var(--space);
   border-left: 2px solid var(--color-border);
   color: var(--color-text);
@@ -682,7 +676,7 @@ dd {
 
 aside {
   max-width: var(--page-width);
-  margin: 0 auto;
+  margin: 0 auto var(--space-lg);
   padding: 0 var(--space);
 }
 
@@ -704,18 +698,12 @@ aside section:hover {
 aside h2,
 aside h3 {
   color: var(--color-brand);
-  margin-top: var(--space-lg);
-  margin-bottom: var(--space-sm);
-}
-
-aside h2:first-child,
-aside h3:first-child {
-  margin-top: 0;
+  margin: 0 0 var(--space-sm);
 }
 
 aside ul {
   padding-left: 1.25rem;
-  margin: var(--space-sm) 0 var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 aside ul li {
@@ -724,7 +712,7 @@ aside ul li {
 }
 
 aside p {
-  margin: var(--space-sm) 0;
+  margin: 0 0 var(--space-sm);
 }
 
 /* --------------------------------------------------------------------------
@@ -743,9 +731,12 @@ body > footer {
   color: var(--color-muted);
 }
 
+body > footer address {
+  margin-bottom: var(--space-sm);
+}
+
 body > footer p {
-  margin-top: var(--space-sm);
-  margin-bottom: 0;
+  margin: 0;
 }
 
 
@@ -817,9 +808,9 @@ a[href^="http"]::after {
 .neo {
   background-color: var(--color-bg);
   border-left: none;
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: var(--space-md);
-  margin: var(--space-lg) 0;
+  margin: 0 0 var(--space-lg);
   box-shadow: 8px 8px 16px rgb(0 0 0 / 15%),
               -8px -8px 16px rgb(255 255 255 / 70%);
 
@@ -832,15 +823,20 @@ a[href^="http"]::after {
 
 /* ===== Картки каталогу ===== */
 
+/* Відступ лише знизу, як і скрізь у роботі */
 .catalog {
-  margin-top: var(--space-xl);
+  margin-bottom: var(--space-xl);
 }
 
 /* Контейнер карток: сам нічого не малює, лише тримає картки одну за одною.
    Поки немає Flexbox і Grid, картки стають у рядок через inline-block;
    коли ряд заповнений, наступна картка переноситься на новий. */
+/* transform: scale(1) нічого не масштабує, але створює новий контекст
+   накладання: z-index карток і бейджів порівнюються лише всередині .cards,
+   а шапка (z-index: 10) лишається над усім блоком */
 .cards {
-  margin-top: var(--space);
+  margin: 0;
+  transform: scale(1);
 }
 
 /* Експеримент із position: relative. Абсолютно позиціонований бейдж рахує
@@ -981,7 +977,7 @@ a[href^="http"]::after {
 
 .banner {
   width: min(100%, 900px); /* не розтягується нескінченно на широкому екрані */
-  margin: var(--space-lg) auto; /* auto по боках — центрування */
+  margin: 0 auto var(--space-lg); /* auto по боках — центрування; вертикально лише знизу */
   padding: var(--space-lg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -1073,7 +1069,7 @@ a[href^="http"]::after {
   padding: var(--space-xs) var(--space-sm);
   border-radius: 999px;
   background-color: var(--color-muted); /* запасний колір, якщо модифікатор не задано */
-  color: hsl(0, 0%, 100%);
+  color: var(--color-on-dark);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -1148,6 +1144,7 @@ a[href^="http"]::after {
 
 .sunburst-wrap {
   overflow-x: auto;
+  margin-bottom: var(--space);
 }
 
 .sunburst {
@@ -1156,7 +1153,7 @@ a[href^="http"]::after {
   min-width: 640px;
   max-width: 980px;
   height: auto;
-  margin: 0 auto;
+  margin: 0 auto var(--space);
 }
 
 .sunburst text {
@@ -1165,7 +1162,7 @@ a[href^="http"]::after {
 }
 
 .sb-l1 {
-  fill: hsl(0, 0%, 100%);
+  fill: var(--color-on-dark);
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1173,7 +1170,7 @@ a[href^="http"]::after {
 }
 
 .sb-l2 {
-  fill: hsl(0, 0%, 100%);
+  fill: var(--color-on-dark);
   font-size: 15px;
   font-weight: 600;
 }
@@ -1224,7 +1221,7 @@ a[href^="http"]::after {
   display: grid;
   max-width: 860px;
   min-height: 6rem;
-  margin: var(--space) auto 0;
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -1293,10 +1290,6 @@ a[href^="http"]::after {
 .sunburst-wrap:has(#sb-3-15:hover) :is(#sb-1-2,#sb-2-5,#sb-3-15,.info-sb-3-15) { opacity: 1; }
 .sunburst-wrap:has(#sb-3-16:hover) :is(#sb-1-2,#sb-2-5,#sb-3-16,.info-sb-3-16) { opacity: 1; }
 .sunburst-wrap:has(#sb-3-17:hover) :is(#sb-1-2,#sb-2-5,#sb-3-17,.info-sb-3-17) { opacity: 1; }
-
-#genres details {
-  margin-top: var(--space);
-}
 
 /* ===== Демонстрація: схлопування відступів ===== */
 
