@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body>
+<body id="top">
 
     <!-- Шапка сайту -->
-    <header id="top">
+    <header>
         <a href="index.html" class="logo">Вініл-Клуб</a>
         <nav aria-label="Головне меню">
             <ul>
@@ -34,6 +34,7 @@
             <h2>Зміст розділу</h2>
             <ul>
                 <li><a href="#genres">Музичні жанри</a></li>
+                <li><a href="#catalog-cards">Каталог (картки)</a></li>
                 <li><a href="#albums-table">Таблиця видань</a></li>
                 <li><a href="#tracklists">Видання та треклісти</a></li>
                 <li><a href="#vinyl-care">Правила догляду</a></li>
@@ -102,6 +103,56 @@
             </ul>
         </section>
 
+        <!-- Каталог (ЛР 5): картки платівок; назва веде до детального видання нижче -->
+        <section id="catalog-cards" class="catalog">
+            <h2>Каталог</h2>
+            <div class="cards">
+
+                <!-- Картка 1: новий реліз, свідомо довга назва, горизонтальне фото -->
+                <article class="card">
+                    <span class="card__badge">Нове</span>
+                    <img class="card__img" src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
+                    <div class="card__body">
+                        <h3 class="card__title"><a href="#edition-lamenting-malice">Lamenting Malice (Limited Double LP, Black Ice &amp; White Marbled Vinyl, Gatefold Sleeve)</a></h3>
+                        <p class="card__meta"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span><br>Жанр: Breakcore, Gabber<br>Рік: 2026</p>
+                        <p class="card__id">Артикул: UA-LP-11045</p>
+                    </div>
+                </article>
+
+                <!-- Картка 2: свідомо довга назва, квадратне фото -->
+                <article class="card">
+                    <img class="card__img" src="images/card-3.jpg" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора">
+                    <div class="card__body">
+                        <h3 class="card__title"><a href="#edition-ultraviolet">Ultraviolet (Exclusive Smoky Clear Vinyl Edition Featuring Bonus Tracks)</a></h3>
+                        <p class="card__meta"><span class="artist-tag artist-tag--usedcvnt">Usedcvnt</span><br>Жанр: Breakcore, Ambient<br>Рік: 2023</p>
+                        <p class="card__id">Артикул: UA-LP-77020</p>
+                    </div>
+                </article>
+
+                <!-- Картка 3: культовий альбом, бейдж «Хіт» -->
+                <article class="card">
+                    <span class="card__badge">Хіт</span>
+                    <img class="card__img" src="images/card-6.jpg" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям">
+                    <div class="card__body">
+                        <h3 class="card__title"><a href="#edition-draining-love-story">Draining Love Story</a></h3>
+                        <p class="card__meta"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><br>Жанр: Breakcore, Ambient<br>Рік: 2020</p>
+                        <p class="card__id">Артикул: UA-LP-02020</p>
+                    </div>
+                </article>
+
+                <!-- Картка 4: вертикальне фото -->
+                <article class="card">
+                    <img class="card__img" src="images/card-7.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A">
+                    <div class="card__body">
+                        <h3 class="card__title"><a href="#edition-the-world-is-fvcked">The World Is Fvcked</a></h3>
+                        <p class="card__meta"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><br>Жанр: Jungle, Ambient, Drum n Bass<br>Рік: 2020</p>
+                        <p class="card__id">Артикул: UA-LP-02022</p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
        <table id="albums-table">
   <caption>Зведена таблиця альбомів, виконавців, дат випуску та видавництв</caption>
   <thead>
@@ -133,10 +184,16 @@
     </tr>
     <tr>
       <th scope="row">DRAINING LOVE STORY</th>
-      <td rowspan="2">Sewerslvt</td>
+      <td rowspan="3">Sewerslvt</td>
       <td>2020</td>
       <td>Geometric Lullaby</td>
       <td>GEO-069</td>
+    </tr>
+    <tr>
+      <th scope="row">THE WORLD IS FVCKED</th>
+      <td>2020</td>
+      <td>Wave Racers Collective</td>
+      <td>WRCV003</td>
     </tr>
     <tr>
       <th scope="row">WE HAD GOOD TIMES TOGETHER, DON'T FORGET THAT</th>
@@ -148,7 +205,7 @@
   <tfoot>
     <tr>
       <th colspan="3" scope="row">Разом релізів у каталозі</th>
-      <td colspan="2">4 платівки (2020–2026 рр.)</td>
+      <td colspan="2">5 платівок (2020–2026 рр.)</td>
     </tr>
   </tfoot>
 </table>
@@ -158,8 +215,9 @@
             <h2>Видання та треклісти</h2>
 
             <!-- Альбом 1: Cynthoni (єдиний figure з figcaption за вимогою лаби) -->
-            <article>
+            <article id="edition-lamenting-malice">
                 <h3>Cynthoni — Lamenting Malice (2026) <span class="edition-badge">Нове</span></h3>
+                <p class="edition-tags"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></p>
                 <p>Подвійне лімітоване вінілове видання (Black Ice &amp; White Marbled) на власному лейблі Cynthoni (CYN003-V) у стилях брейккор, драм-енд-бейс, джангл та габбер.</p>
 
                 <figure>
@@ -218,8 +276,9 @@
             </article>
 
             <!-- Альбом 2: Usedcvnt (чистий img без підпису) -->
-            <article>
+            <article id="edition-ultraviolet">
                 <h3>Usedcvnt — Ultraviolet (2023)</h3>
+                <p class="edition-tags"><span class="artist-tag artist-tag--usedcvnt">Usedcvnt</span></p>
                 <p>Атмосферний реліз на перетині ембієнту, драм-енд-бейсу та джанглу з колабораціями та фірмовими мелодійними текстурами.</p>
 
                 <img src="images/ultraviolet-vinyl.jpg"
@@ -262,8 +321,9 @@
             </article>
 
             <!-- Альбом 3: Sewerslvt (чистий img без підпису) -->
-            <article>
+            <article id="edition-draining-love-story">
                 <h3>Sewerslvt — Draining Love Story (2020) <span class="edition-badge">Хіт</span></h3>
+                <p class="edition-tags"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span></p>
                 <p>Культовий альбом на 10 композицій загальною тривалістю близько 58 хвилин, що закріпив фірмовий стиль виконавиці на стику атмосферного драм-енд-бейсу та брейккору.</p>
 
                 <img src="images/draining-love-story-vinyl.jpg"
@@ -296,6 +356,43 @@
                 </details>
                 <footer>
                     <p>Артикул: <strong>UA-LP-02020</strong> | Жанр: <strong>Breakcore, Ambient</strong> | Рік: <strong>2020</strong></p>
+                </footer>
+            </article>
+
+            <!-- Альбом 4: Sewerslvt — The World Is Fvcked -->
+            <article id="edition-the-world-is-fvcked">
+                <h3>Sewerslvt — The World Is Fvcked (2020)</h3>
+                <p class="edition-tags"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span></p>
+                <p>Альбом 2020 року на стику джанглу, ембієнту, драм-енд-бейсу, експериментальної електроніки та трансу: сім треків загальною тривалістю близько 35 хвилин.</p>
+
+                <img src="images/card-8.jpg"
+                    alt="Обкладинка альбому The World Is Fvcked: колаж із чотирьох зображень і напис sewerslvt theworldisfvcked"
+                    width="360" height="360"
+                    loading="lazy">
+
+                <section class="gallery">
+                    <h4>Додаткові ілюстрації</h4>
+                    <div class="gallery__items">
+                        <img src="images/card-10.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A на сірому тлі" loading="lazy">
+                        <img src="images/card-9.jpg" alt="Золотава етикетка сторони B платівки The World Is Fvcked зі списком треків 5–7" loading="lazy">
+                    </div>
+                </section>
+
+                <details>
+                    <summary>Переглянути трекліст альбому (7 треків)</summary>
+                    <ol class="tracklist">
+                        <li>A Thousand Lonely <span class="track-duration">2:18</span></li>
+                        <li>Make-Me-Sad <span class="track-duration">6:15</span></li>
+                        <li>Psychosis <span class="track-duration">3:49</span></li>
+                        <li>Something of Value Less Than That <span class="track-duration">4:36</span></li>
+                        <li>Ruined Snowy Day <span class="track-duration">4:19</span></li>
+                        <li>I Really Like You Pt2 <span class="track-duration">7:03</span></li>
+                        <li>Jvnko Still Loves You <span class="track-duration">6:59</span></li>
+                    </ol>
+                </details>
+
+                <footer>
+                    <p>Артикул: <strong>UA-LP-02022</strong> | Жанр: <strong>Jungle, Ambient, Drum n Bass</strong> | Рік: <strong>2020</strong></p>
                 </footer>
             </article>
         </section>
@@ -358,6 +455,8 @@
         </address>
         <p>Підгрупа 2, Царенко, 2026 рік</p>
     </footer>
+
+    <a class="to-top" href="#top" aria-label="Нагору">↑</a>
 
 </body>
 
