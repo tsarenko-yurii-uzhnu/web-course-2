@@ -4,11 +4,29 @@
    Студент: Царенко Юрій
    Дата: 2026-10-05
    Тема 4: CSS-основи, селектори, каскад, текст і шрифти
+   Тема 5 (ЛР 5): нормалізація box-sizing, змінні розмірів, галерея в виданнях
    ========================================================================== */
 
 /* Моноширинний шрифт Google Fonts із кирилицею: Anonymous Pro — лише для
    треклістів і коду (накреслення 400 і 700); решта сайту — системний стек */
 @import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&subset=cyrillic&display=swap');
+
+/* --------------------------------------------------------------------------
+   0. Глобальна нормалізація коробок (ЛР 5)
+   -------------------------------------------------------------------------- */
+
+/* Що змінює це правило. За замовчуванням (box-sizing: content-box) властивість
+   width задає ширину лише вмісту, а padding і border браузер додає зверху.
+   Тому блок із width: 50% та padding: 20px насправді займає 50% + 40px + рамки,
+   і дві такі колонки разом виходять ширшими за 100% — друга падає на новий рядок.
+   У моделі border-box width вже включає padding і border: блок із width: 50%
+   лишається рівно половиною контейнера, а внутрішні відступи «з'їдають» місце
+   зсередини. Саме тому дві колонки по 50% з відступами нарешті стоять в одному
+   рядку. Правило стоїть перед :root і діє на всі елементи та їхні
+   псевдоелементи (@import вище — бо імпорт у CSS має йти першим у файлі). */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 /* --------------------------------------------------------------------------
    1. Палітра у custom properties (:root) та нетипові змінні
@@ -34,12 +52,26 @@
   /* Нетипові змінні (шрифти, геометрія, тіні) */
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Anonymous Pro", "Courier New", Courier, monospace;
-  --radius: 4px;
+  --radius: 12px;
   --space: 16px;
   --space-sm: 8px;
   --space-md: 20px;
   --space-lg: 24px;
   --space-xl: 32px;
+
+  /* Нові змінні розмірів (ЛР 5): жодних «магічних чисел» у відступах і сітці */
+  --color-on-dark: hsl(0, 0%, 100%);  /* білий текст на темних плашках (теги авторів, SVG-діаграма) */
+  --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
+  --page-width: 1100px;     /* максимальна ширина вмісту сторінки */
+  --card-width: 260px;      /* мінімальна ширина картки в сітці */
+  --card-img-height: 260px; /* висота зображень у картках: дорівнює ширині картки — майже квадратна обкладинка */
+  --gallery-img-height: 220px; /* висота ілюстрацій у галереї видання */
+
+  /* Кольори авторів для тегів: взяті з їхніх обкладинок і вінілу
+     (на всіх фонах текст тегу білий) */
+  --artist-cynthoni: hsl(215, 18%, 30%);  /* крижано-мармуровий вініл Black Ice */
+  --artist-usedcvnt: hsl(265, 40%, 38%);  /* ультрафіолет, прозоро-димчастий вініл */
+  --artist-sewerslvt: hsl(330, 60%, 38%); /* рожево-малиновий сплеттер */
 
   /* Базова тінь та тінь підйому карток при ховері */
   --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
@@ -71,10 +103,6 @@ body.dark-theme {
    2. Базові стилі та типографіка (rem, line-height числом)
    -------------------------------------------------------------------------- */
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
 html {
   height: 100%;
 }
@@ -97,7 +125,9 @@ h1, h2, h3 {
   color: var(--color-brand);
 }
 
-h1 { font-size: 2.25rem; }
+/* clamp(мінімум, бажане, максимум): заголовок плавно росте разом із шириною
+   вікна, але не стає меншим за 1.6rem і більшим за 3rem */
+h1 { font-size: clamp(1.6rem, 5vw, 3rem); }
 h2 { font-size: 1.65rem; }
 h3 { font-size: 1.25rem; }
 
@@ -127,16 +157,24 @@ img {
 
 /* [8.3] Комбінатор > (дитина): стилі лише для шапки, що є прямою дитиною body,
    а не для <header> усередині карток article */
+/* Липка шапка: sticky тримає її вгорі вікна під час прокручування.
+   Фон — суцільний колір палітри (не прозорий), щоб текст сторінки не просвічував.
+   z-index працює лише в елементів із position, відмінним від static, тому шапці
+   потрібен саме position: sticky разом із z-index: сам по собі z-index ігнорується,
+   а картки з position: relative могли б опинитися поверх шапки. */
 body > header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background-color: var(--color-brand);
   color: var(--color-bg);
-  padding: var(--space) 0;
+  padding: var(--space-sm) 0;
 }
 
 /* Вміст шапки й підвалу — тієї ж ширини, що й main */
 body > header > *,
 body > footer > * {
-  max-width: 1100px;
+  max-width: var(--page-width);
   margin-left: auto;
   margin-right: auto;
   padding-left: var(--space);
@@ -236,13 +274,13 @@ a:active {
    -------------------------------------------------------------------------- */
 
 main {
-  max-width: 1100px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: var(--space-lg) var(--space);
 }
 
 main h1 {
-  margin-top: var(--space-lg);
+  margin-top: 0;
   margin-bottom: var(--space-sm);
 }
 
@@ -312,7 +350,7 @@ article fieldset {
   border: none;
   box-shadow: none;
   padding: 0;
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 article section:hover,
@@ -324,13 +362,12 @@ article fieldset:hover {
 article video,
 article audio {
   max-width: 100%;
-  margin-top: var(--space-sm);
-  margin-bottom: var(--space-sm);
+  margin: 0 0 var(--space-sm);
 }
 
 /* Цитата: повністю чиста без фонової заливки */
 blockquote {
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
   padding: var(--space-sm) 0 var(--space-sm) var(--space);
   border-left: 3px solid var(--color-accent);
   font-style: italic;
@@ -402,7 +439,9 @@ table {
 
 caption {
   text-align: left;
+  font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1.3;
   padding-bottom: var(--space-sm);
 }
 
@@ -583,7 +622,7 @@ button {
 
 ol {
   padding-left: 1.5rem;
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 ol li {
@@ -613,24 +652,18 @@ ol li::marker {
 }
 
 dl {
-  margin: var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 dt {
   font-weight: 700;
   color: var(--color-brand);
-  margin-top: var(--space);
+  margin: 0;
   font-size: 1.05rem;
 }
 
-dt:first-child {
-  margin-top: 0;
-}
-
 dd {
-  margin-left: 0;
-  margin-top: 4px;
-  margin-bottom: var(--space-sm);
+  margin: 0 0 var(--space);
   padding-left: var(--space);
   border-left: 2px solid var(--color-border);
   color: var(--color-text);
@@ -642,8 +675,8 @@ dd {
    -------------------------------------------------------------------------- */
 
 aside {
-  max-width: 1100px;
-  margin: 0 auto;
+  max-width: var(--page-width);
+  margin: 0 auto var(--space-lg);
   padding: 0 var(--space);
 }
 
@@ -665,18 +698,12 @@ aside section:hover {
 aside h2,
 aside h3 {
   color: var(--color-brand);
-  margin-top: var(--space-lg);
-  margin-bottom: var(--space-sm);
-}
-
-aside h2:first-child,
-aside h3:first-child {
-  margin-top: 0;
+  margin: 0 0 var(--space-sm);
 }
 
 aside ul {
   padding-left: 1.25rem;
-  margin: var(--space-sm) 0 var(--space) 0;
+  margin: 0 0 var(--space);
 }
 
 aside ul li {
@@ -685,7 +712,7 @@ aside ul li {
 }
 
 aside p {
-  margin: var(--space-sm) 0;
+  margin: 0 0 var(--space-sm);
 }
 
 /* --------------------------------------------------------------------------
@@ -704,9 +731,12 @@ body > footer {
   color: var(--color-muted);
 }
 
+body > footer address {
+  margin-bottom: var(--space-sm);
+}
+
 body > footer p {
-  margin-top: var(--space-sm);
-  margin-bottom: 0;
+  margin: 0;
 }
 
 
@@ -778,9 +808,9 @@ a[href^="http"]::after {
 .neo {
   background-color: var(--color-bg);
   border-left: none;
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: var(--space-md);
-  margin: var(--space-lg) 0;
+  margin: 0 0 var(--space-lg);
   box-shadow: 8px 8px 16px rgb(0 0 0 / 15%),
               -8px -8px 16px rgb(255 255 255 / 70%);
 
@@ -789,3 +819,489 @@ a[href^="http"]::after {
                 inset -8px -8px 16px rgb(255 255 255 / 70%);
   }
 }
+
+
+/* ===== Картки каталогу ===== */
+
+/* Відступ лише знизу, як і скрізь у роботі */
+.catalog {
+  margin-bottom: var(--space-xl);
+}
+
+/* Контейнер карток: сам нічого не малює, лише тримає картки одну за одною.
+   Поки немає Flexbox і Grid, картки стають у рядок через inline-block;
+   коли ряд заповнений, наступна картка переноситься на новий. */
+/* transform: scale(1) нічого не масштабує, але створює новий контекст
+   накладання: z-index карток і бейджів порівнюються лише всередині .cards,
+   а шапка (z-index: 10) лишається над усім блоком */
+.cards {
+  margin: 0;
+  transform: scale(1);
+}
+
+/* Експеримент із position: relative. Абсолютно позиціонований бейдж рахує
+   top/right відносно найближчого предка з position, відмінним від static;
+   коли я закоментував цей рядок, такого предка не стало, і всі бейджі
+   «злетіли» в правий верхній кут усієї сторінки. З relative точкою відліку
+   стає сама картка, тому бейдж опиняється в її правому верхньому куті. */
+.cards .card {
+  position: relative;
+}
+
+/* Картка. Селектор .cards .card, а не просто .card, бо клас card ще є
+   в блоці «Що ми пропонуємо» на головній — йому ширина картки не потрібна. */
+.cards .card {
+  display: inline-block;
+  vertical-align: top; /* картки різної висоти вирівнюються по верхньому краю */
+  width: var(--card-width);
+  margin: 0 var(--space-md) var(--space-lg) 0;
+  padding: 0;          /* відступи — лише в .card__body, щоб фото йшло до самого краю */
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  /* overflow: hidden потрібен разом із border-radius, щоб кути зображення
+     обрізалися по закругленню рамки й не виступали за неї. */
+  overflow: hidden;
+}
+
+.card__badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 2;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 999px; /* повністю закруглені краї — «пігулка» */
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* display: block потрібен, бо img за природою рядковий (inline): такий елемент
+   стоїть на базовій лінії тексту, і під ним лишається зайвий проміжок у
+   кілька пікселів під рядок; блоковий img цей проміжок прибирає. */
+.card__img {
+  display: block;
+  width: 100%;
+  height: var(--card-img-height);
+  object-fit: cover;
+  object-position: center;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+}
+
+/* Внутрішні відступи задає тільки тіло картки, а не сама картка */
+.card__body {
+  padding: var(--space-md);
+}
+
+/* Назва — рівно в один рядок; усе, що не вмістилося, замінюють три крапки */
+.card__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 var(--space-sm); /* відступ лише знизу, як і в решти абзаців картки */
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: var(--color-brand);
+}
+
+/* Назва в картці — посилання на видання, але виглядає як заголовок:
+   колір успадковується, підкреслення лише при наведенні */
+.card__title a:link,
+.card__title a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card__title a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.card__meta {
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.card__id {
+  margin: 0;
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ==========================================================================
+   14. Видання як «товар»: позначка в заголовку та галерея ілюстрацій
+   ========================================================================== */
+
+.edition-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--space-xs);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gallery__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.gallery__items img {
+  width: auto;
+  max-width: 100%;
+  height: var(--gallery-img-height);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+
+/* ==========================================================================
+   15. Градієнтний банер (головна сторінка)
+   ========================================================================== */
+
+.banner {
+  width: min(100%, 900px); /* не розтягується нескінченно на широкому екрані */
+  margin: 0 auto var(--space-lg); /* auto по боках — центрування; вертикально лише знизу */
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  /* Світлий градієнт у тон фону сторінки: від «картону» до ледь теплого
+     відтінку акценту, зверху — тонкі борозни платівки. Текст темний, тож
+     читається на всій довжині градієнта. */
+  background-image:
+    repeating-radial-gradient(circle at 92% 8%, transparent 0 7px, rgb(0 0 0 / 3%) 7px 8px),
+    linear-gradient(120deg, var(--color-surface), color-mix(in srgb, var(--color-accent) 22%, var(--color-bg)));
+}
+
+.banner h2 {
+  margin-top: 0;
+}
+
+.banner p {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   16. Бонус: кнопка «Нагору», «скляний» банер, опис у два рядки
+   ========================================================================== */
+
+/* position: fixed виймає кнопку з потоку й прив'язує до вікна браузера:
+   вона не займає місця в розмітці й завжди стоїть у правому нижньому куті. */
+.to-top {
+  position: fixed;
+  right: var(--space-lg);
+  bottom: var(--space-lg);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  box-shadow: var(--shadow-lift);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* Загальні правила a:link / a:hover специфічніші за .to-top, тому колір
+   кнопки задаємо тими ж псевдокласами */
+.to-top:link,
+.to-top:visited,
+.to-top:hover {
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+.to-top:hover {
+  background-color: var(--color-accent-hover);
+}
+
+/* «Скляний» банер: кілька фонових шарів в одному background.
+   Порядок від верхнього шару до нижнього: борозни платівки, напівпрозорий
+   градієнт (через нього проступає фото), фотографія, суцільний колір.
+   Суцільний колір може бути лише останнім: він заливає область під усіма
+   шарами-зображеннями і слугує запасним фоном, якщо фото не завантажилось. */
+.banner--glass {
+  background:
+    repeating-radial-gradient(circle at 92% 8%, transparent 0 7px, rgb(0 0 0 / 3%) 7px 8px),
+    linear-gradient(160deg, color-mix(in srgb, var(--color-bg) 92%, transparent), color-mix(in srgb, var(--color-surface) 70%, transparent)),
+    url("../images/breakcore-pod-vodochku-vinyl.jpg") center / cover no-repeat,
+    var(--color-surface);
+}
+
+/* Короткий опис у картці: рівно два рядки, далі — три крапки */
+.card__excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 var(--space-sm);
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* ==========================================================================
+   17. Теги авторів
+   ========================================================================== */
+
+.artist-tag {
+  display: inline-block;
+  margin-bottom: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 999px;
+  background-color: var(--color-muted); /* запасний колір, якщо модифікатор не задано */
+  color: var(--color-on-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.artist-tag--cynthoni  { background-color: var(--artist-cynthoni); }
+.artist-tag--usedcvnt  { background-color: var(--artist-usedcvnt); }
+.artist-tag--sewerslvt { background-color: var(--artist-sewerslvt); }
+
+/* Спільний тег двох авторів: дві частини одного «капсула» з власним
+   кольором кожного автора, між ними тонкий проміжок */
+.artist-tag-group {
+  display: inline-flex;
+  gap: 2px;
+  margin-bottom: var(--space-xs);
+}
+
+.artist-tag-group .artist-tag {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+.artist-tag-group .artist-tag:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.artist-tag-group .artist-tag:last-child {
+  border-radius: 0 999px 999px 0;
+}
+
+.edition-tags {
+  margin: 0 0 var(--space-sm);
+}
+
+/* ==========================================================================
+   18. Зміст сторінки кнопками та круговий спектр жанрів
+   ========================================================================== */
+
+/* Якір не ховається під липкою шапкою */
+[id] {
+  scroll-margin-top: 7rem;
+}
+
+.page-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-nav a:link,
+.page-nav a:visited {
+  display: inline-block;
+  padding: var(--space-sm) var(--space);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.page-nav a:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.sunburst-wrap {
+  overflow-x: auto;
+  margin-bottom: var(--space);
+}
+
+.sunburst {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  max-width: 980px;
+  height: auto;
+  margin: 0 auto var(--space);
+}
+
+.sunburst text {
+  font-family: var(--font-body);
+  pointer-events: none;
+}
+
+.sb-l1 {
+  fill: var(--color-on-dark);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sb-l2 {
+  fill: var(--color-on-dark);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sb-l3 {
+  fill: var(--color-muted);
+  font-size: 17px;
+}
+
+.sb-l3.sb-has {
+  fill: var(--color-text);
+  font-weight: 700;
+}
+
+.sb-hub {
+  fill: var(--color-surface);
+  stroke: var(--color-border);
+}
+
+.sb-hub-text {
+  fill: var(--color-muted);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.sunburst path {
+  stroke: var(--color-bg);
+  stroke-width: 2px;
+}
+
+.sb-seg {
+  transition: opacity 0.2s ease;
+}
+
+.sb-off path {
+  opacity: 0.4;
+}
+
+.sb-seg:hover path {
+  opacity: 1;
+  filter: brightness(1.12) saturate(1.2);
+}
+
+/* Інфопанель: усі блоки лежать в одній клітинці сітки й прозорі, а CSS
+   вмикає лише той, що відповідає сегменту під курсором */
+.sunburst-info {
+  display: grid;
+  max-width: 860px;
+  min-height: 6rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.sunburst-info > * {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sunburst-info strong {
+  font-size: 1.15rem;
+  color: var(--color-brand);
+}
+
+.sunburst-info span {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.sunburst-info span strong {
+  font-size: inherit;
+  color: var(--color-text);
+}
+
+/* Стан за замовчуванням: підказка видима, поки курсор не на діаграмі */
+.sunburst-wrap:not(:has(.sb-seg:hover)) .info-default {
+  opacity: 1;
+}
+
+/* Під курсором: усі сегменти тьмяніють... */
+.sunburst-wrap:has(.sb-seg:hover) .sb-seg {
+  opacity: 0.2;
+}
+
+/* ...а для кожного сегмента повертається повна непрозорість його «гілки»
+   (він сам, предки й нащадки) та його інфоблока. Правила згенеровані. */
+.sunburst-wrap:has(#sb-1-0:hover) :is(#sb-1-0,#sb-2-0,#sb-2-1,#sb-3-0,#sb-3-1,#sb-3-2,#sb-3-3,#sb-3-4,#sb-3-5,.info-sb-1-0) { opacity: 1; }
+.sunburst-wrap:has(#sb-1-1:hover) :is(#sb-1-1,#sb-2-2,#sb-2-3,#sb-3-10,#sb-3-11,#sb-3-6,#sb-3-7,#sb-3-8,#sb-3-9,.info-sb-1-1) { opacity: 1; }
+.sunburst-wrap:has(#sb-1-2:hover) :is(#sb-1-2,#sb-2-4,#sb-2-5,#sb-3-12,#sb-3-13,#sb-3-14,#sb-3-15,#sb-3-16,#sb-3-17,.info-sb-1-2) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-0:hover) :is(#sb-1-0,#sb-2-0,#sb-3-0,#sb-3-1,#sb-3-2,.info-sb-2-0) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-1:hover) :is(#sb-1-0,#sb-2-1,#sb-3-3,#sb-3-4,#sb-3-5,.info-sb-2-1) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-2:hover) :is(#sb-1-1,#sb-2-2,#sb-3-6,#sb-3-7,#sb-3-8,.info-sb-2-2) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-3:hover) :is(#sb-1-1,#sb-2-3,#sb-3-10,#sb-3-11,#sb-3-9,.info-sb-2-3) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-4:hover) :is(#sb-1-2,#sb-2-4,#sb-3-12,#sb-3-13,#sb-3-14,.info-sb-2-4) { opacity: 1; }
+.sunburst-wrap:has(#sb-2-5:hover) :is(#sb-1-2,#sb-2-5,#sb-3-15,#sb-3-16,#sb-3-17,.info-sb-2-5) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-0:hover) :is(#sb-1-0,#sb-2-0,#sb-3-0,.info-sb-3-0) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-1:hover) :is(#sb-1-0,#sb-2-0,#sb-3-1,.info-sb-3-1) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-2:hover) :is(#sb-1-0,#sb-2-0,#sb-3-2,.info-sb-3-2) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-3:hover) :is(#sb-1-0,#sb-2-1,#sb-3-3,.info-sb-3-3) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-4:hover) :is(#sb-1-0,#sb-2-1,#sb-3-4,.info-sb-3-4) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-5:hover) :is(#sb-1-0,#sb-2-1,#sb-3-5,.info-sb-3-5) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-6:hover) :is(#sb-1-1,#sb-2-2,#sb-3-6,.info-sb-3-6) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-7:hover) :is(#sb-1-1,#sb-2-2,#sb-3-7,.info-sb-3-7) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-8:hover) :is(#sb-1-1,#sb-2-2,#sb-3-8,.info-sb-3-8) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-9:hover) :is(#sb-1-1,#sb-2-3,#sb-3-9,.info-sb-3-9) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-10:hover) :is(#sb-1-1,#sb-2-3,#sb-3-10,.info-sb-3-10) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-11:hover) :is(#sb-1-1,#sb-2-3,#sb-3-11,.info-sb-3-11) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-12:hover) :is(#sb-1-2,#sb-2-4,#sb-3-12,.info-sb-3-12) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-13:hover) :is(#sb-1-2,#sb-2-4,#sb-3-13,.info-sb-3-13) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-14:hover) :is(#sb-1-2,#sb-2-4,#sb-3-14,.info-sb-3-14) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-15:hover) :is(#sb-1-2,#sb-2-5,#sb-3-15,.info-sb-3-15) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-16:hover) :is(#sb-1-2,#sb-2-5,#sb-3-16,.info-sb-3-16) { opacity: 1; }
+.sunburst-wrap:has(#sb-3-17:hover) :is(#sb-1-2,#sb-2-5,#sb-3-17,.info-sb-3-17) { opacity: 1; }
+
+/* ===== Демонстрація: схлопування відступів ===== */
+
+/* Схлопування вертикальних відступів (margin collapse).
+   Якщо розмістити цей блок у колонці блокових елементів (display: block),
+   відстань між сусідніми картками по вертикалі буде НЕ 24+16=40px, а 24px:
+   два вертикальні відступи, що стикаються, не додаються, а зливаються в один —
+   більший із двох. Горизонтальні відступи так не поводяться, вони завжди додаються.
+   У картках каталогу (inline-block) відступи не схлопуються взагалі, і було б
+   справді 40px. Саме тому в цій роботі вертикальні відступи задані лише
+   в один бік — знизу.
+
+.card { margin-bottom: 24px; }
+.card + .card { margin-top: 16px; }
+*/
