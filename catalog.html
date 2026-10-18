@@ -23,6 +23,7 @@
                 <li><a href="form.html">Замовлення</a></li>
             </ul>
         </nav>
+        <button type="button" class="theme-toggle" onclick="document.body.classList.toggle('dark-theme')">Тема</button>
     </header>
 
     <!-- Макет сторінки: Grid із зонами nav / main / side / foot (grid-template-areas у CSS) -->
@@ -35,6 +36,7 @@
                 <li><a href="#genres">Музичні жанри</a></li>
                 <li><a href="#catalog-cards">Каталог (картки)</a></li>
                 <li><a href="#albums-table">Таблиця видань</a></li>
+                <li><a href="#gallery">Галерея</a></li>
                 <li><a href="#tracklists">Видання та треклісти</a></li>
                 <li><a href="#vinyl-care">Правила догляду</a></li>
                 <li><a href="#glossary">Термінологічний словник</a></li>
@@ -160,7 +162,7 @@
                 <div class="cards">
 
                     <!-- Картка 1: новий реліз, свідомо довга назва, горизонтальне фото -->
-                    <article class="card">
+                    <article class="card" data-genres="breakcore gabber">
                         <span class="card__badge">Нове</span>
                         <img class="card__img" src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
                         <div class="card__body">
@@ -170,13 +172,13 @@
                             <p class="card__id">Артикул: CYN003-V</p>
                             <div class="card__actions">
                                 <a class="card__action" href="#">Замовити</a>
-                                <button type="button" class="card__quick" data-modal-open="details" aria-haspopup="dialog">Швидкий перегляд</button>
+                                <button type="button" class="card__quick" data-modal-open="details" aria-haspopup="dialog">Трекліст</button>
                             </div>
                         </div>
                     </article>
 
                     <!-- Картка 2: свідомо довга назва, квадратне фото -->
-                    <article class="card">
+                    <article class="card" data-genres="breakcore ambient">
                         <img class="card__img" src="images/card-3.jpg" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-ultraviolet">Ultraviolet (Exclusive Smoky Clear Vinyl Edition Featuring Bonus Tracks)</a></h3>
@@ -190,7 +192,7 @@
                     </article>
 
                     <!-- Картка 3: культовий альбом, бейдж «Хіт» -->
-                    <article class="card">
+                    <article class="card card--featured" data-genres="breakcore ambient">
                         <span class="card__badge">Хіт</span>
                         <img class="card__img" src="images/card-6.jpg" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям">
                         <div class="card__body">
@@ -205,7 +207,7 @@
                     </article>
 
                     <!-- Картка 4: вертикальне фото -->
-                    <article class="card">
+                    <article class="card" data-genres="jungle ambient drum-n-bass">
                         <img class="card__img" src="images/card-7.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-the-world-is-fvcked">The World Is Fvcked</a></h3>
@@ -219,7 +221,7 @@
                     </article>
 
                     <!-- Картки 5 і 6: дві частини однієї збірки, об'єднані спільним тегом двох авторів -->
-                    <article class="card">
+                    <article class="card" data-genres="trance jungle breakcore">
                         <img class="card__img" src="images/card-11.jpg" alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 1</a></h3>
@@ -232,7 +234,7 @@
                         </div>
                     </article>
 
-                    <article class="card">
+                    <article class="card" data-genres="trance jungle breakcore">
                         <img class="card__img" src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 2</a></h3>
@@ -246,7 +248,7 @@
                     </article>
 
                     <!-- Картка 7: Cynthoni, подвійний мармуровий вініл 2025 -->
-                    <article class="card">
+                    <article class="card" data-genres="breakcore jungle trance">
                         <img class="card__img" src="images/card-14.jpg" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і яскравим квітковим візерунком на одязі">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-in-the-eyes-of-cynthoni">Draining Love Story (In The Eyes Of Cynthoni)</a></h3>
@@ -260,7 +262,7 @@
                     </article>
 
                     <!-- Картка 8: Femtanyl, Entitii Records 2026 -->
-                    <article class="card">
+                    <article class="card" data-genres="breakcore gabber synthpunk">
                         <img class="card__img" src="images/card-17.jpg" alt="Обкладинка Man Bites Dog: вогняний напис у формі дерева над освітленою травою на темному тлі">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-man-bites-dog">Man Bites Dog</a></h3>
@@ -274,7 +276,7 @@
                     </article>
 
                     <!-- Картка 9: Femtanyl, лімітований міспринт 2024 -->
-                    <article class="card">
+                    <article class="card" data-genres="breakcore footwork gabber">
                         <span class="card__badge">Міспринт</span>
                         <img class="card__img" src="images/card-20.jpg" alt="Обкладинка Chaser: чорно-білий малюнок кота з червоними плямами, що стоїть на акумуляторі">
                         <div class="card__body">
@@ -295,10 +297,26 @@
                  відкривається через showModal(), закривається кнопкою, Esc або кліком по затемненню -->
             <dialog id="details" class="modal" aria-labelledby="details-title">
                 <div class="modal__body">
-                    <h2 id="details-title">Lamenting Malice</h2>
-                    <img src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
-                    <p>Подвійне лімітоване видання (Black Ice &amp; White Marbled) із розворотом: брейккор, драм-енд-бейс, джангл і габбер.</p>
+                    <h2 id="details-title">Cynthoni — Lamenting Malice</h2>
                     <p class="modal__meta">Cynthoni · Breakcore, Gabber · 2026<br>Лейбл: Not On Label (Cynthoni Self-released)<br>Артикул: CYN003-V</p>
+                    <h3>Трекліст (15 треків)</h3>
+                    <ol class="tracklist">
+                        <li>Unbirthing <span class="track-duration">1:06</span></li>
+                        <li>The F***ing Apocalypse <span class="track-duration">4:02</span></li>
+                        <li>Ensh***ification <span class="track-duration">4:04</span></li>
+                        <li>BleakReality <span class="track-duration">3:48</span></li>
+                        <li>Hell Sings <span class="track-duration">4:28</span></li>
+                        <li>MentallyILL <span class="track-duration">5:23</span></li>
+                        <li>Imminent Eradication <span class="track-duration">4:51</span></li>
+                        <li>Nihilism Extremist <span class="track-duration">4:00</span></li>
+                        <li>Dead Doom Scrolls <span class="track-duration">4:41</span></li>
+                        <li>Endlessly Dying Machine <span class="track-duration">4:48</span></li>
+                        <li>(emotion)2 <span class="track-duration">5:12</span></li>
+                        <li>Shut Your B***h A** Up: Prolapse Of The Mind <span class="track-duration">1:06</span></li>
+                        <li>Fearful Avoidant Disorganised Attachment <span class="track-duration">4:23</span></li>
+                        <li>Disappearing <span class="track-duration">6:48</span></li>
+                        <li>It Is 0 Seconds To Midnight <span class="track-duration">7:03</span></li>
+                    </ol>
                     <form method="dialog">
                         <button type="submit">Закрити</button>
                     </form>
@@ -389,6 +407,26 @@
       </tfoot>
     </table>
 
+            <!-- Бонус: щільна галерея. Grid з grid-auto-flow: row dense: великі плитки (wide, tall)
+                 займають по кілька клітинок, а дрібні заповнюють порожнечі між ними -->
+            <section id="gallery">
+                <h2>Галерея обкладинок</h2>
+                <p>Мозаїка з обкладинок і вінілу каталогу: кілька плиток розтягнуті вшир або вгору, решта заповнює проміжки.</p>
+                <div class="gallery">
+                    <figure class="gallery__item gallery__item--wide"><img src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-3.jpg" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора" loading="lazy"></figure>
+                    <figure class="gallery__item gallery__item--wide gallery__item--tall"><img src="images/card-17.jpg" alt="Обкладинка Man Bites Dog: вогняний напис у формі дерева над освітленою травою на темному тлі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-6.jpg" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям" loading="lazy"></figure>
+                    <figure class="gallery__item gallery__item--tall"><img src="images/card-7.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-14.jpg" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і квітковим візерунком на одязі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-15.jpg" alt="Блакитно-рожевий мармуровий вініловий диск з чорною етикеткою, на якій рожевим намальовані очі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-20.jpg" alt="Обкладинка Chaser: чорно-білий малюнок кота з червоними плямами, що стоїть на акумуляторі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-21.jpg" alt="Білий вініл із малиновими бризками та великим помаранчевим малюнком морди на сліпматі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-5.jpg" alt="Рожевий вініл Draining Love Story, етикетка сторони A з назвами треків" loading="lazy"></figure>
+                </div>
+            </section>
+
              <!-- Секція 3: треклісти альбомів -->
             <section id="tracklists">
                 <h2>Видання та треклісти</h2>
@@ -407,9 +445,9 @@
                         <figcaption>Фізичний вигляд подвійного мармурового вінілу Lamenting Malice (Black Ice &amp; White Marbled)</figcaption>
                     </figure>
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-1.jpg" alt="Чорно-білий мармуровий вініловий диск Lamenting Malice з етикеткою та назвами треків" loading="lazy">
                             <img src="images/card-2.jpg" alt="Колаж із розвороту Lamenting Malice: напис Cynthoni, назви треків і графіка" loading="lazy">
                         </div>
@@ -465,9 +503,9 @@
                         width="360" height="360"
                         loading="lazy">
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-3.jpg" alt="Ілюстрація до Ultraviolet: дівчинка з рожевим волоссям сидить біля ескалатора" loading="lazy">
                             <img src="images/card-4.jpg" alt="Внутрішній конверт Ultraviolet зі списком треків на тлі голих дерев" loading="lazy">
                         </div>
@@ -510,9 +548,9 @@
                         width="360" height="450"
                         loading="lazy">
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-5.jpg" alt="Рожевий вініл Draining Love Story, етикетка сторони A з назвами треків" loading="lazy">
                             <img src="images/card-6.jpg" alt="Обкладинка Draining Love Story: ілюстрація дівчини з фіолетовим волоссям" loading="lazy">
                         </div>
@@ -549,9 +587,9 @@
                         width="360" height="360"
                         loading="lazy">
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-10.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A на сірому тлі" loading="lazy">
                             <img src="images/card-9.jpg" alt="Золотава етикетка сторони B платівки The World Is Fvcked зі списком треків 5–7" loading="lazy">
                         </div>
@@ -586,9 +624,9 @@
                         width="360" height="360"
                         loading="lazy">
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni" loading="lazy">
                             <img src="images/card-13.jpg" alt="Темний конверт із голографічним написом sewerslvt presents: CYNThoni part 1/2" loading="lazy">
                         </div>
@@ -634,9 +672,9 @@
                         width="360" height="360"
                         loading="lazy">
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-14.jpg" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і квітковим візерунком на одязі" loading="lazy">
                             <img src="images/card-16.jpg" alt="Зворотний бік конверта: чорно-білий портрет у центрі, символи по боках і напис Draining Love Story" loading="lazy">
                         </div>
@@ -676,9 +714,9 @@
                         width="360" height="360"
                         loading="lazy">
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-18.jpg" alt="Чорний вініловий диск, що виглядає з конверта Man Bites Dog із вогняним написом" loading="lazy">
                             <img src="images/card-19.jpg" alt="Запечатаний у плівку конверт із червоним написом Man Bites Dog на чорному тлі" loading="lazy">
                         </div>
@@ -715,9 +753,9 @@
                         width="360" height="360"
                         loading="lazy">
 
-                    <section class="gallery">
+                    <section class="edition-gallery">
                         <h4>Додаткові ілюстрації</h4>
-                        <div class="gallery__items">
+                        <div class="edition-gallery__items">
                             <img src="images/card-21.jpg" alt="Білий вініл із малиновими бризками та великим помаранчевим малюнком морди на сліпматі" loading="lazy">
                             <img src="images/card-22.jpg" alt="Білий вініл із малиновими бризками та білою етикеткою з червоним написом у центрі" loading="lazy">
                         </div>
@@ -787,6 +825,20 @@
 
         <!-- Зона side (grid-area: side): зворотний зв'язок -->
         <aside class="layout__aside">
+            <!-- Фільтр за жанром без JavaScript: вибрана радіокнопка через :has() ховає картки з іншими жанрами (data-genres) -->
+            <section class="genre-filter">
+                <h2>Фільтр за жанром</h2>
+                <ul>
+                    <li><input type="radio" name="genre" id="genre-all" value="all" checked><label for="genre-all">Усі жанри</label></li>
+                    <li><input type="radio" name="genre" id="genre-breakcore" value="breakcore"><label for="genre-breakcore">Breakcore</label></li>
+                    <li><input type="radio" name="genre" id="genre-gabber" value="gabber"><label for="genre-gabber">Gabber</label></li>
+                    <li><input type="radio" name="genre" id="genre-ambient" value="ambient"><label for="genre-ambient">Ambient</label></li>
+                    <li><input type="radio" name="genre" id="genre-jungle" value="jungle"><label for="genre-jungle">Jungle</label></li>
+                    <li><input type="radio" name="genre" id="genre-trance" value="trance"><label for="genre-trance">Trance</label></li>
+                    <li><input type="radio" name="genre" id="genre-drum-n-bass" value="drum-n-bass"><label for="genre-drum-n-bass">Drum n Bass</label></li>
+                </ul>
+            </section>
+
             <section>
                 <h2>Зворотний зв'язок</h2>
                 <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?

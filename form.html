@@ -21,6 +21,7 @@
                 <li><a href="form.html" class="current" aria-current="page">Замовлення</a></li>
             </ul>
         </nav>
+        <button type="button" class="theme-toggle" onclick="document.body.classList.toggle('dark-theme')">Тема</button>
     </header>
 
     <main>
@@ -28,7 +29,7 @@
         <p>Ця форма призначена для оформлення замовлення або бронювання колекційних вінілових платівок із нашого каталогу. Після надсилання заявки менеджер перевірить фізичну наявність екземпляра на складі та зв'яжеться з вами впродовж робочого дня для підтвердження даних доставки й надання платіжних реквізитів.</p>
 
         <!-- Основна форма 1: Замовлення платівки -->
-        <form action="/submit" method="post" enctype="multipart/form-data">
+        <form class="form-grid" action="/submit" method="post" enctype="multipart/form-data">
             <!-- method="post": форма створює нове замовлення платівки, тому конфіденційні контактні дані не повинні потрапляти в URL, а запит не має дублюватися при оновленні сторінки -->
 
             <!-- Група 1: Контактні дані замовника та доставка -->
@@ -122,8 +123,8 @@
                     <input type="number" id="album-quantity" name="quantity" min="1" max="5" step="1" value="1" required>
                 </p>
 
-                <p><strong>Стан платівки:</strong></p>
-                <p>
+                <p class="form__term"><strong>Стан платівки:</strong></p>
+                <p class="form__control">
                     <input type="radio" id="condition-new" name="condition" value="new" checked>
                     <label for="condition-new">Нова (Mint / Sealed — запечатана заводська плівка)</label><br>
 
@@ -134,8 +135,8 @@
                     <label for="condition-used-vg">Б/в у доброму стані (Very Good+ — незначні сліди використання)</label>
                 </p>
 
-                <p><strong>Додаткові опції:</strong></p>
-                <p>
+                <p class="form__term"><strong>Додаткові опції:</strong></p>
+                <p class="form__control">
                     <input type="checkbox" id="opt-sleeve" name="extra_options" value="protective_sleeve">
                     <label for="opt-sleeve">Захисний конверт (зовнішній щільний чохол 350 мкм)</label><br>
 
@@ -156,7 +157,8 @@
                     <textarea id="order-comment" name="order_comment" rows="4" cols="50" minlength="10" maxlength="300" placeholder="Наприклад, уточнити номер відділення або зателефонувати перед відправкою"></textarea>
                 </p>
 
-                <p>
+                <p class="form__term"><strong>Підтвердження:</strong></p>
+                <p class="form__control">
                     <input type="checkbox" id="return-consent" name="return_consent" value="agreed" required>
                     <label for="return-consent">Я погоджуюся з умовами повернення товару та правилами замовлення</label>
                 </p>
@@ -168,7 +170,7 @@
                 
             </fieldset>
 
-            <p>
+            <p class="form__actions">
                 <button type="submit">Оформити замовлення</button>
                 <button type="reset">Очистити форму</button>
             </p>
@@ -181,7 +183,7 @@
             <h2>Зворотний зв'язок</h2>
             <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці? Надішліть нам повідомлення:</p>
 
-            <form action="/submit" method="post">
+            <form class="form-grid" action="/submit" method="post">
                 <!-- method="post": форма надсилає повідомлення користувача адміністраторам клубу без передачі тексту у відкритому URL -->
 
                 <p>
@@ -209,7 +211,7 @@
                     <textarea id="feedback-message" name="feedback_message" rows="4" cols="50" placeholder="Опишіть ваше запитання або пропозицію..." required></textarea>
                 </p>
 
-                <p>
+                <p class="form__actions">
                     <button type="submit">Надіслати повідомлення</button>
                 </p>
                 

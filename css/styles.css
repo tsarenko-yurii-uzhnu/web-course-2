@@ -77,7 +77,12 @@
   --min-col: 260px;     /* мінімальна ширина колонки сітки каталогу */
   --sidebar: 220px;     /* ширина бічних колонок макета (nav і side) */
   --gap-tag: 2px;       /* тонкий проміжок між частинами спільного тега авторів */
-  --header-offset: 5.5rem; /* висота липкої шапки з запасом: під неї «прилипає» зміст, і до неї скролляться якорі */
+  --header-offset: 5rem;   /* висота липкої шапки з запасом: під неї «прилипає» зміст, і до неї скролляться якорі */
+
+  /* Змінні бонусів ЛР 6: щільна галерея та форма в дві колонки */
+  --gallery-cols: 4;    /* кількість колонок галереї */
+  --gallery-row: 120px; /* висота одного рядка галереї: wide/tall плитки кратні їй */
+  --form-label-col: minmax(12rem, 18rem); /* ліва колонка форми з підписами */
 
   /* Кольори авторів для тегів: взяті з їхніх обкладинок і вінілу
      (на всіх фонах текст тегу білий) */
@@ -89,28 +94,34 @@
   /* Базова тінь та тінь підйому карток при ховері */
   --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
   --shadow-lift: 0 4px 12px rgb(0 0 0 / 12%), 0 12px 24px rgb(0 0 0 / 14%);
+  /* Тіні неоморфної картки: кольори у змінних, щоб темна тема їх перевизначала */
+  --neo-shadow-dark: rgb(0 0 0 / 15%);
+  --neo-shadow-light: rgb(255 255 255 / 70%);
 }
 
-/* БОНУС 1. Темна тема другим набором змінних: вмикається класом dark-theme
-   на <body> (вручну; перемикач буде в темі 9). Усі правила нижче вже
-   використовують var(...), тому дублювати їх не потрібно */
-body.dark-theme {
-  --color-brand: hsl(40, 30%, 90%);
-  --color-accent: hsl(16, 75%, 55%);
-  --color-accent-hover: hsl(16, 85%, 65%);
-  --color-visited: hsl(340, 50%, 68%);
-  --color-bg: hsl(20, 10%, 9%);
-  --color-surface: hsl(20, 8%, 15%);
-  --color-text: hsl(40, 20%, 88%);
-  --color-muted: hsl(32, 10%, 66%);
-  --color-border: hsl(24, 8%, 28%);
-  --color-highlight: hsl(42, 45%, 26%);
-  --color-row-hover: hsl(16, 28%, 24%);
+/* БОНУС 1. Темна тема: клас dark-theme на <body> (кнопка «Тема» в шапці) лише
+   перевизначає змінні палітри, жодного правила оформлення не дублюється.
+   Перші чотири змінні — з завдання, решта (бренд, межі, стани, тіні) підібрані
+   під той самий холодний відтінок, щоб текст лишався читабельним */
+.dark-theme {
+  --color-bg: #1b2631;
+  --color-surface: #22313f;
+  --color-text: #eaeded;
+  --color-accent: #5dade2;
+  --color-brand: hsl(180, 8%, 92%);
+  --color-accent-hover: hsl(204, 70%, 72%);
+  --color-visited: hsl(280, 40%, 72%);
+  --color-muted: hsl(204, 10%, 68%);
+  --color-border: hsl(206, 20%, 30%);
+  --color-highlight: hsl(204, 40%, 28%);
+  --color-row-hover: hsl(206, 30%, 26%);
   --color-danger: hsl(0, 70%, 62%);
   --color-danger-bg: hsl(0, 35%, 20%);
   --color-success: hsl(85, 35%, 60%);
   --color-success-bg: hsl(85, 20%, 18%);
   --color-current: hsl(0, 80%, 62%);
+  --neo-shadow-dark: rgb(0 0 0 / 45%);
+  --neo-shadow-light: rgb(255 255 255 / 6%);
 }
 
 /* --------------------------------------------------------------------------
@@ -825,6 +836,9 @@ body > footer p,
 
 /* Бічна колонка: блоки всередині ставить Flex, а проміжок між ними дає gap */
 .layout__aside {
+  position: sticky;           /* бонус: прокручується разом зі сторінкою й зупиняється під шапкою */
+  top: var(--header-offset);
+  align-self: start;          /* без цього колонка розтягнута на всю висоту рядка, і липнути нікуди */
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -868,7 +882,8 @@ body > footer p,
   }
 
   /* Зміст над вмістом не липне: у верхньому рядку він займав би пів екрана */
-  .layout__nav {
+  .layout__nav,
+  .layout__aside {
     position: static;
   }
 
@@ -949,12 +964,12 @@ a[href^="http"]::after {
   border-radius: var(--radius);
   padding: var(--space-md);
   margin: 0 0 var(--space-lg);
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 15%),
-              -8px -8px 16px rgb(255 255 255 / 70%);
+  box-shadow: 8px 8px 16px var(--neo-shadow-dark),
+              -8px -8px 16px var(--neo-shadow-light);
 
   &:active {
-    box-shadow: inset 8px 8px 16px rgb(0 0 0 / 15%),
-                inset -8px -8px 16px rgb(255 255 255 / 70%);
+    box-shadow: inset 8px 8px 16px var(--neo-shadow-dark),
+                inset -8px -8px 16px var(--neo-shadow-light);
   }
 }
 
@@ -1154,13 +1169,13 @@ a[href^="http"]::after {
   letter-spacing: 0.05em;
 }
 
-.gallery__items {
+.edition-gallery__items {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
 }
 
-.gallery__items img {
+.edition-gallery__items img {
   width: auto;
   max-width: 100%;
   height: var(--gallery-img-height);
@@ -1360,6 +1375,7 @@ a[href^="http"]::after {
 body:has(#genres:target) .page-nav a[href="#genres"],
 body:has(#catalog-cards:target) .page-nav a[href="#catalog-cards"],
 body:has(#albums-table:target) .page-nav a[href="#albums-table"],
+body:has(#gallery:target) .page-nav a[href="#gallery"],
 body:has(#tracklists:target) .page-nav a[href="#tracklists"],
 body:has(#vinyl-care:target) .page-nav a[href="#vinyl-care"],
 body:has(#glossary:target) .page-nav a[href="#glossary"],
@@ -1540,7 +1556,7 @@ body:has(#offers:target) .page-nav a[href="#offers"] {
    в top layer браузера, який завжди лежить над усім вмістом сторінки, зокрема
    над липкою шапкою. Розташування по центру дає сам браузер (margin: auto). */
 .modal {
-  width: min(90%, 420px);
+  width: min(90%, 480px);
   padding: 0;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -1583,3 +1599,171 @@ body:has(#offers:target) .page-nav a[href="#offers"] {
 body:has(dialog[open]) {
   overflow: hidden;
 }
+
+/* ==========================================================================
+   20. Бонуси ЛР 6
+   ========================================================================== */
+
+/* --- Перемикач теми в шапці: кнопка стоїть праворуч поруч із меню --- */
+body > header nav {
+  margin-left: auto;
+}
+
+.theme-toggle {
+  background-color: transparent;
+  color: var(--color-bg);
+  border-color: var(--color-bg);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* --- Закріплена картка: «Хіт» стоїть у HTML третьою, але в сітці займає весь перший
+   рядок (grid-column: 1 / -1 + grid-row: 1), порядок у розмітці не змінюється.
+   Решта карток сама розтікається по рядках нижче --- */
+.cards .card--featured {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lift);
+}
+
+.card--featured .card__img {
+  height: calc(var(--card-img-height) * 1.5);
+}
+
+/* --- Щільна галерея: Grid із grid-auto-flow: row dense. Рядки однакові,
+   wide розтягує плитку на дві колонки, tall — на два рядки, а dense
+   дозволяє дрібним плиткам заповнювати порожнечі, що лишились --- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-cols), 1fr);
+  grid-auto-rows: var(--gallery-row);
+  grid-auto-flow: row dense;
+  gap: var(--gap);
+  margin-bottom: var(--space-xl);
+}
+
+.gallery__item {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.gallery__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.gallery__item--wide { grid-column: span 2; }
+.gallery__item--tall { grid-row: span 2; }
+
+/* --- Форма у дві колонки: підписи ліворуч, поля праворуч.
+   Форма й кожен fieldset — Grid з двома колонками; кожен рядок <p> бере ці
+   колонки через subgrid, тож підписи й поля вирівнюються по одній лінії.
+   Проміжки — лише gap. <br> між підписом і полем у рядках приховано
+   (зірочка обов'язкових полів шукає його в DOM, тому в розмітці він лишається) --- */
+.form-grid,
+.form-grid fieldset {
+  display: grid;
+  grid-template-columns: var(--form-label-col) 1fr;
+  align-items: baseline;
+}
+
+.form-grid {
+  gap: var(--space-lg) var(--gap);
+}
+
+.form-grid fieldset {
+  grid-column: 1 / -1;
+  gap: var(--space) var(--gap);
+  margin: 0;
+}
+
+.form-grid p {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  max-width: none;
+  margin: 0;
+}
+
+.form-grid p:not(.form__control) br {
+  display: none;
+}
+
+/* Пара «заголовок групи — елементи групи»: перший у лівій колонці, другий у правій */
+.form-grid p.form__term {
+  display: block;
+  grid-column: 1;
+}
+
+.form-grid p.form__control {
+  display: block;
+  grid-column: 2;
+}
+
+/* Кнопки: рядок займає обидві колонки (grid-column: 1 / -1), «Надіслати» розтягнута */
+.form-grid p.form__actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.form__actions button[type="submit"] {
+  flex: 1;
+}
+
+/* --- Вузький екран: галерея в дві колонки, форма в одну --- */
+@media (max-width: 900px) {
+  .gallery {
+    --gallery-cols: 2;
+  }
+}
+
+@media (max-width: 700px) {
+  .form-grid,
+  .form-grid fieldset {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid p.form__term,
+  .form-grid p.form__control {
+    grid-column: 1;
+  }
+}
+
+/* --- Фільтр за жанром в aside (без JavaScript): радіокнопка в aside і картки
+   в main — нащадки одного .layout, тож :has() на ньому вмикає потрібне правило --- */
+.genre-filter ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.genre-filter li {
+  margin: 0;
+}
+
+.layout:has(#genre-breakcore:checked) .card:not([data-genres~="breakcore"]) { display: none; }
+.layout:has(#genre-gabber:checked) .card:not([data-genres~="gabber"]) { display: none; }
+.layout:has(#genre-ambient:checked) .card:not([data-genres~="ambient"]) { display: none; }
+.layout:has(#genre-jungle:checked) .card:not([data-genres~="jungle"]) { display: none; }
+.layout:has(#genre-trance:checked) .card:not([data-genres~="trance"]) { display: none; }
+.layout:has(#genre-drum-n-bass:checked) .card:not([data-genres~="drum-n-bass"]) { display: none; }
