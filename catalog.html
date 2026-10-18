@@ -170,7 +170,7 @@
                             <p class="card__id">Артикул: CYN003-V</p>
                             <div class="card__actions">
                                 <a class="card__action" href="#">Замовити</a>
-                                <button type="button" class="card__quick" data-modal-open="quick-view" aria-haspopup="dialog">Швидкий перегляд</button>
+                                <button type="button" class="card__quick" data-modal-open="details" aria-haspopup="dialog">Швидкий перегляд</button>
                             </div>
                         </div>
                     </article>
@@ -293,9 +293,9 @@
 
             <!-- Модальне вікно «Швидкий перегляд» для першої картки: нативний <dialog>,
                  відкривається через showModal(), закривається кнопкою, Esc або кліком по затемненню -->
-            <dialog id="quick-view" class="modal" aria-labelledby="quick-view-title">
+            <dialog id="details" class="modal" aria-labelledby="details-title">
                 <div class="modal__body">
-                    <h2 id="quick-view-title">Lamenting Malice</h2>
+                    <h2 id="details-title">Lamenting Malice</h2>
                     <img src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
                     <p>Подвійне лімітоване видання (Black Ice &amp; White Marbled) із розворотом: брейккор, драм-енд-бейс, джангл і габбер.</p>
                     <p class="modal__meta">Cynthoni · Breakcore, Gabber · 2026<br>Лейбл: Not On Label (Cynthoni Self-released)<br>Артикул: CYN003-V</p>
@@ -787,9 +787,11 @@
 
         <!-- Зона side (grid-area: side): зворотний зв'язок -->
         <aside class="layout__aside">
-            <h2>Зворотний зв'язок</h2>
-            <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?
-            <a href="form.html#feedback-section">Надішліть нам повідомлення</a>.</p>
+            <section>
+                <h2>Зворотний зв'язок</h2>
+                <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?
+                <a href="form.html#feedback-section">Надішліть нам повідомлення</a>.</p>
+            </section>
         </aside>
 
         <footer class="layout__footer">
@@ -806,8 +808,8 @@
 
     <!-- Керування модальним вікном: showModal() вмикає ::backdrop і top layer, Esc закриває вікно без коду -->
     <script>
-        const dialog = document.getElementById("quick-view");
-        const openButton = document.querySelector('[data-modal-open="quick-view"]');
+        const dialog = document.getElementById("details");
+        const openButton = document.querySelector('[data-modal-open="details"]');
 
         openButton.addEventListener("click", () => dialog.showModal());
 
