@@ -5,6 +5,7 @@
    Дата: 2026-10-05
    Тема 4: CSS-основи, селектори, каскад, текст і шрифти
    Тема 5 (ЛР 5): нормалізація box-sizing, змінні розмірів, галерея в виданнях
+   Тема 6 (ЛР 6): Grid для макета, Flexbox для вмісту, відступи лише через gap
    ========================================================================== */
 
 /* Моноширинний шрифт Google Fonts із кирилицею: Anonymous Pro — лише для
@@ -63,15 +64,21 @@
   --color-on-dark: hsl(0, 0%, 100%);  /* білий текст на темних плашках (теги авторів, SVG-діаграма) */
   --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
   --page-width: 1100px;     /* максимальна ширина вмісту сторінки */
-  --card-width: 260px;      /* мінімальна ширина картки в сітці */
   --card-img-height: 260px; /* висота зображень у картках: дорівнює ширині картки — майже квадратна обкладинка */
   --gallery-img-height: 220px; /* висота ілюстрацій у галереї видання */
+
+  /* Змінні макета (ЛР 6): проміжки й ширини колонок беруться лише звідси */
+  --gap: 1.25rem;       /* проміжок між картками сітки та елементами flex-рядків */
+  --min-col: 260px;     /* мінімальна ширина колонки сітки каталогу */
+  --sidebar: 220px;     /* ширина бічної колонки (поки не використана) */
+  --gap-tag: 2px;       /* тонкий проміжок між частинами спільного тега авторів */
 
   /* Кольори авторів для тегів: взяті з їхніх обкладинок і вінілу
      (на всіх фонах текст тегу білий) */
   --artist-cynthoni: hsl(215, 18%, 30%);  /* крижано-мармуровий вініл Black Ice */
   --artist-usedcvnt: hsl(265, 40%, 38%);  /* ультрафіолет, прозоро-димчастий вініл */
   --artist-sewerslvt: hsl(330, 60%, 38%); /* рожево-малиновий сплеттер */
+  --artist-femtanyl: hsl(8, 65%, 34%);    /* вогняно-червоний з обкладинки Man Bites Dog */
 
   /* Базова тінь та тінь підйому карток при ховері */
   --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
@@ -152,7 +159,7 @@ img {
 }
 
 /* --------------------------------------------------------------------------
-   3. Наскрізна шапка та горизонтальне меню (display: inline-block)
+   3. Наскрізна шапка та горизонтальне меню (Flexbox)
    -------------------------------------------------------------------------- */
 
 /* [8.3] Комбінатор > (дитина): стилі лише для шапки, що є прямою дитиною body,
@@ -194,15 +201,14 @@ body > header nav {
   background-color: var(--color-brand);
 }
 
+/* Вміст диктує Flex: пункти меню йдуть у рядок, проміжки дає лише gap */
 body > header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
   list-style: none;
   padding-left: 0;
-  margin: 0 0 0 -8px; /* вирівнює текст першого пункту з логотипом */
-}
-
-body > header nav li {
-  display: inline-block;
-  margin-right: var(--space-sm);
+  margin: 0 0 0 calc(-1 * var(--space-sm)); /* вирівнює текст першого пункту з логотипом */
 }
 
 body > header .logo:link,
@@ -214,7 +220,7 @@ body > header nav a:visited {
 }
 
 body > header nav a {
-  display: inline-block;
+  display: block;
   padding: var(--space-sm);
 }
 
@@ -270,7 +276,7 @@ a:active {
 }
 
 /* --------------------------------------------------------------------------
-   5. Головний контейнер та блочна розкладка (inline-block замість flex)
+   5. Головний контейнер та блочна розкладка
    -------------------------------------------------------------------------- */
 
 main {
@@ -400,29 +406,45 @@ article footer {
   color: var(--color-muted);
 }
 
-/* Варіант №11: окремий стиль назв треків — моноширинний шрифт
-   із вирівняною по правому краю тривалістю (float: right) */
+/* Варіант №11: окремий стиль назв треків — моноширинний шрифт. Рядок треку —
+   flex-контейнер: номер, назва й тривалість стоять в одному рядку. Номер
+   малюють лічильником CSS, бо display: flex прибирає стандартний маркер <li>;
+   margin-left: auto на тривалості забирає вільне місце й притискає її праворуч
+   (без обтікання та ручного скидання). */
 .tracklist {
   max-width: 32rem;
-  padding-left: 2rem;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: track;
+}
+
+/* Друга частина збірки починається з 7-го треку (атрибут start у HTML) */
+.tracklist[start="7"] {
+  counter-reset: track 6;
 }
 
 .tracklist li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap);
   padding: 6px 0;
+  counter-increment: track;
+}
+
+.tracklist li::before {
+  content: counter(track) ".";
+  flex-shrink: 0;
+  min-width: 3ch;
+  text-align: right;
+  color: var(--color-accent);
+  font-weight: 700;
 }
 
 .track-duration {
-  float: right;
+  flex-shrink: 0;
+  margin-left: auto;
   color: var(--color-accent);
   font-weight: 700;
-  margin-left: var(--space);
-}
-
-/* Скидання обтікання: рядок треку охоплює float із тривалістю */
-.tracklist li::after {
-  content: "";
-  display: table;
-  clear: both;
 }
 
 /* --------------------------------------------------------------------------
@@ -480,12 +502,12 @@ tbody tr:nth-child(even) {
 
 /* Підсвітка рядка під курсором (після зебри, щоб перемагати за порядком).
    Рядки, об'єднані через rowspan (один виконавець — кілька альбомів),
-   підсвічуються разом: з будь-якого з них видно всю групу.
-   :has(td[rowspan]) — рядок, де починається об'єднана клітинка;
-   + tr — наступний за ним рядок; :has(+ tr:hover) — рядок перед тим, що під курсором */
+   підсвічуються разом, скільки б їх не було: рядки групи позначені атрибутом
+   data-group у HTML, а :has() на tbody вмикає підсвітку всієї групи, коли
+   курсор стоїть над будь-яким її рядком. */
 tbody tr:hover,
-tbody tr:hover:has(td[rowspan]) + tr,
-tbody tr:has(td[rowspan]):has(+ tr:hover) {
+tbody:has(tr[data-group="sewerslvt"]:hover) tr[data-group="sewerslvt"],
+tbody:has(tr[data-group="femtanyl"]:hover) tr[data-group="femtanyl"] {
   background-color: var(--color-row-hover);
 }
 
@@ -828,13 +850,15 @@ a[href^="http"]::after {
   margin-bottom: var(--space-xl);
 }
 
-/* Контейнер карток: сам нічого не малює, лише тримає картки одну за одною.
-   Поки немає Flexbox і Grid, картки стають у рядок через inline-block;
-   коли ряд заповнений, наступна картка переноситься на новий. */
-/* transform: scale(1) нічого не масштабує, але створює новий контекст
+/* Макет диктує Grid: колонки підбираються автоматично (auto-fit + minmax),
+   проміжки між картками дає лише gap, без margin.
+   transform: scale(1) нічого не масштабує, але створює новий контекст
    накладання: z-index карток і бейджів порівнюються лише всередині .cards,
    а шапка (z-index: 10) лишається над усім блоком */
 .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
+  gap: var(--gap);
   margin: 0;
   transform: scale(1);
 }
@@ -849,12 +873,14 @@ a[href^="http"]::after {
 }
 
 /* Картка. Селектор .cards .card, а не просто .card, бо клас card ще є
-   в блоці «Що ми пропонуємо» на головній — йому ширина картки не потрібна. */
+   в блоці «Що ми пропонуємо» на головній — йому колонкова розкладка не потрібна.
+   Вміст диктує Flex: усередині картка — колонка. Ширину задає колонка сітки,
+   тож width не потрібен. margin: 0 лише скасовує margin-bottom із загального
+   правила «article, fieldset, table, .card»: інакше до gap додався б зайвий відступ. */
 .cards .card {
-  display: inline-block;
-  vertical-align: top; /* картки різної висоти вирівнюються по верхньому краю */
-  width: var(--card-width);
-  margin: 0 var(--space-md) var(--space-lg) 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
   padding: 0;          /* відступи — лише в .card__body, щоб фото йшло до самого краю */
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -885,6 +911,7 @@ a[href^="http"]::after {
    кілька пікселів під рядок; блоковий img цей проміжок прибирає. */
 .card__img {
   display: block;
+  flex-shrink: 0; /* у flex-колонці фото не стискається, коли тіла багато тексту */
   width: 100%;
   height: var(--card-img-height);
   object-fit: cover;
@@ -893,8 +920,14 @@ a[href^="http"]::after {
   border-radius: 0;
 }
 
-/* Внутрішні відступи задає тільки тіло картки, а не сама картка */
+/* Внутрішні відступи задає тільки тіло картки, а не сама картка.
+   Тіло — теж flex-колонка і займає весь залишок висоти картки; проміжки між
+   її рядками дає gap, тому окремих margin у дочірніх елементів немає */
 .card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-sm);
   padding: var(--space-md);
 }
 
@@ -903,7 +936,7 @@ a[href^="http"]::after {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0 0 var(--space-sm); /* відступ лише знизу, як і в решти абзаців картки */
+  margin: 0;
   font-size: 1.1rem;
   line-height: 1.4;
   color: var(--color-brand);
@@ -923,8 +956,7 @@ a[href^="http"]::after {
 }
 
 .card__meta {
-  margin-top: 0;
-  margin-bottom: var(--space-sm);
+  margin: 0;
   font-size: 0.9rem;
   color: var(--color-muted);
 }
@@ -939,12 +971,39 @@ a[href^="http"]::after {
   color: var(--color-text);
 }
 
+/* Кнопка «Замовити» — останній елемент тіла картки */
+.card__action {
+  /* auto забирає весь вільний простір по головній осі: так само, як margin: 0 auto
+     віддає залишок ширини боковим відступам і центрує блок, тут верхній відступ
+     забирає весь залишок висоти й притискає кнопку до низу картки. */
+  margin-top: auto;
+  align-self: flex-start;
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card__action:link,
+.card__action:visited {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+.card__action:hover {
+  background-color: var(--color-brand);
+  color: var(--color-bg);
+}
+
 /* ==========================================================================
    14. Видання як «товар»: позначка в заголовку та галерея ілюстрацій
    ========================================================================== */
 
 .edition-badge {
-  display: inline-block;
+  display: inline-flex;
   vertical-align: middle;
   margin-left: var(--space-sm);
   padding: var(--space-xs) var(--space-sm);
@@ -1054,7 +1113,7 @@ a[href^="http"]::after {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: 0 0 var(--space-sm);
+  margin: 0;
   font-size: 0.9rem;
   color: var(--color-muted);
 }
@@ -1064,7 +1123,7 @@ a[href^="http"]::after {
    ========================================================================== */
 
 .artist-tag {
-  display: inline-block;
+  display: inline-flex;
   margin-bottom: var(--space-xs);
   padding: var(--space-xs) var(--space-sm);
   border-radius: 999px;
@@ -1079,12 +1138,13 @@ a[href^="http"]::after {
 .artist-tag--cynthoni  { background-color: var(--artist-cynthoni); }
 .artist-tag--usedcvnt  { background-color: var(--artist-usedcvnt); }
 .artist-tag--sewerslvt { background-color: var(--artist-sewerslvt); }
+.artist-tag--femtanyl  { background-color: var(--artist-femtanyl); }
 
 /* Спільний тег двох авторів: дві частини одного «капсула» з власним
    кольором кожного автора, між ними тонкий проміжок */
 .artist-tag-group {
   display: inline-flex;
-  gap: 2px;
+  gap: var(--gap-tag);
   margin-bottom: var(--space-xs);
 }
 
@@ -1125,7 +1185,7 @@ a[href^="http"]::after {
 
 .page-nav a:link,
 .page-nav a:visited {
-  display: inline-block;
+  display: block;
   padding: var(--space-sm) var(--space);
   border: 1px solid var(--color-border);
   border-radius: 999px;
@@ -1298,7 +1358,7 @@ a[href^="http"]::after {
    відстань між сусідніми картками по вертикалі буде НЕ 24+16=40px, а 24px:
    два вертикальні відступи, що стикаються, не додаються, а зливаються в один —
    більший із двох. Горизонтальні відступи так не поводяться, вони завжди додаються.
-   У картках каталогу (inline-block) відступи не схлопуються взагалі, і було б
+   У Grid- і Flex-контейнерах (картки каталогу) відступи не схлопуються взагалі, і було б
    справді 40px. Саме тому в цій роботі вертикальні відступи задані лише
    в один бік — знизу.
 
