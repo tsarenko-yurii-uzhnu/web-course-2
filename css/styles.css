@@ -5,7 +5,8 @@
    Дата: 2026-10-05
    Тема 4: CSS-основи, селектори, каскад, текст і шрифти
    Тема 5 (ЛР 5): нормалізація box-sizing, змінні розмірів, галерея в виданнях
-   Тема 6 (ЛР 6): Grid для макета, Flexbox для вмісту, відступи лише через gap
+   Тема 6 (ЛР 6): Grid для макета, Flexbox для вмісту, відступи лише через gap,
+                  навігація на Flexbox, grid-template-areas, нативний <dialog>
    ========================================================================== */
 
 /* Моноширинний шрифт Google Fonts із кирилицею: Anonymous Pro — лише для
@@ -49,6 +50,7 @@
   --color-danger-bg: hsl(0, 70%, 95%);      /* Світлий фон поля з помилкою */
   --color-success: hsl(85, 28%, 32%);       /* Коректне поле: приглушений оливковий, у тон кремовій палітрі */
   --color-success-bg: hsl(85, 30%, 89%);    /* Світлий оливковий фон коректного поля */
+  --color-current: hsl(0, 78%, 46%);        /* Червона обводка поточного розділу в панелі змісту */
 
   /* Нетипові змінні (шрифти, геометрія, тіні) */
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -63,15 +65,19 @@
   /* Нові змінні розмірів (ЛР 5): жодних «магічних чисел» у відступах і сітці */
   --color-on-dark: hsl(0, 0%, 100%);  /* білий текст на темних плашках (теги авторів, SVG-діаграма) */
   --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
-  --page-width: 1100px;     /* максимальна ширина вмісту сторінки */
+  --page-width: 1400px;     /* максимальна ширина вмісту сторінки (макет із двома бічними колонками) */
+  /* Бічний відступ шапки й підвалу: вміст вирівнюється по краях макета,
+     а фон шапки лишається на всю ширину вікна */
+  --page-inset: max(var(--space), calc((100% - var(--page-width)) / 2 + var(--space)));
   --card-img-height: 260px; /* висота зображень у картках: дорівнює ширині картки — майже квадратна обкладинка */
   --gallery-img-height: 220px; /* висота ілюстрацій у галереї видання */
 
   /* Змінні макета (ЛР 6): проміжки й ширини колонок беруться лише звідси */
-  --gap: 1.25rem;       /* проміжок між картками сітки та елементами flex-рядків */
+  --gap: 2rem;          /* проміжок між зонами макета, картками сітки та елементами flex-рядків */
   --min-col: 260px;     /* мінімальна ширина колонки сітки каталогу */
   --sidebar: 220px;     /* ширина бічної колонки (поки не використана) */
   --gap-tag: 2px;       /* тонкий проміжок між частинами спільного тега авторів */
+  --header-offset: 5.5rem; /* висота липкої шапки з запасом: під неї «прилипає» зміст, і до неї скролляться якорі */
 
   /* Кольори авторів для тегів: взяті з їхніх обкладинок і вінілу
      (на всіх фонах текст тегу білий) */
@@ -104,20 +110,19 @@ body.dark-theme {
   --color-danger-bg: hsl(0, 35%, 20%);
   --color-success: hsl(85, 35%, 60%);
   --color-success-bg: hsl(85, 20%, 18%);
+  --color-current: hsl(0, 80%, 62%);
 }
 
 /* --------------------------------------------------------------------------
    2. Базові стилі та типографіка (rem, line-height числом)
    -------------------------------------------------------------------------- */
 
-html {
-  height: 100%;
-}
-
+/* Футер притиснуто до низу через Flexbox: body — flex-колонка висотою не менше вікна,
+   а блок, що росте (.layout або main), забирає весь вільний простір (flex: 1) */
 body {
-  position: relative;
-  min-height: 100%;
-  padding-bottom: 12rem; /* місце під футер, що лежить внизу body */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: var(--font-body);
   font-size: 1rem;       /* 16px */
   line-height: 1.6;      /* комфортний інтерліньяж числом */
@@ -167,48 +172,44 @@ img {
 /* Липка шапка: sticky тримає її вгорі вікна під час прокручування.
    Фон — суцільний колір палітри (не прозорий), щоб текст сторінки не просвічував.
    z-index працює лише в елементів із position, відмінним від static, тому шапці
-   потрібен саме position: sticky разом із z-index: сам по собі z-index ігнорується,
-   а картки з position: relative могли б опинитися поверх шапки. */
+   потрібен саме position: sticky разом із z-index. */
+/* Шапка — Flex-контейнер: логотип ліворуч, меню праворуч (space-between), по вертикалі
+   вони по центру, а проміжок між ними задає лише gap. flex-wrap дає меню перейти
+   під логотип на вузькому екрані. */
 body > header {
   position: sticky;
   top: 0;
   z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  padding: var(--space-sm) var(--page-inset);
   background-color: var(--color-brand);
   color: var(--color-bg);
-  padding: var(--space-sm) 0;
-}
-
-/* Вміст шапки й підвалу — тієї ж ширини, що й main */
-body > header > *,
-body > footer > * {
-  max-width: var(--page-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--space);
-  padding-right: var(--space);
 }
 
 /* Єдиний вигляд назви сайту для всіх сторінок */
 body > header .logo {
-  display: block;
   font-size: 2.25rem;
   line-height: 1.2;
-  margin-top: 0;
-  margin-bottom: var(--space-sm);
+  margin: 0;
 }
 
 body > header nav {
   background-color: var(--color-brand);
 }
 
-/* Вміст диктує Flex: пункти меню йдуть у рядок, проміжки дає лише gap */
-body > header nav ul {
+/* Вміст диктує Flex: пункти меню йдуть у рядок, проміжок дає лише gap.
+   Без старих хаків розкладки та без margin на <li> */
+body > header nav .menu {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
   list-style: none;
-  padding-left: 0;
-  margin: 0 0 0 calc(-1 * var(--space-sm)); /* вирівнює текст першого пункту з логотипом */
+  margin: 0;
+  padding: 0;
 }
 
 body > header .logo:link,
@@ -219,6 +220,7 @@ body > header nav a:visited {
   text-decoration: none;
 }
 
+/* Посилання лишаються плитками: блок із власним padding */
 body > header nav a {
   display: block;
   padding: var(--space-sm);
@@ -287,11 +289,22 @@ main {
 
 main h1 {
   margin-top: 0;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
 }
 
 main > p {
   margin-bottom: var(--space-lg);
+}
+
+/* Сторінки без .layout (about, form): main росте й притискає футер до низу;
+   width: 100% потрібен, бо auto-відступи не дають flex-елементу розтягнутися */
+body > main {
+  flex: 1;
+  width: 100%;
+}
+
+body > aside {
+  width: 100%;
 }
 
 /* --------------------------------------------------------------------------
@@ -741,24 +754,127 @@ aside p {
    12. Підвал сайту (<footer>)
    -------------------------------------------------------------------------- */
 
-body > footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+/* Підвал сторінок без .layout (about, form): звичайний блок у кінці flex-колонки body,
+   до низу його притискає main з flex: 1 */
+body > footer,
+.layout__footer {
   background-color: var(--color-surface);
   border-top: 1px solid var(--color-border);
-  padding: var(--space-lg) 0;
   font-size: 0.9rem;
   color: var(--color-muted);
 }
 
-body > footer address {
+body > footer {
+  padding: var(--space-lg) var(--page-inset);
+}
+
+body > footer address,
+.layout__footer address {
   margin-bottom: var(--space-sm);
 }
 
-body > footer p {
+body > footer p,
+.layout__footer p {
   margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   13. Макет сторінки (index, catalog): Grid і grid-template-areas
+   -------------------------------------------------------------------------- */
+
+/* Макет диктує Grid: три колонки (бічна, основна, бічна) і два рядки (вміст, підвал).
+   Зони названі у grid-template-areas, а кожен блок сам каже, у яку зону йому.
+   flex: 1 — .layout росте всередині flex-колонки body й притискає підвал до низу;
+   margin: 0 auto лише центрує сам макет, а проміжки між зонами дає gap. */
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    "nav  main side"
+    "foot foot foot";
+  gap: var(--gap);
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space);
+}
+
+/* Зміст завжди збоку: position: sticky не виймає блок із потоку (як fixed), тому він лишається
+   у своїй колонці й під час прокручування «прилипає» під шапкою. align-self: start потрібен,
+   бо за замовчуванням колонка розтягується на всю висоту рядка, і прилипати було б нікуди. */
+.layout__nav {
+  grid-area: nav;
+  position: sticky;
+  top: var(--header-offset);
+  align-self: start;
+}
+
+.layout__main   { grid-area: main; }
+.layout__aside  { grid-area: side; }
+.layout__footer { grid-area: foot; }
+
+/* min-width: 0 дозволяє колонці 1fr стискатися, коли всередині широка таблиця чи діаграма */
+.layout__main {
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Бічна колонка: блоки всередині ставить Flex, а проміжок між ними дає gap */
+.layout__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.layout__nav h2,
+.layout__aside h2 {
+  font-size: 1.15rem;
+}
+
+/* Панель змісту компактна: дрібніший заголовок, маленькі відступи */
+.layout__nav h2 {
+  margin: 0 0 var(--space-sm);
+  font-size: 1rem;
+}
+
+/* У вузькій колонці кнопки змісту стають стовпчиком */
+.layout__nav ul {
+  flex-direction: column;
+}
+
+.layout__footer {
+  padding: var(--space-lg) var(--space);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* Вузький екран: зони складаються в одну колонку одна під одною */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "nav"
+      "main"
+      "side"
+      "foot";
+  }
+
+  /* Зміст над вмістом не липне: у верхньому рядку він займав би пів екрана */
+  .layout__nav {
+    position: static;
+  }
+
+  .layout__nav ul {
+    flex-direction: row;
+  }
 }
 
 
@@ -971,13 +1087,21 @@ a[href^="http"]::after {
   color: var(--color-text);
 }
 
-/* Кнопка «Замовити» — останній елемент тіла картки */
-.card__action {
+/* Обгортка дій — рядок кнопок унизу картки. Flex з gap ставить «Замовити» і
+   «Швидкий перегляд» поруч, а margin-top: auto стоїть один раз на обгортці,
+   тому кнопки між собою не конфліктують. */
+.card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
   /* auto забирає весь вільний простір по головній осі: так само, як margin: 0 auto
      віддає залишок ширини боковим відступам і центрує блок, тут верхній відступ
-     забирає весь залишок висоти й притискає кнопку до низу картки. */
+     забирає весь залишок висоти й притискає кнопки до низу картки. */
   margin-top: auto;
-  align-self: flex-start;
+}
+
+/* Кнопка «Замовити» */
+.card__action {
   padding: var(--space-sm) var(--space);
   border-radius: var(--radius);
   font-size: 0.85rem;
@@ -996,6 +1120,20 @@ a[href^="http"]::after {
 .card__action:hover {
   background-color: var(--color-brand);
   color: var(--color-bg);
+}
+
+/* Кнопка «Швидкий перегляд» — другорядна: світла, з рамкою */
+.card__quick {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.card__quick:hover {
+  background-color: var(--color-border);
 }
 
 /* ==========================================================================
@@ -1171,13 +1309,13 @@ a[href^="http"]::after {
 
 /* Якір не ховається під липкою шапкою */
 [id] {
-  scroll-margin-top: 7rem;
+  scroll-margin-top: var(--header-offset);
 }
 
 .page-nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1186,20 +1324,48 @@ a[href^="http"]::after {
 .page-nav a:link,
 .page-nav a:visited {
   display: block;
-  padding: var(--space-sm) var(--space);
+  padding: var(--space-xs) var(--space-sm);
   border: 1px solid var(--color-border);
   border-radius: 999px;
   background-color: var(--color-surface);
   color: var(--color-text);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, outline-color 0.2s ease;
 }
 
 .page-nav a:hover {
   border-color: var(--color-accent);
   background-color: var(--color-accent);
   color: var(--color-bg);
+}
+
+/* Поточний розділ: червона обводка по зовнішньому контуру плитки, без JavaScript.
+   outline йде ззовні рамки й повторює її заокруглення, тож розмір плитки не змінюється. */
+
+/* scroll-target-group: auto — нова можливість CSS (Chrome/Edge 135+, поза лекційним
+   матеріалом): браузер сам вважає посилання змісту групою й стежить за прокручуванням. */
+.layout__nav {
+  scroll-target-group: auto;
+}
+
+/* :target-current — стан «розділ цього посилання зараз на екрані»; у браузерах без
+   підтримки правило просто ігнорується, тож нічого не ламається. */
+.page-nav a:target-current {
+  outline: 2px solid var(--color-current);
+}
+
+/* Запасний варіант для всіх браузерів: :target — елемент, до якого щойно перейшли за
+   посиланням з #id, а :has() піднімає цей стан до body, щоб підсвітити відповідний пункт. */
+body:has(#genres:target) .page-nav a[href="#genres"],
+body:has(#catalog-cards:target) .page-nav a[href="#catalog-cards"],
+body:has(#albums-table:target) .page-nav a[href="#albums-table"],
+body:has(#tracklists:target) .page-nav a[href="#tracklists"],
+body:has(#vinyl-care:target) .page-nav a[href="#vinyl-care"],
+body:has(#glossary:target) .page-nav a[href="#glossary"],
+body:has(#about-section:target) .page-nav a[href="#about-section"],
+body:has(#offers:target) .page-nav a[href="#offers"] {
+  outline: 2px solid var(--color-current);
 }
 
 .sunburst-wrap {
@@ -1365,3 +1531,55 @@ a[href^="http"]::after {
 .card { margin-bottom: 24px; }
 .card + .card { margin-top: 16px; }
 */
+
+/* ==========================================================================
+   19. Модальне вікно «Швидкий перегляд» (нативний <dialog>)
+   ========================================================================== */
+
+/* Цій модалці не потрібен z-index: вікно, відкрите через showModal(), потрапляє
+   в top layer браузера, який завжди лежить над усім вмістом сторінки, зокрема
+   над липкою шапкою. Розташування по центру дає сам браузер (margin: auto). */
+.modal {
+  width: min(90%, 420px);
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Затемнення сторінки під вікном малює псевдоелемент ::backdrop */
+.modal::backdrop {
+  background-color: rgb(0 0 0 / 55%);
+}
+
+/* Відступи — на внутрішній обгортці, щоб клік по самому <dialog> означав клік по затемненню */
+.modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--space-lg);
+}
+
+.modal__body > * {
+  margin: 0;
+}
+
+.modal h2 {
+  font-size: 1.4rem;
+}
+
+.modal img {
+  width: 100%;
+}
+
+.modal__meta {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* Поки модалка відкрита, фонова сторінка не прокручується */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
