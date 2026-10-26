@@ -97,31 +97,59 @@
   /* Тіні неоморфної картки: кольори у змінних, щоб темна тема їх перевизначала */
   --neo-shadow-dark: rgb(0 0 0 / 15%);
   --neo-shadow-light: rgb(255 255 255 / 70%);
+
+  /* Нові змінні для темної теми. У світлій темі дорівнюють попереднім значенням,
+     тому її вигляд не змінюється. Розв'язують конфлікт: --color-brand водночас
+     фон шапки/thead і колір заголовків, а їм у темній темі потрібні різні кольори */
+  --color-chrome: var(--color-brand);       /* фон шапки та рядків thead/tfoot */
+  --color-on-chrome: var(--color-bg);       /* текст на шапці та thead/tfoot */
+  --color-btn-hover: var(--color-brand);    /* фон кнопок при наведенні */
+  --glow-accent: none;                      /* світіння кнопок і плиток при наведенні */
 }
 
 /* БОНУС 1. Темна тема: клас dark-theme на <body> (кнопка «Тема» в шапці) лише
    перевизначає змінні палітри, жодного правила оформлення не дублюється.
-   Перші чотири змінні — з завдання, решта (бренд, межі, стани, тіні) підібрані
-   під той самий холодний відтінок, щоб текст лишався читабельним */
+   Стиль: глибокий чорний фон, графітово-бордові поверхні, неоново-червоний акцент.
+   Контраст (WCAG): текст на фоні ≈ 18:1, акцент #ff293b на фоні ≈ 5,3:1,
+   на поверхні ≈ 4,7:1; чорний текст кнопок на акценті ≈ 5,3:1 */
 .dark-theme {
-  --color-bg: #1b2631;
-  --color-surface: #22313f;
-  --color-text: #eaeded;
-  --color-accent: #5dade2;
-  --color-brand: hsl(180, 8%, 92%);
-  --color-accent-hover: hsl(204, 70%, 72%);
-  --color-visited: hsl(280, 40%, 72%);
-  --color-muted: hsl(204, 10%, 68%);
-  --color-border: hsl(206, 20%, 30%);
-  --color-highlight: hsl(204, 40%, 28%);
-  --color-row-hover: hsl(206, 30%, 26%);
-  --color-danger: hsl(0, 70%, 62%);
-  --color-danger-bg: hsl(0, 35%, 20%);
-  --color-success: hsl(85, 35%, 60%);
-  --color-success-bg: hsl(85, 20%, 18%);
-  --color-current: hsl(0, 80%, 62%);
-  --neo-shadow-dark: rgb(0 0 0 / 45%);
-  --neo-shadow-light: rgb(255 255 255 / 6%);
+  /* Фон і поверхні */
+  --color-bg: #0a0a0a;                       /* глибокий чорний */
+  --color-surface: hsl(350, 9%, 12%);        /* графіт із ледь помітним бордовим відтінком */
+  --color-chrome: hsl(350, 40%, 14%);        /* шапка та thead: темний бордо */
+  --color-on-chrome: hsl(0, 0%, 100%);
+
+  /* Текст */
+  --color-text: hsl(0, 0%, 94%);
+  --color-brand: hsl(0, 0%, 100%);           /* заголовки, підписи, hover посилань */
+  --color-muted: hsl(350, 6%, 68%);
+
+  /* Акцент */
+  --color-accent: #ff293b;                   /* чистий яскравий червоний */
+  --color-accent-hover: hsl(355, 100%, 68%);
+  --color-btn-hover: var(--color-accent-hover);
+  --color-visited: hsl(330, 40%, 68%);       /* відвідані: приглушений рожевий, не плутається з акцентом */
+  --color-current: hsl(355, 100%, 70%);
+
+  /* Межі й стани */
+  --color-border: hsl(350, 14%, 24%);
+  --color-highlight: hsl(355, 75%, 30%);
+  --color-row-hover: hsl(352, 45%, 17%);
+  --color-danger: hsl(24, 100%, 62%);        /* помилка: бурштиново-помаранчева, щоб не зливалась із червоним акцентом */
+  --color-danger-bg: hsl(24, 50%, 14%);
+  --color-success: hsl(145, 55%, 58%);
+  --color-success-bg: hsl(145, 30%, 12%);
+
+  /* Тіні та неонове світіння */
+  --shadow: 0 1px 2px rgb(0 0 0 / 70%),
+            0 8px 20px rgb(255 41 59 / 7%);
+  --shadow-lift: 0 0 0 1px rgb(255 41 59 / 35%),
+                 0 0 18px rgb(255 41 59 / 40%),
+                 0 10px 32px rgb(255 41 59 / 22%);
+  --glow-accent: 0 0 10px rgb(255 41 59 / 60%),
+                 0 0 26px rgb(255 41 59 / 35%);
+  --neo-shadow-dark: rgb(0 0 0 / 90%);
+  --neo-shadow-light: rgb(255 41 59 / 9%);   /* неоморфна картка світиться червоним, а не білим */
 }
 
 /* --------------------------------------------------------------------------
@@ -197,8 +225,8 @@ body > header {
   justify-content: space-between;
   gap: var(--gap);
   padding: var(--space-sm) var(--page-inset);
-  background-color: var(--color-brand);
-  color: var(--color-bg);
+  background-color: var(--color-chrome);
+  color: var(--color-on-chrome);
 }
 
 /* Єдиний вигляд назви сайту для всіх сторінок */
@@ -209,7 +237,7 @@ body > header .logo {
 }
 
 body > header nav {
-  background-color: var(--color-brand);
+  background-color: var(--color-chrome);
 }
 
 /* Вміст диктує Flex: пункти меню йдуть у рядок, проміжок дає лише gap.
@@ -227,7 +255,7 @@ body > header .logo:link,
 body > header .logo:visited,
 body > header nav a:link,
 body > header nav a:visited {
-  color: var(--color-bg);
+  color: var(--color-on-chrome);
   text-decoration: none;
 }
 
@@ -498,8 +526,8 @@ th, td {
 }
 
 thead th, tfoot th {
-  background-color: var(--color-brand);
-  color: var(--color-bg);
+  background-color: var(--color-chrome);
+  color: var(--color-on-chrome);
 }
 
 tbody th {
@@ -647,7 +675,7 @@ button {
     color: var(--color-bg);
 
     &:hover {
-      background-color: var(--color-brand);
+      background-color: var(--color-btn-hover);
     }
   }
 
@@ -1133,7 +1161,7 @@ a[href^="http"]::after {
 }
 
 .card__action:hover {
-  background-color: var(--color-brand);
+  background-color: var(--color-btn-hover);
   color: var(--color-bg);
 }
 
@@ -1611,8 +1639,8 @@ body > header nav {
 
 .theme-toggle {
   background-color: transparent;
-  color: var(--color-bg);
-  border-color: var(--color-bg);
+  color: var(--color-on-chrome);
+  border-color: var(--color-on-chrome);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -1767,3 +1795,20 @@ body > header nav {
 .layout:has(#genre-jungle:checked) .card:not([data-genres~="jungle"]) { display: none; }
 .layout:has(#genre-trance:checked) .card:not([data-genres~="trance"]) { display: none; }
 .layout:has(#genre-drum-n-bass:checked) .card:not([data-genres~="drum-n-bass"]) { display: none; }
+
+/* ==========================================================================
+   21. Світіння при наведенні (значення — у змінній --glow-accent;
+       у світлій темі вона none, тож правило нічого не змінює)
+   ========================================================================== */
+
+button:not(:disabled):hover,
+.card__action:hover,
+.page-nav a:hover,
+body > header nav a:hover {
+  box-shadow: var(--glow-accent);
+}
+
+.cards .card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-lift);
+  }
