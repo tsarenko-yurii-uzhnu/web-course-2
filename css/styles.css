@@ -421,7 +421,6 @@ article, fieldset, table, .card {
   padding: var(--space-md);
   margin-bottom: var(--space-lg);
   box-shadow: var(--shadow, 0 2px 8px rgb(0 0 0 / 10%));
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 @media (hover: hover) {
@@ -638,7 +637,6 @@ input, select, textarea {
   border-radius: var(--radius);
   background-color: var(--color-bg);
   color: var(--color-text);
-  transition: border-color 0.2s ease;
 }
 
 /* Усі поля (крім чекбоксів і радіокнопок) — однакової ширини */
@@ -704,7 +702,6 @@ fieldset label {
   cursor: pointer;
   display: inline;
   vertical-align: middle;
-  transition: color 0.15s ease;
 }
 
 fieldset label:hover {
@@ -730,7 +727,6 @@ button {
   border: 1px solid transparent;
   cursor: pointer;
   font-weight: 700;
-  transition: background-color 0.2s ease;
 
   /* Кнопки розрізняються атрибутним селектором, без доданих класів */
   &[type="submit"] {
@@ -1499,7 +1495,6 @@ a[href^="http"]::after {
   color: var(--color-text);
   font-size: 0.75rem;
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, outline-color 0.2s ease;
 }
 
 .page-nav a:hover {
