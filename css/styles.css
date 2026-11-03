@@ -1968,4 +1968,10 @@ body > header nav a:hover {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  .cards .card:hover,
+  .cards .card:focus-within {
+    transform: none;
+    background-color: var(--color-surface);
+  }
 }
