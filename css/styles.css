@@ -5,6 +5,7 @@
    Дата: 2026-10-05
    Тема 4: CSS-основи, селектори, каскад, текст і шрифти
    Тема 5 (ЛР 5): нормалізація box-sizing, змінні розмірів, галерея в виданнях
+   Тема 7 (ЛР 7): mobile-first, три розкладки макета через min-width
    Тема 6 (ЛР 6): Grid для макета, Flexbox для вмісту, відступи лише через gap,
                   навігація на Flexbox, grid-template-areas, нативний <dialog>
    ========================================================================== */
@@ -28,6 +29,17 @@
    псевдоелементи (@import вище — бо імпорт у CSS має йти першим у файлі). */
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+/* Без max-width: 100% одне зашироке зображення виходить за межі екрана й розтягує всю сторінку, викликаючи горизонтальну прокрутку. */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Широка таблиця прокручується всередині власної обгортки, а не розтягує сторінку */
+.table-wrap {
+  overflow-x: auto;
 }
 
 /* --------------------------------------------------------------------------
@@ -65,7 +77,7 @@
   /* Нові змінні розмірів (ЛР 5): жодних «магічних чисел» у відступах і сітці */
   --color-on-dark: hsl(0, 0%, 100%);  /* білий текст на темних плашках (теги авторів, SVG-діаграма) */
   --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
-  --page-width: 1400px;     /* максимальна ширина вмісту сторінки (макет із двома бічними колонками) */
+  --page-width: 1160px;     /* максимальна ширина вмісту сторінки (макет із двома бічними колонками) */
   /* Бічний відступ шапки й підвалу: вміст вирівнюється по краях макета,
      а фон шапки лишається на всю ширину вікна */
   --page-inset: max(var(--space), calc((100% - var(--page-width)) / 2 + var(--space)));
@@ -75,12 +87,12 @@
   /* Змінні макета (ЛР 6): проміжки й ширини колонок беруться лише звідси */
   --gap: 2rem;          /* проміжок між зонами макета, картками сітки та елементами flex-рядків */
   --min-col: 260px;     /* мінімальна ширина колонки сітки каталогу */
-  --sidebar: 220px;     /* ширина бічних колонок макета (nav і side) */
+  --sidebar: 13rem;     /* ширина бічних колонок десктопного макета (nav і side) */
   --gap-tag: 2px;       /* тонкий проміжок між частинами спільного тега авторів */
   --header-offset: 5rem;   /* висота липкої шапки з запасом: під неї «прилипає» зміст, і до неї скролляться якорі */
 
   /* Змінні бонусів ЛР 6: щільна галерея та форма в дві колонки */
-  --gallery-cols: 4;    /* кількість колонок галереї */
+  --gallery-cols: 2;    /* кількість колонок галереї: база — телефон, більше колонок у медіазапиті поруч із .gallery */
   --gallery-row: 120px; /* висота одного рядка галереї: wide/tall плитки кратні їй */
   --form-label-col: minmax(12rem, 18rem); /* ліва колонка форми з підписами */
 
@@ -179,8 +191,8 @@ h1, h2, h3 {
 /* clamp(мінімум, бажане, максимум): заголовок плавно росте разом із шириною
    вікна, але не стає меншим за 1.6rem і більшим за 3rem */
 h1 { font-size: clamp(1.6rem, 5vw, 3rem); }
-h2 { font-size: 1.65rem; }
-h3 { font-size: 1.25rem; }
+h2 { font-size: clamp(1.35rem, 4vw, 1.65rem); }
+h3 { font-size: clamp(1.1rem, 3vw, 1.25rem); }
 
 p {
   max-width: 40rem;
@@ -231,7 +243,7 @@ body > header {
 
 /* Єдиний вигляд назви сайту для всіх сторінок */
 body > header .logo {
-  font-size: 2.25rem;
+  font-size: clamp(1.5rem, 6vw, 2.25rem);
   line-height: 1.2;
   margin: 0;
 }
@@ -262,7 +274,8 @@ body > header nav a:visited {
 /* Посилання лишаються плитками: блок із власним padding */
 body > header nav a {
   display: block;
-  padding: var(--space-sm);
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
 }
 
 body > header .logo:hover {
@@ -513,7 +526,7 @@ table {
 
 caption {
   text-align: left;
-  font-size: 1.35rem;
+  font-size: clamp(1.1rem, 3.5vw, 1.35rem);
   font-weight: 700;
   line-height: 1.3;
   padding-bottom: var(--space-sm);
@@ -818,43 +831,39 @@ body > footer p,
 }
 
 /* --------------------------------------------------------------------------
-   13. Макет сторінки (index, catalog): Grid і grid-template-areas
+   13. Макет сторінки (index, catalog): Grid і grid-template-areas, mobile-first
    -------------------------------------------------------------------------- */
 
-/* Макет диктує Grid: три колонки (бічна, основна, бічна) і два рядки (вміст, підвал).
-   Зони названі у grid-template-areas, а кожен блок сам каже, у яку зону йому.
-   flex: 1 — .layout росте всередині flex-колонки body й притискає підвал до низу;
-   margin: 0 auto лише центрує сам макет, а проміжки між зонами дає gap. */
+/* ===== Адаптив (mobile-first) =====
+   база             - телефон, ≤ 767px
+   min-width: 768px - планшет, 768-1023px
+   min-width: 1024px - десктоп, ≥ 1024px */
+
+/* База - телефон: одна колонка, зони йдуть одна під одною (nav -> main -> side -> foot).
+   Шапка лежить поза .layout. Назви зон закріплені за блоками нижче, тож
+   HTML не змінюється: макет перебудовують лише grid-template-columns і
+   grid-template-areas. flex: 1 тримає підвал унизу flex-колонки body. */
 .layout {
   flex: 1;
   display: grid;
-  grid-template-columns: var(--sidebar) 1fr var(--sidebar);
-  grid-template-rows: 1fr auto;
-  grid-template-areas:
-    "nav  main side"
-    "foot foot foot";
   gap: var(--gap);
-  width: 100%;
-  max-width: var(--page-width);
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "nav"
+    "main"
+    "side"
+    "foot";
+  width: min(100%, var(--page-width));
   margin: 0 auto;
   padding: var(--space-xl) var(--space);
 }
 
-/* Зміст завжди збоку: position: sticky не виймає блок із потоку (як fixed), тому він лишається
-   у своїй колонці й під час прокручування «прилипає» під шапкою. align-self: start потрібен,
-   бо за замовчуванням колонка розтягується на всю висоту рядка, і прилипати було б нікуди. */
-.layout__nav {
-  grid-area: nav;
-  position: sticky;
-  top: var(--header-offset);
-  align-self: start;
-}
-
+.layout__nav    { grid-area: nav; }
 .layout__main   { grid-area: main; }
 .layout__aside  { grid-area: side; }
 .layout__footer { grid-area: foot; }
 
-/* min-width: 0 дозволяє колонці 1fr стискатися, коли всередині широка таблиця чи діаграма */
+/* min-width: 0 дозволяє колонці стискатися, коли всередині широка таблиця чи діаграма */
 .layout__main {
   min-width: 0;
   max-width: none;
@@ -864,12 +873,9 @@ body > footer p,
 
 /* Бічна колонка: блоки всередині ставить Flex, а проміжок між ними дає gap */
 .layout__aside {
-  position: sticky;           /* бонус: прокручується разом зі сторінкою й зупиняється під шапкою */
-  top: var(--header-offset);
-  align-self: start;          /* без цього колонка розтягнута на всю висоту рядка, і липнути нікуди */
   display: flex;
   flex-direction: column;
-  gap: var(--gap);
+  gap: var(--space-md); /* Зменшено з var(--gap) на var(--space-md) */
   max-width: none;
   margin: 0;
   padding: 0;
@@ -877,7 +883,7 @@ body > footer p,
 
 .layout__nav h2,
 .layout__aside h2 {
-  font-size: 1.15rem;
+  font-size: clamp(1rem, 3vw, 1.15rem);
 }
 
 /* Панель змісту компактна: дрібніший заголовок, маленькі відступи */
@@ -886,37 +892,46 @@ body > footer p,
   font-size: 1rem;
 }
 
-/* У вузькій колонці кнопки змісту стають стовпчиком */
-.layout__nav ul {
-  flex-direction: column;
-}
-
 .layout__footer {
+  grid-column: 1 / -1;
   padding: var(--space-lg) var(--space);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
 }
 
-/* Вузький екран: зони складаються в одну колонку одна під одною */
-@media (max-width: 900px) {
+/* Планшет: дві колонки; зміст і підвал розтягнуті на обидві */
+@media (min-width: 768px) {
   .layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:
-      "nav"
-      "main"
-      "side"
-      "foot";
+      "nav  nav"
+      "main side"
+      "foot foot";
+  }
+}
+
+/* Десктоп: три колонки (бічна, основна, бічна); макет обмежений --page-width
+   і відцентрований. Зміст і бічна колонка «прилипають» під шапкою:
+   position: sticky не виймає блок із потоку, а align-self: start потрібен,
+   бо за замовчуванням колонка розтягується на всю висоту рядка. */
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+    grid-template-areas:
+      "nav  main side"
+      "foot foot foot";
   }
 
-  /* Зміст над вмістом не липне: у верхньому рядку він займав би пів екрана */
   .layout__nav,
   .layout__aside {
-    position: static;
+    position: sticky;
+    top: var(--header-offset);
+    align-self: start;
   }
 
+  /* У вузькій колонці кнопки змісту стають стовпчиком */
   .layout__nav ul {
-    flex-direction: row;
+    flex-direction: column;
   }
 }
 
@@ -1020,6 +1035,22 @@ a[href^="http"]::after {
   gap: var(--gap);
   margin: 0;
   transform: scale(1);
+}
+
+/* База - телефон: --min-col = 260px, колонка вузька, тож картка одна в ряд.
+   Від планшета main займає лише частину екрана, тому мінімальну ширину колонки
+   зменшено: у планшетній розкладці виходить дві картки, у десктопній — три
+   (макет обмежений --page-width, тож четверта вже не поміщається). */
+@media (min-width: 768px) {
+  .cards {
+    --min-col: 8.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards {
+    --min-col: 9rem;
+  }
 }
 
 /* Експеримент із position: relative. Абсолютно позиціонований бейдж рахує
@@ -1611,7 +1642,7 @@ body:has(#offers:target) .page-nav a[href="#offers"] {
 }
 
 .modal h2 {
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 4vw, 1.4rem);
 }
 
 .modal img {
@@ -1699,15 +1730,22 @@ body > header nav {
 .gallery__item--wide { grid-column: span 2; }
 .gallery__item--tall { grid-row: span 2; }
 
-/* --- Форма у дві колонки: підписи ліворуч, поля праворуч.
-   Форма й кожен fieldset — Grid з двома колонками; кожен рядок <p> бере ці
-   колонки через subgrid, тож підписи й поля вирівнюються по одній лінії.
-   Проміжки — лише gap. <br> між підписом і полем у рядках приховано
-   (зірочка обов'язкових полів шукає його в DOM, тому в розмітці він лишається) --- */
+/* База — дві колонки (телефон і планшет); на десктопі мозаїка в чотири */
+@media (min-width: 1024px) {
+  .gallery {
+    --gallery-cols: 4;
+  }
+}
+
+/* --- Форма: база (телефон) — одна колонка, підпис над полем.
+   Форма й кожен fieldset — Grid; кожен рядок <p> бере колонки через subgrid.
+   Від планшета з'являються дві колонки: підписи ліворуч, поля праворуч.
+   Проміжки — лише gap. <br> між підписом і полем приховано (зірочка
+   обов'язкових полів шукає його в DOM, тому в розмітці він лишається) --- */
 .form-grid,
 .form-grid fieldset {
   display: grid;
-  grid-template-columns: var(--form-label-col) 1fr;
+  grid-template-columns: 1fr;
   align-items: baseline;
 }
 
@@ -1734,18 +1772,14 @@ body > header nav {
   display: none;
 }
 
-/* Пара «заголовок групи — елементи групи»: перший у лівій колонці, другий у правій */
-.form-grid p.form__term {
+/* Пара «заголовок групи — елементи групи»: на телефоні одна під одною */
+.form-grid p.form__term,
+.form-grid p.form__control {
   display: block;
   grid-column: 1;
 }
 
-.form-grid p.form__control {
-  display: block;
-  grid-column: 2;
-}
-
-/* Кнопки: рядок займає обидві колонки (grid-column: 1 / -1), «Надіслати» розтягнута */
+/* Кнопки: рядок займає всю ширину, «Надіслати» розтягнута */
 .form-grid p.form__actions {
   display: flex;
   gap: var(--space-sm);
@@ -1755,22 +1789,14 @@ body > header nav {
   flex: 1;
 }
 
-/* --- Вузький екран: галерея в дві колонки, форма в одну --- */
-@media (max-width: 900px) {
-  .gallery {
-    --gallery-cols: 2;
-  }
-}
-
-@media (max-width: 700px) {
+@media (min-width: 768px) {
   .form-grid,
   .form-grid fieldset {
-    grid-template-columns: 1fr;
+    grid-template-columns: var(--form-label-col) 1fr;
   }
 
-  .form-grid p.form__term,
   .form-grid p.form__control {
-    grid-column: 1;
+    grid-column: 2;
   }
 }
 
@@ -1812,3 +1838,16 @@ body > header nav a:hover {
     border-color: var(--color-accent);
     box-shadow: var(--shadow-lift);
   }
+
+/* ==========================================================================
+   22. Зменшення руху: користувачам із prefers-reduced-motion переходи й
+       анімації скорочуються практично до нуля
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
