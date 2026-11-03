@@ -16,323 +16,298 @@
     <header>
         <a href="index.html" class="logo">Вініл-Клуб</a>
         <nav aria-label="Головне меню">
-            <ul>
+            <ul class="menu">
                 <li><a href="index.html">Головна</a></li>
                 <li><a href="catalog.html" class="current" aria-current="page">Каталог</a></li>
                 <li><a href="about.html">Про проєкт</a></li>
                 <li><a href="form.html">Замовлення</a></li>
             </ul>
         </nav>
+        <button type="button" class="theme-toggle" onclick="document.body.classList.toggle('dark-theme')">Тема</button>
     </header>
 
-    <!-- Основний вміст сторінки -->
-    <main>
-        <h1>Каталог платівок</h1>
+    <!-- Макет сторінки: Grid із зонами nav / main / side / foot (grid-template-areas у CSS) -->
+    <div class="layout">
 
-        <!-- Друга навігація: зміст каталогу за секціями -->
-        <nav class="page-nav" aria-label="Навігація по сторінці">
+        <!-- Зона nav (grid-area: nav): зміст розділу -->
+        <nav class="page-nav layout__nav" aria-label="Навігація по сторінці">
             <h2>Зміст розділу</h2>
             <ul>
                 <li><a href="#genres">Музичні жанри</a></li>
                 <li><a href="#catalog-cards">Каталог (картки)</a></li>
                 <li><a href="#albums-table">Таблиця видань</a></li>
+                <li><a href="#gallery">Галерея</a></li>
                 <li><a href="#tracklists">Видання та треклісти</a></li>
                 <li><a href="#vinyl-care">Правила догляду</a></li>
                 <li><a href="#glossary">Термінологічний словник</a></li>
             </ul>
         </nav>
 
-        <!-- Секція 1: Список жанрів (багаторівневий маркований список) -->
-        <section id="genres">
-            <h2>Музичні жанри каталогу</h2>
-            <p>Спектр жанрів по колу: від центру до краю — напрям, група, жанр. Жирним підписано жанри, що вже є в каталозі, решта лише в переліку.</p>
+        <main class="layout__main">
+            <h1>Каталог платівок</h1>
 
-            <div class="sunburst-wrap">
-                <svg class="sunburst" viewBox="0 0 980 980" role="img" aria-labelledby="sb-title sb-desc">
-                    <title id="sb-title">Спектр музичних жанрів каталогу</title>
-                    <desc id="sb-desc">Кругова діаграма: у центрі три напрями (Breaks, Hardcore, Downtempo), далі групи жанрів і самі жанри по краю кола. Те саме є списком нижче.</desc>
-                    <defs><path id="sb-arc-0-0" d="M496.3,310.9A179.2,179.2 0 0 1 642.0,395.0"/><path id="sb-arc-0-1" d="M495.7,327.8A162.2,162.2 0 0 1 627.6,404.0"/><path id="sb-arc-1-0" d="M648.3,405.8A179.2,179.2 0 0 1 648.3,574.2"/><path id="sb-arc-1-1" d="M633.3,413.8A162.2,162.2 0 0 1 633.3,566.2"/><path id="sb-arc-main-0" d="M494.5,403.4A86.7,86.7 0 0 1 567.3,529.4"/><path id="sb-arc-2-0" d="M496.0,662.6A172.8,172.8 0 0 0 636.5,581.5"/><path id="sb-arc-2-1" d="M496.6,679.6A189.8,189.8 0 0 0 650.9,590.6"/><path id="sb-arc-3-0" d="M350.7,577.0A164.2,164.2 0 0 0 484.3,654.1"/><path id="sb-arc-3-1" d="M336.3,586.0A181.2,181.2 0 0 0 483.7,671.1"/><path id="sb-arc-3-2" d="M321.9,595.1A198.2,198.2 0 0 0 483.1,688.1"/><path id="sb-arc-main-1" d="M406.7,544.1A99.3,99.3 0 0 0 573.3,544.1"/><path id="sb-arc-4-0" d="M331.7,574.2A179.2,179.2 0 0 1 331.7,405.8"/><path id="sb-arc-4-1" d="M346.7,566.2A162.2,162.2 0 0 1 346.7,413.8"/><path id="sb-arc-5-0" d="M338.0,395.0A179.2,179.2 0 0 1 483.7,310.9"/><path id="sb-arc-5-1" d="M352.4,404.0A162.2,162.2 0 0 1 484.3,327.8"/><path id="sb-arc-main-2" d="M412.7,529.4A86.7,86.7 0 0 1 485.5,403.4"/></defs>
-                    
-<g id="sb-3-0" class="sb-seg sb-off"><path d="M490.0,190.0A300,300 0 0 1 592.6,208.1L565.9,281.4A222,222 0 0 0 490.0,268.0Z" fill="hsl(35,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Liquid Funk</title><text class="sb-l3" transform="translate(543.5,186.7) rotate(-80.0)" text-anchor="start" dominant-baseline="central">Liquid Funk</text></g>                    <g id="sb-3-1" class="sb-seg sb-off"><path d="M592.6,208.1A300,300 0 0 1 682.8,260.2L632.7,319.9A222,222 0 0 0 565.9,281.4Z" fill="hsl(31,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Neuro Funk</title><text class="sb-l3" transform="translate(644.0,223.3) rotate(-60.0)" text-anchor="start" dominant-baseline="central">Neuro Funk</text></g>                    <g id="sb-3-2" class="sb-seg"><path d="M682.8,260.2A300,300 0 0 1 749.8,340.0L682.3,379.0A222,222 0 0 0 632.7,319.9Z" fill="hsl(27,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Jungle</title><text class="sb-l3 sb-has" transform="translate(725.9,292.0) rotate(-40.0)" text-anchor="start" dominant-baseline="central">Jungle</text></g>                    <g id="sb-3-3" class="sb-seg"><path d="M749.8,340.0A300,300 0 0 1 785.4,437.9L708.6,451.5A222,222 0 0 0 682.3,379.0Z" fill="hsl(23,42%,52%)"/><title>Breaks → Breakbeat та брейки → Breakcore</title><text class="sb-l3 sb-has" transform="translate(779.4,384.7) rotate(-20.0)" text-anchor="start" dominant-baseline="central">Breakcore</text></g>                    <g id="sb-3-4" class="sb-seg sb-off"><path d="M785.4,437.9A300,300 0 0 1 785.4,542.1L708.6,528.5A222,222 0 0 0 708.6,451.5Z" fill="hsl(19,42%,52%)"/><title>Breaks → Breakbeat та брейки → Big Beat</title><text class="sb-l3" transform="translate(798.0,490.0) rotate(0.0)" text-anchor="start" dominant-baseline="central">Big Beat</text></g>                    <g id="sb-3-5" class="sb-seg sb-off"><path d="M785.4,542.1A300,300 0 0 1 749.8,640.0L682.3,601.0A222,222 0 0 0 708.6,528.5Z" fill="hsl(15,42%,52%)"/><title>Breaks → Breakbeat та брейки → Nu Skool Breaks</title><text class="sb-l3" transform="translate(779.4,595.3) rotate(20.0)" text-anchor="start" dominant-baseline="central">Nu Skool Breaks</text></g>                    <g id="sb-3-6" class="sb-seg"><path d="M749.8,640.0A300,300 0 0 1 682.8,719.8L632.7,660.1A222,222 0 0 0 682.3,601.0Z" fill="hsl(355,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Gabber</title><text class="sb-l3 sb-has" transform="translate(725.9,688.0) rotate(40.0)" text-anchor="start" dominant-baseline="central">Gabber</text></g>                    <g id="sb-3-7" class="sb-seg sb-off"><path d="M682.8,719.8A300,300 0 0 1 592.6,771.9L565.9,698.6A222,222 0 0 0 632.7,660.1Z" fill="hsl(349,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Happy Hardcore</title><text class="sb-l3" transform="translate(644.0,756.7) rotate(60.0)" text-anchor="start" dominant-baseline="central">Happy Hardcore</text></g>                    <g id="sb-3-8" class="sb-seg sb-off"><path d="M592.6,771.9A300,300 0 0 1 490.0,790.0L490.0,712.0A222,222 0 0 0 565.9,698.6Z" fill="hsl(343,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Speedcore</title><text class="sb-l3" transform="translate(543.5,793.3) rotate(80.0)" text-anchor="start" dominant-baseline="central">Speedcore</text></g>                    <g id="sb-3-9" class="sb-seg sb-off"><path d="M490.0,790.0A300,300 0 0 1 387.4,771.9L414.1,698.6A222,222 0 0 0 490.0,712.0Z" fill="hsl(337,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Industrial Hardcore</title><text class="sb-l3" transform="translate(436.5,793.3) rotate(280.0)" text-anchor="end" dominant-baseline="central">Industrial Hardcore</text></g>                    <g id="sb-3-10" class="sb-seg sb-off"><path d="M387.4,771.9A300,300 0 0 1 297.2,719.8L347.3,660.1A222,222 0 0 0 414.1,698.6Z" fill="hsl(331,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Breakbeat Hardcore</title><text class="sb-l3" transform="translate(336.0,756.7) rotate(300.0)" text-anchor="end" dominant-baseline="central">Breakbeat Hardcore</text></g>                    <g id="sb-3-11" class="sb-seg sb-off"><path d="M297.2,719.8A300,300 0 0 1 230.2,640.0L297.7,601.0A222,222 0 0 0 347.3,660.1Z" fill="hsl(325,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Hardtek</title><text class="sb-l3" transform="translate(254.1,688.0) rotate(320.0)" text-anchor="end" dominant-baseline="central">Hardtek</text></g>                    <g id="sb-3-12" class="sb-seg sb-off"><path d="M230.2,640.0A300,300 0 0 1 194.6,542.1L271.4,528.5A222,222 0 0 0 297.7,601.0Z" fill="hsl(215,42%,52%)"/><title>Downtempo → Експериментальна ритміка → IDM</title><text class="sb-l3" transform="translate(200.6,595.3) rotate(340.0)" text-anchor="end" dominant-baseline="central">IDM</text></g>                    <g id="sb-3-13" class="sb-seg sb-off"><path d="M194.6,542.1A300,300 0 0 1 194.6,437.9L271.4,451.5A222,222 0 0 0 271.4,528.5Z" fill="hsl(205,42%,52%)"/><title>Downtempo → Експериментальна ритміка → Illbient</title><text class="sb-l3" transform="translate(182.0,490.0) rotate(360.0)" text-anchor="end" dominant-baseline="central">Illbient</text></g>                    <g id="sb-3-14" class="sb-seg sb-off"><path d="M194.6,437.9A300,300 0 0 1 230.2,340.0L297.7,379.0A222,222 0 0 0 271.4,451.5Z" fill="hsl(195,42%,52%)"/><title>Downtempo → Експериментальна ритміка → Chillwave</title><text class="sb-l3" transform="translate(200.6,384.7) rotate(380.0)" text-anchor="end" dominant-baseline="central">Chillwave</text></g>                    <g id="sb-3-15" class="sb-seg"><path d="M230.2,340.0A300,300 0 0 1 297.2,260.2L347.3,319.9A222,222 0 0 0 297.7,379.0Z" fill="hsl(185,42%,52%)"/><title>Downtempo → Атмосферний звук → Ambient</title><text class="sb-l3 sb-has" transform="translate(254.1,292.0) rotate(400.0)" text-anchor="end" dominant-baseline="central">Ambient</text></g>                    <g id="sb-3-16" class="sb-seg sb-off"><path d="M297.2,260.2A300,300 0 0 1 387.4,208.1L414.1,281.4A222,222 0 0 0 347.3,319.9Z" fill="hsl(175,42%,52%)"/><title>Downtempo → Атмосферний звук → Psybient</title><text class="sb-l3" transform="translate(336.0,223.3) rotate(420.0)" text-anchor="end" dominant-baseline="central">Psybient</text></g>                    <g id="sb-3-17" class="sb-seg sb-off"><path d="M387.4,208.1A300,300 0 0 1 490.0,190.0L490.0,268.0A222,222 0 0 0 414.1,281.4Z" fill="hsl(165,42%,52%)"/><title>Downtempo → Атмосферний звук → Chill Out</title><text class="sb-l3" transform="translate(436.5,186.7) rotate(440.0)" text-anchor="end" dominant-baseline="central">Chill Out</text></g>                    <g id="sb-2-0" class="sb-seg"><path d="M490.0,268.0A222,222 0 0 1 682.3,379.0L602.6,425.0A130,130 0 0 0 490.0,360.0Z" fill="hsl(31,42%,38%)"/><title>Breaks → Drum & Bass та Jungle</title><text class="sb-l2"><textPath href="#sb-arc-0-0" startOffset="50%" text-anchor="middle">Drum &amp; Bass</textPath></text><text class="sb-l2"><textPath href="#sb-arc-0-1" startOffset="50%" text-anchor="middle">та Jungle</textPath></text></g>                    <g id="sb-2-1" class="sb-seg"><path d="M682.3,379.0A222,222 0 0 1 682.3,601.0L602.6,555.0A130,130 0 0 0 602.6,425.0Z" fill="hsl(19,42%,38%)"/><title>Breaks → Breakbeat та брейки</title><text class="sb-l2"><textPath href="#sb-arc-1-0" startOffset="50%" text-anchor="middle">Breakbeat</textPath></text><text class="sb-l2"><textPath href="#sb-arc-1-1" startOffset="50%" text-anchor="middle">та брейки</textPath></text></g>                    <g id="sb-2-2" class="sb-seg"><path d="M682.3,601.0A222,222 0 0 1 490.0,712.0L490.0,620.0A130,130 0 0 0 602.6,555.0Z" fill="hsl(349,42%,38%)"/><title>Hardcore → Класичний та швидкий рейв</title><text class="sb-l2"><textPath href="#sb-arc-2-0" startOffset="50%" text-anchor="middle">Класичний та</textPath></text><text class="sb-l2"><textPath href="#sb-arc-2-1" startOffset="50%" text-anchor="middle">швидкий рейв</textPath></text></g>                    <g id="sb-2-3" class="sb-seg"><path d="M490.0,712.0A222,222 0 0 1 297.7,601.0L377.4,555.0A130,130 0 0 0 490.0,620.0Z" fill="hsl(331,42%,38%)"/><title>Hardcore → Важкі та індустріальні форми</title><text class="sb-l2"><textPath href="#sb-arc-3-0" startOffset="50%" text-anchor="middle">Важкі та</textPath></text><text class="sb-l2"><textPath href="#sb-arc-3-1" startOffset="50%" text-anchor="middle">індустріальні</textPath></text><text class="sb-l2"><textPath href="#sb-arc-3-2" startOffset="50%" text-anchor="middle">форми</textPath></text></g>                    <g id="sb-2-4" class="sb-seg"><path d="M297.7,601.0A222,222 0 0 1 297.7,379.0L377.4,425.0A130,130 0 0 0 377.4,555.0Z" fill="hsl(205,42%,38%)"/><title>Downtempo → Експериментальна ритміка</title><text class="sb-l2"><textPath href="#sb-arc-4-0" startOffset="50%" text-anchor="middle">Експериментальна</textPath></text><text class="sb-l2"><textPath href="#sb-arc-4-1" startOffset="50%" text-anchor="middle">ритміка</textPath></text></g>                    <g id="sb-2-5" class="sb-seg"><path d="M297.7,379.0A222,222 0 0 1 490.0,268.0L490.0,360.0A130,130 0 0 0 377.4,425.0Z" fill="hsl(175,42%,38%)"/><title>Downtempo → Атмосферний звук</title><text class="sb-l2"><textPath href="#sb-arc-5-0" startOffset="50%" text-anchor="middle">Атмосферний</textPath></text><text class="sb-l2"><textPath href="#sb-arc-5-1" startOffset="50%" text-anchor="middle">звук</textPath></text></g>                    <g id="sb-1-0" class="sb-seg"><path d="M490.0,360.0A130,130 0 0 1 602.6,555.0L538.5,518.0A56,56 0 0 0 490.0,434.0Z" fill="hsl(25,42%,30%)"/><title>Breaks</title><text class="sb-l1"><textPath href="#sb-arc-main-0" startOffset="50%" text-anchor="middle">Breaks</textPath></text></g>                    <g id="sb-1-1" class="sb-seg"><path d="M602.6,555.0A130,130 0 0 1 377.4,555.0L441.5,518.0A56,56 0 0 0 538.5,518.0Z" fill="hsl(340,42%,30%)"/><title>Hardcore</title><text class="sb-l1"><textPath href="#sb-arc-main-1" startOffset="50%" text-anchor="middle">Hardcore</textPath></text></g>                    <g id="sb-1-2" class="sb-seg"><path d="M377.4,555.0A130,130 0 0 1 490.0,360.0L490.0,434.0A56,56 0 0 0 441.5,518.0Z" fill="hsl(190,42%,30%)"/><title>Downtempo</title><text class="sb-l1"><textPath href="#sb-arc-main-2" startOffset="50%" text-anchor="middle">Downtempo</textPath></text></g>
-                    <circle class="sb-hub" cx="490" cy="490" r="54"/>
-                    <text class="sb-hub-text" x="490" y="490" text-anchor="middle" dominant-baseline="central">ЖАНРИ</text>
-                </svg>
+            <!-- Секція 1: Список жанрів (багаторівневий маркований список) -->
+            <section id="genres">
+                <h2>Музичні жанри каталогу</h2>
+                <p>Спектр жанрів по колу: від центру до краю — напрям, група, жанр. Жирним підписано жанри, що вже є в каталозі, решта лише в переліку.</p>
 
-                <!-- Інфопанель: показується CSS-ом (:has), коли курсор над сегментом -->
-                <div class="sunburst-info" aria-hidden="true">
-                    <div class="info-default">Наведіть курсор на сегмент діаграми</div>
-                    <div class="info-sb-1-0"><strong>Breaks</strong><span>У каталозі: <strong>5</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, The World Is Fvcked, Presents: Cynthoni</span></div>
-                    <div class="info-sb-1-1"><strong>Hardcore</strong><span>У каталозі: <strong>1</strong> — Lamenting Malice</span></div>
-                    <div class="info-sb-1-2"><strong>Downtempo</strong><span>У каталозі: <strong>3</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked</span></div>
-                    <div class="info-sb-2-0"><strong>Drum &amp; Bass та Jungle</strong><span>Breaks</span><span>У каталозі: <strong>2</strong> — The World Is Fvcked, Presents: Cynthoni</span></div>
-                    <div class="info-sb-2-1"><strong>Breakbeat та брейки</strong><span>Breaks</span><span>У каталозі: <strong>4</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, Presents: Cynthoni</span></div>
-                    <div class="info-sb-2-2"><strong>Класичний та швидкий рейв</strong><span>Hardcore</span><span>У каталозі: <strong>1</strong> — Lamenting Malice</span></div>
-                    <div class="info-sb-2-3"><strong>Важкі та індустріальні форми</strong><span>Hardcore</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-2-4"><strong>Експериментальна ритміка</strong><span>Downtempo</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-2-5"><strong>Атмосферний звук</strong><span>Downtempo</span><span>У каталозі: <strong>3</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked</span></div>
-                    <div class="info-sb-3-0"><strong>Liquid Funk</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-1"><strong>Neuro Funk</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-2"><strong>Jungle</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: <strong>2</strong> — The World Is Fvcked, Presents: Cynthoni</span></div>
-                    <div class="info-sb-3-3"><strong>Breakcore</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: <strong>4</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, Presents: Cynthoni</span></div>
-                    <div class="info-sb-3-4"><strong>Big Beat</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-5"><strong>Nu Skool Breaks</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-6"><strong>Gabber</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: <strong>1</strong> — Lamenting Malice</span></div>
-                    <div class="info-sb-3-7"><strong>Happy Hardcore</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-8"><strong>Speedcore</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-9"><strong>Industrial Hardcore</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-10"><strong>Breakbeat Hardcore</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-11"><strong>Hardtek</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-12"><strong>IDM</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-13"><strong>Illbient</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-14"><strong>Chillwave</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-15"><strong>Ambient</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: <strong>3</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked</span></div>
-                    <div class="info-sb-3-16"><strong>Psybient</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: поки немає релізів</span></div>
-                    <div class="info-sb-3-17"><strong>Chill Out</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: поки немає релізів</span></div>
+                <div class="sunburst-wrap">
+                    <svg class="sunburst" viewBox="0 0 980 980" role="img" aria-labelledby="sb-title sb-desc">
+                        <title id="sb-title">Спектр музичних жанрів каталогу</title>
+                        <desc id="sb-desc">Кругова діаграма: у центрі три напрями (Breaks, Hardcore, Downtempo), далі групи жанрів і самі жанри по краю кола. Те саме є списком нижче.</desc>
+                        <defs><path id="sb-arc-0-0" d="M496.3,310.9A179.2,179.2 0 0 1 642.0,395.0"/><path id="sb-arc-0-1" d="M495.7,327.8A162.2,162.2 0 0 1 627.6,404.0"/><path id="sb-arc-1-0" d="M648.3,405.8A179.2,179.2 0 0 1 648.3,574.2"/><path id="sb-arc-1-1" d="M633.3,413.8A162.2,162.2 0 0 1 633.3,566.2"/><path id="sb-arc-main-0" d="M494.5,403.4A86.7,86.7 0 0 1 567.3,529.4"/><path id="sb-arc-2-0" d="M496.0,662.6A172.8,172.8 0 0 0 636.5,581.5"/><path id="sb-arc-2-1" d="M496.6,679.6A189.8,189.8 0 0 0 650.9,590.6"/><path id="sb-arc-3-0" d="M350.7,577.0A164.2,164.2 0 0 0 484.3,654.1"/><path id="sb-arc-3-1" d="M336.3,586.0A181.2,181.2 0 0 0 483.7,671.1"/><path id="sb-arc-3-2" d="M321.9,595.1A198.2,198.2 0 0 0 483.1,688.1"/><path id="sb-arc-main-1" d="M406.7,544.1A99.3,99.3 0 0 0 573.3,544.1"/><path id="sb-arc-4-0" d="M331.7,574.2A179.2,179.2 0 0 1 331.7,405.8"/><path id="sb-arc-4-1" d="M346.7,566.2A162.2,162.2 0 0 1 346.7,413.8"/><path id="sb-arc-5-0" d="M338.0,395.0A179.2,179.2 0 0 1 483.7,310.9"/><path id="sb-arc-5-1" d="M352.4,404.0A162.2,162.2 0 0 1 484.3,327.8"/><path id="sb-arc-main-2" d="M412.7,529.4A86.7,86.7 0 0 1 485.5,403.4"/></defs>
+
+    <g id="sb-3-0" class="sb-seg sb-off"><path d="M490.0,190.0A300,300 0 0 1 592.6,208.1L565.9,281.4A222,222 0 0 0 490.0,268.0Z" fill="hsl(35,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Liquid Funk</title><text class="sb-l3" transform="translate(543.5,186.7) rotate(-80.0)" text-anchor="start" dominant-baseline="central">Liquid Funk</text></g>                    <g id="sb-3-1" class="sb-seg sb-off"><path d="M592.6,208.1A300,300 0 0 1 682.8,260.2L632.7,319.9A222,222 0 0 0 565.9,281.4Z" fill="hsl(31,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Neuro Funk</title><text class="sb-l3" transform="translate(644.0,223.3) rotate(-60.0)" text-anchor="start" dominant-baseline="central">Neuro Funk</text></g>                    <g id="sb-3-2" class="sb-seg"><path d="M682.8,260.2A300,300 0 0 1 749.8,340.0L682.3,379.0A222,222 0 0 0 632.7,319.9Z" fill="hsl(27,42%,52%)"/><title>Breaks → Drum & Bass та Jungle → Jungle</title><text class="sb-l3 sb-has" transform="translate(725.9,292.0) rotate(-40.0)" text-anchor="start" dominant-baseline="central">Jungle</text></g>                    <g id="sb-3-3" class="sb-seg"><path d="M749.8,340.0A300,300 0 0 1 785.4,437.9L708.6,451.5A222,222 0 0 0 682.3,379.0Z" fill="hsl(23,42%,52%)"/><title>Breaks → Breakbeat та брейки → Breakcore</title><text class="sb-l3 sb-has" transform="translate(779.4,384.7) rotate(-20.0)" text-anchor="start" dominant-baseline="central">Breakcore</text></g>                    <g id="sb-3-4" class="sb-seg sb-off"><path d="M785.4,437.9A300,300 0 0 1 785.4,542.1L708.6,528.5A222,222 0 0 0 708.6,451.5Z" fill="hsl(19,42%,52%)"/><title>Breaks → Breakbeat та брейки → Big Beat</title><text class="sb-l3" transform="translate(798.0,490.0) rotate(0.0)" text-anchor="start" dominant-baseline="central">Big Beat</text></g>                    <g id="sb-3-5" class="sb-seg sb-off"><path d="M785.4,542.1A300,300 0 0 1 749.8,640.0L682.3,601.0A222,222 0 0 0 708.6,528.5Z" fill="hsl(15,42%,52%)"/><title>Breaks → Breakbeat та брейки → Nu Skool Breaks</title><text class="sb-l3" transform="translate(779.4,595.3) rotate(20.0)" text-anchor="start" dominant-baseline="central">Nu Skool Breaks</text></g>                    <g id="sb-3-6" class="sb-seg"><path d="M749.8,640.0A300,300 0 0 1 682.8,719.8L632.7,660.1A222,222 0 0 0 682.3,601.0Z" fill="hsl(355,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Gabber</title><text class="sb-l3 sb-has" transform="translate(725.9,688.0) rotate(40.0)" text-anchor="start" dominant-baseline="central">Gabber</text></g>                    <g id="sb-3-7" class="sb-seg sb-off"><path d="M682.8,719.8A300,300 0 0 1 592.6,771.9L565.9,698.6A222,222 0 0 0 632.7,660.1Z" fill="hsl(349,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Happy Hardcore</title><text class="sb-l3" transform="translate(644.0,756.7) rotate(60.0)" text-anchor="start" dominant-baseline="central">Happy Hardcore</text></g>                    <g id="sb-3-8" class="sb-seg sb-off"><path d="M592.6,771.9A300,300 0 0 1 490.0,790.0L490.0,712.0A222,222 0 0 0 565.9,698.6Z" fill="hsl(343,42%,52%)"/><title>Hardcore → Класичний та швидкий рейв → Speedcore</title><text class="sb-l3" transform="translate(543.5,793.3) rotate(80.0)" text-anchor="start" dominant-baseline="central">Speedcore</text></g>                    <g id="sb-3-9" class="sb-seg sb-off"><path d="M490.0,790.0A300,300 0 0 1 387.4,771.9L414.1,698.6A222,222 0 0 0 490.0,712.0Z" fill="hsl(337,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Industrial Hardcore</title><text class="sb-l3" transform="translate(436.5,793.3) rotate(280.0)" text-anchor="end" dominant-baseline="central">Industrial Hardcore</text></g>                    <g id="sb-3-10" class="sb-seg sb-off"><path d="M387.4,771.9A300,300 0 0 1 297.2,719.8L347.3,660.1A222,222 0 0 0 414.1,698.6Z" fill="hsl(331,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Breakbeat Hardcore</title><text class="sb-l3" transform="translate(336.0,756.7) rotate(300.0)" text-anchor="end" dominant-baseline="central">Breakbeat Hardcore</text></g>                    <g id="sb-3-11" class="sb-seg sb-off"><path d="M297.2,719.8A300,300 0 0 1 230.2,640.0L297.7,601.0A222,222 0 0 0 347.3,660.1Z" fill="hsl(325,42%,52%)"/><title>Hardcore → Важкі та індустріальні форми → Hardtek</title><text class="sb-l3" transform="translate(254.1,688.0) rotate(320.0)" text-anchor="end" dominant-baseline="central">Hardtek</text></g>                    <g id="sb-3-12" class="sb-seg sb-off"><path d="M230.2,640.0A300,300 0 0 1 194.6,542.1L271.4,528.5A222,222 0 0 0 297.7,601.0Z" fill="hsl(215,42%,52%)"/><title>Downtempo → Експериментальна ритміка → IDM</title><text class="sb-l3" transform="translate(200.6,595.3) rotate(340.0)" text-anchor="end" dominant-baseline="central">IDM</text></g>                    <g id="sb-3-13" class="sb-seg sb-off"><path d="M194.6,542.1A300,300 0 0 1 194.6,437.9L271.4,451.5A222,222 0 0 0 271.4,528.5Z" fill="hsl(205,42%,52%)"/><title>Downtempo → Експериментальна ритміка → Illbient</title><text class="sb-l3" transform="translate(182.0,490.0) rotate(360.0)" text-anchor="end" dominant-baseline="central">Illbient</text></g>                    <g id="sb-3-14" class="sb-seg sb-off"><path d="M194.6,437.9A300,300 0 0 1 230.2,340.0L297.7,379.0A222,222 0 0 0 271.4,451.5Z" fill="hsl(195,42%,52%)"/><title>Downtempo → Експериментальна ритміка → Chillwave</title><text class="sb-l3" transform="translate(200.6,384.7) rotate(380.0)" text-anchor="end" dominant-baseline="central">Chillwave</text></g>                    <g id="sb-3-15" class="sb-seg"><path d="M230.2,340.0A300,300 0 0 1 297.2,260.2L347.3,319.9A222,222 0 0 0 297.7,379.0Z" fill="hsl(185,42%,52%)"/><title>Downtempo → Атмосферний звук → Ambient</title><text class="sb-l3 sb-has" transform="translate(254.1,292.0) rotate(400.0)" text-anchor="end" dominant-baseline="central">Ambient</text></g>                    <g id="sb-3-16" class="sb-seg sb-off"><path d="M297.2,260.2A300,300 0 0 1 387.4,208.1L414.1,281.4A222,222 0 0 0 347.3,319.9Z" fill="hsl(175,42%,52%)"/><title>Downtempo → Атмосферний звук → Psybient</title><text class="sb-l3" transform="translate(336.0,223.3) rotate(420.0)" text-anchor="end" dominant-baseline="central">Psybient</text></g>                    <g id="sb-3-17" class="sb-seg sb-off"><path d="M387.4,208.1A300,300 0 0 1 490.0,190.0L490.0,268.0A222,222 0 0 0 414.1,281.4Z" fill="hsl(165,42%,52%)"/><title>Downtempo → Атмосферний звук → Chill Out</title><text class="sb-l3" transform="translate(436.5,186.7) rotate(440.0)" text-anchor="end" dominant-baseline="central">Chill Out</text></g>                    <g id="sb-2-0" class="sb-seg"><path d="M490.0,268.0A222,222 0 0 1 682.3,379.0L602.6,425.0A130,130 0 0 0 490.0,360.0Z" fill="hsl(31,42%,38%)"/><title>Breaks → Drum & Bass та Jungle</title><text class="sb-l2"><textPath href="#sb-arc-0-0" startOffset="50%" text-anchor="middle">Drum &amp; Bass</textPath></text><text class="sb-l2"><textPath href="#sb-arc-0-1" startOffset="50%" text-anchor="middle">та Jungle</textPath></text></g>                    <g id="sb-2-1" class="sb-seg"><path d="M682.3,379.0A222,222 0 0 1 682.3,601.0L602.6,555.0A130,130 0 0 0 602.6,425.0Z" fill="hsl(19,42%,38%)"/><title>Breaks → Breakbeat та брейки</title><text class="sb-l2"><textPath href="#sb-arc-1-0" startOffset="50%" text-anchor="middle">Breakbeat</textPath></text><text class="sb-l2"><textPath href="#sb-arc-1-1" startOffset="50%" text-anchor="middle">та брейки</textPath></text></g>                    <g id="sb-2-2" class="sb-seg"><path d="M682.3,601.0A222,222 0 0 1 490.0,712.0L490.0,620.0A130,130 0 0 0 602.6,555.0Z" fill="hsl(349,42%,38%)"/><title>Hardcore → Класичний та швидкий рейв</title><text class="sb-l2"><textPath href="#sb-arc-2-0" startOffset="50%" text-anchor="middle">Класичний та</textPath></text><text class="sb-l2"><textPath href="#sb-arc-2-1" startOffset="50%" text-anchor="middle">швидкий рейв</textPath></text></g>                    <g id="sb-2-3" class="sb-seg"><path d="M490.0,712.0A222,222 0 0 1 297.7,601.0L377.4,555.0A130,130 0 0 0 490.0,620.0Z" fill="hsl(331,42%,38%)"/><title>Hardcore → Важкі та індустріальні форми</title><text class="sb-l2"><textPath href="#sb-arc-3-0" startOffset="50%" text-anchor="middle">Важкі та</textPath></text><text class="sb-l2"><textPath href="#sb-arc-3-1" startOffset="50%" text-anchor="middle">індустріальні</textPath></text><text class="sb-l2"><textPath href="#sb-arc-3-2" startOffset="50%" text-anchor="middle">форми</textPath></text></g>                    <g id="sb-2-4" class="sb-seg"><path d="M297.7,601.0A222,222 0 0 1 297.7,379.0L377.4,425.0A130,130 0 0 0 377.4,555.0Z" fill="hsl(205,42%,38%)"/><title>Downtempo → Експериментальна ритміка</title><text class="sb-l2"><textPath href="#sb-arc-4-0" startOffset="50%" text-anchor="middle">Експериментальна</textPath></text><text class="sb-l2"><textPath href="#sb-arc-4-1" startOffset="50%" text-anchor="middle">ритміка</textPath></text></g>                    <g id="sb-2-5" class="sb-seg"><path d="M297.7,379.0A222,222 0 0 1 490.0,268.0L490.0,360.0A130,130 0 0 0 377.4,425.0Z" fill="hsl(175,42%,38%)"/><title>Downtempo → Атмосферний звук</title><text class="sb-l2"><textPath href="#sb-arc-5-0" startOffset="50%" text-anchor="middle">Атмосферний</textPath></text><text class="sb-l2"><textPath href="#sb-arc-5-1" startOffset="50%" text-anchor="middle">звук</textPath></text></g>                    <g id="sb-1-0" class="sb-seg"><path d="M490.0,360.0A130,130 0 0 1 602.6,555.0L538.5,518.0A56,56 0 0 0 490.0,434.0Z" fill="hsl(25,42%,30%)"/><title>Breaks</title><text class="sb-l1"><textPath href="#sb-arc-main-0" startOffset="50%" text-anchor="middle">Breaks</textPath></text></g>                    <g id="sb-1-1" class="sb-seg"><path d="M602.6,555.0A130,130 0 0 1 377.4,555.0L441.5,518.0A56,56 0 0 0 538.5,518.0Z" fill="hsl(340,42%,30%)"/><title>Hardcore</title><text class="sb-l1"><textPath href="#sb-arc-main-1" startOffset="50%" text-anchor="middle">Hardcore</textPath></text></g>                    <g id="sb-1-2" class="sb-seg"><path d="M377.4,555.0A130,130 0 0 1 490.0,360.0L490.0,434.0A56,56 0 0 0 441.5,518.0Z" fill="hsl(190,42%,30%)"/><title>Downtempo</title><text class="sb-l1"><textPath href="#sb-arc-main-2" startOffset="50%" text-anchor="middle">Downtempo</textPath></text></g>
+                        <circle class="sb-hub" cx="490" cy="490" r="54"/>
+                        <text class="sb-hub-text" x="490" y="490" text-anchor="middle" dominant-baseline="central">ЖАНРИ</text>
+                    </svg>
+
+                    <!-- Інфопанель: показується CSS-ом (:has), коли курсор над сегментом -->
+                    <div class="sunburst-info" aria-hidden="true">
+                        <div class="info-default">Наведіть курсор на сегмент діаграми</div>
+                        <div class="info-sb-1-0"><strong>Breaks</strong><span>У каталозі: <strong>8</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, The World Is Fvcked, Presents: Cynthoni, In The Eyes Of Cynthoni, Man Bites Dog, Chaser</span></div>
+                        <div class="info-sb-1-1"><strong>Hardcore</strong><span>У каталозі: <strong>3</strong> — Lamenting Malice, Man Bites Dog, Chaser</span></div>
+                        <div class="info-sb-1-2"><strong>Downtempo</strong><span>У каталозі: <strong>4</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked, In The Eyes Of Cynthoni</span></div>
+                        <div class="info-sb-2-0"><strong>Drum &amp; Bass та Jungle</strong><span>Breaks</span><span>У каталозі: <strong>3</strong> — The World Is Fvcked, Presents: Cynthoni, In The Eyes Of Cynthoni</span></div>
+                        <div class="info-sb-2-1"><strong>Breakbeat та брейки</strong><span>Breaks</span><span>У каталозі: <strong>7</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, Presents: Cynthoni, In The Eyes Of Cynthoni, Man Bites Dog, Chaser</span></div>
+                        <div class="info-sb-2-2"><strong>Класичний та швидкий рейв</strong><span>Hardcore</span><span>У каталозі: <strong>3</strong> — Lamenting Malice, Man Bites Dog, Chaser</span></div>
+                        <div class="info-sb-2-3"><strong>Важкі та індустріальні форми</strong><span>Hardcore</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-2-4"><strong>Експериментальна ритміка</strong><span>Downtempo</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-2-5"><strong>Атмосферний звук</strong><span>Downtempo</span><span>У каталозі: <strong>4</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked, In The Eyes Of Cynthoni</span></div>
+                        <div class="info-sb-3-0"><strong>Liquid Funk</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-1"><strong>Neuro Funk</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-2"><strong>Jungle</strong><span>Breaks → Drum &amp; Bass та Jungle</span><span>У каталозі: <strong>3</strong> — The World Is Fvcked, Presents: Cynthoni, In The Eyes Of Cynthoni</span></div>
+                        <div class="info-sb-3-3"><strong>Breakcore</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: <strong>7</strong> — Lamenting Malice, Ultraviolet, Draining Love Story, Presents: Cynthoni, In The Eyes Of Cynthoni, Man Bites Dog, Chaser</span></div>
+                        <div class="info-sb-3-4"><strong>Big Beat</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-5"><strong>Nu Skool Breaks</strong><span>Breaks → Breakbeat та брейки</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-6"><strong>Gabber</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: <strong>3</strong> — Lamenting Malice, Man Bites Dog, Chaser</span></div>
+                        <div class="info-sb-3-7"><strong>Happy Hardcore</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-8"><strong>Speedcore</strong><span>Hardcore → Класичний та швидкий рейв</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-9"><strong>Industrial Hardcore</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-10"><strong>Breakbeat Hardcore</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-11"><strong>Hardtek</strong><span>Hardcore → Важкі та індустріальні форми</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-12"><strong>IDM</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-13"><strong>Illbient</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-14"><strong>Chillwave</strong><span>Downtempo → Експериментальна ритміка</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-15"><strong>Ambient</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: <strong>4</strong> — Ultraviolet, Draining Love Story, The World Is Fvcked, In The Eyes Of Cynthoni</span></div>
+                        <div class="info-sb-3-16"><strong>Psybient</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: поки немає релізів</span></div>
+                        <div class="info-sb-3-17"><strong>Chill Out</strong><span>Downtempo → Атмосферний звук</span><span>У каталозі: поки немає релізів</span></div>
+                    </div>
                 </div>
-            </div>
 
-            <details>
-                <summary>Переглянути жанри списком</summary>
-                <ul>
-                    <li>Breaks
-                        <ul>
-                            <li>Drum &amp; Bass та Jungle
-                                <ul>
-                                    <li>Liquid Funk</li>
-                                    <li>Neuro Funk</li>
-                                    <li>Jungle</li>
-                                </ul>
-                            </li>
-                            <li>Breakbeat та брейки
-                                <ul>
-                                    <li>Breakcore</li>
-                                    <li>Big Beat</li>
-                                    <li>Nu Skool Breaks</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>Hardcore
-                        <ul>
-                            <li>Класичний та швидкий рейв
-                                <ul>
-                                    <li>Gabber</li>
-                                    <li>Happy Hardcore</li>
-                                    <li>Speedcore</li>
-                                </ul>
-                            </li>
-                            <li>Важкі та індустріальні форми
-                                <ul>
-                                    <li>Industrial Hardcore</li>
-                                    <li>Breakbeat Hardcore</li>
-                                    <li>Hardtek</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>Downtempo
-                        <ul>
-                            <li>Експериментальна ритміка
-                                <ul>
-                                    <li>IDM</li>
-                                    <li>Illbient</li>
-                                    <li>Chillwave</li>
-                                </ul>
-                            </li>
-                            <li>Атмосферний звук
-                                <ul>
-                                    <li>Ambient</li>
-                                    <li>Psybient</li>
-                                    <li>Chill Out</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </details>
-        </section>
+                <details>
+                    <summary>Переглянути жанри списком</summary>
+                    <ul>
+                        <li>Breaks
+                            <ul>
+                                <li>Drum &amp; Bass та Jungle
+                                    <ul>
+                                        <li>Liquid Funk</li>
+                                        <li>Neuro Funk</li>
+                                        <li>Jungle</li>
+                                    </ul>
+                                </li>
+                                <li>Breakbeat та брейки
+                                    <ul>
+                                        <li>Breakcore</li>
+                                        <li>Big Beat</li>
+                                        <li>Nu Skool Breaks</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Hardcore
+                            <ul>
+                                <li>Класичний та швидкий рейв
+                                    <ul>
+                                        <li>Gabber</li>
+                                        <li>Happy Hardcore</li>
+                                        <li>Speedcore</li>
+                                    </ul>
+                                </li>
+                                <li>Важкі та індустріальні форми
+                                    <ul>
+                                        <li>Industrial Hardcore</li>
+                                        <li>Breakbeat Hardcore</li>
+                                        <li>Hardtek</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Downtempo
+                            <ul>
+                                <li>Експериментальна ритміка
+                                    <ul>
+                                        <li>IDM</li>
+                                        <li>Illbient</li>
+                                        <li>Chillwave</li>
+                                    </ul>
+                                </li>
+                                <li>Атмосферний звук
+                                    <ul>
+                                        <li>Ambient</li>
+                                        <li>Psybient</li>
+                                        <li>Chill Out</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </details>
+            </section>
 
-        <!-- Каталог (ЛР 5): картки платівок; назва веде до детального видання нижче -->
-        <section id="catalog-cards" class="catalog">
-            <h2>Каталог</h2>
-            <div class="cards">
+            <!-- Каталог (ЛР 5): картки платівок; назва веде до детального видання нижче -->
+            <section id="catalog-cards" class="catalog">
+                <h2>Каталог</h2>
+                <div class="cards">
 
-                <!-- Картка 1: новий реліз, свідомо довга назва, горизонтальне фото -->
-                <article class="card">
-                    <span class="card__badge">Нове</span>
-                    <img class="card__img" src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
-                    <div class="card__body">
-                        <h3 class="card__title"><a href="#edition-lamenting-malice">Lamenting Malice (Limited Double LP, Black Ice &amp; White Marbled Vinyl, Gatefold Sleeve)</a></h3>
-                        <p class="card__excerpt">Подвійний мармуровий вініл із розворотом: брейккор, джангл і габер.</p>
-                        <p class="card__meta"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span><br>Жанр: Breakcore, Gabber<br>Рік: 2026</p>
-                        <p class="card__id">Артикул: UA-LP-11045</p>
-                    </div>
-                </article>
+                    <!-- Картка 1: новий реліз, свідомо довга назва, горизонтальне фото -->
+                    <article class="card" data-genres="breakcore gabber">
+                        <span class="card__badge">Нове</span>
+                        <img class="card__img" src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-lamenting-malice">Lamenting Malice (Limited Double LP, Black Ice &amp; White Marbled Vinyl, Gatefold Sleeve)</a></h3>
+                            <p class="card__excerpt">Подвійний мармуровий вініл із розворотом: брейккор, джангл і габер.</p>
+                            <p class="card__meta"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span><br>Жанр: Breakcore, Gabber<br>Рік: 2026</p>
+                            <p class="card__id">Артикул: CYN003-V</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-lamenting-malice" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-                <!-- Картка 2: свідомо довга назва, квадратне фото -->
-                <article class="card">
-                    <img class="card__img" src="images/card-3.jpg" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора">
-                    <div class="card__body">
-                        <h3 class="card__title"><a href="#edition-ultraviolet">Ultraviolet (Exclusive Smoky Clear Vinyl Edition Featuring Bonus Tracks)</a></h3>
-                        <p class="card__excerpt">Прозоро-димчастий вініл, атмосферний брейккор і колаборації.</p>
-                        <p class="card__meta"><span class="artist-tag artist-tag--usedcvnt">Usedcvnt</span><br>Жанр: Breakcore, Ambient<br>Рік: 2023</p>
-                        <p class="card__id">Артикул: UA-LP-77020</p>
-                    </div>
-                </article>
+                    <!-- Картка 2: свідомо довга назва, квадратне фото -->
+                    <article class="card" data-genres="breakcore ambient">
+                        <img class="card__img" src="images/card-3.jpg" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-ultraviolet">Ultraviolet (Exclusive Smoky Clear Vinyl Edition Featuring Bonus Tracks)</a></h3>
+                            <p class="card__excerpt">Прозоро-димчастий вініл, атмосферний брейккор і колаборації.</p>
+                            <p class="card__meta"><span class="artist-tag artist-tag--usedcvnt">Usedcvnt</span><br>Жанр: Breakcore, Ambient<br>Рік: 2023</p>
+                            <p class="card__id">Артикул: KOFXU1TRAVIO13T</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-ultraviolet" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-                <!-- Картка 3: культовий альбом, бейдж «Хіт» -->
-                <article class="card">
-                    <span class="card__badge">Хіт</span>
-                    <img class="card__img" src="images/card-6.jpg" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям">
-                    <div class="card__body">
-                        <h3 class="card__title"><a href="#edition-draining-love-story">Draining Love Story</a></h3>
-                        <p class="card__excerpt">Культовий альбом на межі драм-енд-бейсу й брейккору.</p>
-                        <p class="card__meta"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><br>Жанр: Breakcore, Ambient<br>Рік: 2020</p>
-                        <p class="card__id">Артикул: UA-LP-02020</p>
-                    </div>
-                </article>
+                    <!-- Картка 3: культовий альбом, бейдж «Хіт» -->
+                    <article class="card card--featured" data-genres="breakcore ambient">
+                        <span class="card__badge">Хіт</span>
+                        <img class="card__img" src="images/card-6.jpg" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-draining-love-story">Draining Love Story</a></h3>
+                            <p class="card__excerpt">Культовий альбом на межі драм-енд-бейсу й брейккору.</p>
+                            <p class="card__meta"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><br>Жанр: Breakcore, Ambient<br>Рік: 2020</p>
+                            <p class="card__id">Артикул: GEO-SP12</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-draining-love-story" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-                <!-- Картка 4: вертикальне фото -->
-                <article class="card">
-                    <img class="card__img" src="images/card-7.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A">
-                    <div class="card__body">
-                        <h3 class="card__title"><a href="#edition-the-world-is-fvcked">The World Is Fvcked</a></h3>
-                        <p class="card__excerpt">Сім треків джанглу, ембієнту та експериментальної електроніки.</p>
-                        <p class="card__meta"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><br>Жанр: Jungle, Ambient, Drum n Bass<br>Рік: 2020</p>
-                        <p class="card__id">Артикул: UA-LP-02022</p>
-                    </div>
-                </article>
+                    <!-- Картка 4: вертикальне фото -->
+                    <article class="card" data-genres="jungle ambient drum-n-bass">
+                        <img class="card__img" src="images/card-7.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-the-world-is-fvcked">The World Is Fvcked</a></h3>
+                            <p class="card__excerpt">Сім треків джанглу, ембієнту та експериментальної електроніки.</p>
+                            <p class="card__meta"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><br>Жанр: Jungle, Ambient, Drum n Bass<br>Рік: 2020</p>
+                            <p class="card__id">Артикул: WRCV003</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-the-world-is-fvcked" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-                <!-- Картки 5 і 6: дві частини однієї збірки, об'єднані спільним тегом двох авторів -->
-                <article class="card">
-                    <img class="card__img" src="images/card-11.jpg" alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками">
-                    <div class="card__body">
-                        <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 1</a></h3>
-                        <p class="card__excerpt">Перша частина збірки: транс, джангл і брейккор.</p>
-                        <p class="card__meta"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span><br>Жанр: Trance, Jungle, Breakcore<br>Рік: 2024</p>
-                        <p class="card__id">Артикул: UA-LP-24001</p>
-                    </div>
-                </article>
+                    <!-- Картки 5 і 6: дві частини однієї збірки, об'єднані спільним тегом двох авторів -->
+                    <article class="card" data-genres="trance jungle breakcore">
+                        <img class="card__img" src="images/card-11.jpg" alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 1</a></h3>
+                            <p class="card__excerpt">Перша частина збірки: транс, джангл і брейккор.</p>
+                            <p class="card__meta"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span><br>Жанр: Trance, Jungle, Breakcore<br>Рік: 2024</p>
+                            <p class="card__id">Артикул: CYN001</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-sewerslvt-presents-cynthoni-pt1" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-                <article class="card">
-                    <img class="card__img" src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni">
-                    <div class="card__body">
-                        <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 2</a></h3>
-                        <p class="card__excerpt">Друга частина збірки на блакитно-фіолетовому вінілі.</p>
-                        <p class="card__meta"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span><br>Жанр: Trance, Jungle, Breakcore<br>Рік: 2024</p>
-                        <p class="card__id">Артикул: UA-LP-24002</p>
-                    </div>
-                </article>
+                    <article class="card" data-genres="trance jungle breakcore">
+                        <img class="card__img" src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 2</a></h3>
+                            <p class="card__excerpt">Друга частина збірки на блакитно-фіолетовому вінілі.</p>
+                            <p class="card__meta"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span><br>Жанр: Trance, Jungle, Breakcore<br>Рік: 2024</p>
+                            <p class="card__id">Артикул: CYN001</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-sewerslvt-presents-cynthoni-pt2" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-            </div>
-        </section>
+                    <!-- Картка 7: Cynthoni, подвійний мармуровий вініл 2025 -->
+                    <article class="card" data-genres="breakcore jungle trance">
+                        <img class="card__img" src="images/card-14.jpg" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і яскравим квітковим візерунком на одязі">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-in-the-eyes-of-cynthoni">Draining Love Story (In The Eyes Of Cynthoni)</a></h3>
+                            <p class="card__excerpt">Подвійний вініл Blue &amp; Pink Marbled із бонус-треками: брейккор, джангл і транс.</p>
+                            <p class="card__meta"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span><br>Жанр: Breakcore, Jungle, Trance<br>Рік: 2025</p>
+                            <p class="card__id">Артикул: CYN002-V</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-in-the-eyes-of-cynthoni" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-       <table id="albums-table">
-  <caption>Зведена таблиця альбомів, виконавців, дат випуску та видавництв</caption>
-  <thead>
-    <tr>
-      <th rowspan="2" scope="col">Альбом</th>
-      <th rowspan="2" scope="col">Виконавець</th>
-      <th rowspan="2" scope="col">Рік</th>
-      <th colspan="2" scope="colgroup">Дані лейблу</th>
-    </tr>
-    <tr>
-      <th scope="col">Лейбл</th>
-      <th scope="col">Каталожний номер</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">LAMENTING MALICE</th>
-      <td>Cynthoni</td>
-      <td>2026</td>
-      <td>Not On Label (Cynthoni Self-released)</td>
-      <td>CYN003-V</td>
-    </tr>
-    <tr>
-      <th scope="row">ULTRAVIOLET</th>
-      <td>Usedcvnt</td>
-      <td>2023</td>
-      <td>Not On Label (Usedcvnt Self-released)</td>
-      <td>UV-LP01</td>
-    </tr>
-    <tr>
-      <th scope="row">SEWERSLVT PRESENTS: CYNTHONI (PT. 1 &amp; PT. 2)</th>
-      <td>Sewerslvt, Cynthoni</td>
-      <td>2024</td>
-      <td>Not On Label (Cynthoni Self-released)</td>
-      <td>CYN001</td>
-    </tr>
-    <tr>
-      <th scope="row">DRAINING LOVE STORY</th>
-      <td rowspan="3">Sewerslvt</td>
-      <td>2020</td>
-      <td>Geometric Lullaby</td>
-      <td>GEO-069</td>
-    </tr>
-    <tr>
-      <th scope="row">THE WORLD IS FVCKED</th>
-      <td>2020</td>
-      <td>Wave Racers Collective</td>
-      <td>WRCV003</td>
-    </tr>
-    <tr>
-      <th scope="row">WE HAD GOOD TIMES TOGETHER, DON'T FORGET THAT</th>
-      <td>2021</td>
-      <td>Not On Label (Sewerslvt Self-released)</td>
-      <td>SLVT-002</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <th colspan="3" scope="row">Разом релізів у каталозі</th>
-      <td colspan="2">6 платівок (2020–2026 рр.)</td>
-    </tr>
-  </tfoot>
-</table>
+                    <!-- Картка 8: Femtanyl, Entitii Records 2026 -->
+                    <article class="card" data-genres="breakcore gabber synthpunk">
+                        <img class="card__img" src="images/card-17.jpg" alt="Обкладинка Man Bites Dog: вогняний напис у формі дерева над освітленою травою на темному тлі">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-man-bites-dog">Man Bites Dog</a></h3>
+                            <p class="card__excerpt">Десять треків 2026 року: брейккор, габбер і синтпанк на вінілі та CD.</p>
+                            <p class="card__meta"><span class="artist-tag artist-tag--femtanyl">Femtanyl</span><br>Жанр: Breakcore, Gabber, Synthpunk<br>Рік: 2026</p>
+                            <p class="card__id">Артикул: FEMT-850004</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-man-bites-dog" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-         <!-- Секція 3: треклісти альбомів -->
-        <section id="tracklists">
-            <h2>Видання та треклісти</h2>
+                    <!-- Картка 9: Femtanyl, лімітований міспринт 2024 -->
+                    <article class="card" data-genres="breakcore footwork gabber">
+                        <span class="card__badge">Міспринт</span>
+                        <img class="card__img" src="images/card-20.jpg" alt="Обкладинка Chaser: чорно-білий малюнок кота з червоними плямами, що стоїть на акумуляторі">
+                        <div class="card__body">
+                            <h3 class="card__title"><a href="#edition-chaser">Chaser (Limited Single Sided EP, White &amp; Blood Splatter, Misprint)</a></h3>
+                            <p class="card__excerpt">Односторонній лімітований EP на біло-червоному сплеттері: шість коротких треків.</p>
+                            <p class="card__meta"><span class="artist-tag artist-tag--femtanyl">Femtanyl</span><br>Жанр: Breakcore, Gabber, Footwork<br>Рік: 2024</p>
+                            <p class="card__id">Артикул: FEM-001</p>
+                            <div class="card__actions">
+                                <a class="card__action" href="#">Замовити</a>
+                                <button type="button" class="card__quick" data-modal-open="details-chaser" aria-haspopup="dialog">Трекліст</button>
+                            </div>
+                        </div>
+                    </article>
 
-            <!-- Альбом 1: Cynthoni (єдиний figure з figcaption за вимогою лаби) -->
-            <article id="edition-lamenting-malice">
-                <h3>Cynthoni — Lamenting Malice (2026) <span class="edition-badge">Нове</span></h3>
-                <p class="edition-tags"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></p>
-                <p>Подвійне лімітоване вінілове видання (Black Ice &amp; White Marbled) на власному лейблі Cynthoni (CYN003-V) у стилях брейккор, драм-енд-бейс, джангл та габбер.</p>
+                </div>
+            </section>
 
-                <figure>
-                    <img src="images/lamenting-malice-vinyl.jpg"
-                        alt="Подвійний мармуровий вініловий диск альбому Cynthoni Lamenting Malice"
-                        width="360" height="360"
-                        loading="lazy">
-                    <figcaption>Фізичний вигляд подвійного мармурового вінілу Lamenting Malice (Black Ice &amp; White Marbled)</figcaption>
-                </figure>
-
-                <section class="gallery">
-                    <h4>Додаткові ілюстрації</h4>
-                    <div class="gallery__items">
-                        <img src="images/card-1.jpg" alt="Чорно-білий мармуровий вініловий диск Lamenting Malice з етикеткою та назвами треків" loading="lazy">
-                        <img src="images/card-2.jpg" alt="Колаж із розвороту Lamenting Malice: напис Cynthoni, назви треків і графіка" loading="lazy">
-                    </div>
-                </section>
-
-                <section>
-                <h4>Відеопрев'ю альбому</h4>
-                <video controls width="360" poster="images/cynthoni-LM-prev.webp" preload="metadata">
-                    <source src="media/cynthoni-drop.mp4" type="video/mp4">
-                    <p>Ваш браузер не підтримує відео. <a href="media/cynthoni-drop.mp4">Завантажити MP4</a>.</p>
-                </video>
-
-                <h4>Аудіофрагмент треку</h4>
-                    <audio controls preload="metadata">
-                        <source src="media/cynthoni-drop.ogg" type="audio/ogg">
-                        <p>Ваш браузер не підтримує аудіо. <a href="media/cynthoni-drop.ogg">Завантажити OGG</a>.</p>
-                    </audio>
-                </section>
-
-                <details open>
-                    <summary>Переглянути трекліст альбому (15 треків)</summary>
+            <!-- Модальні вікна «Трекліст» (по одному на картку): нативний <dialog>,
+                 відкривається через showModal(), закривається кнопкою, Esc або кліком по затемненню -->
+            <dialog id="details-lamenting-malice" class="modal" aria-labelledby="details-lamenting-malice-title">
+                <div class="modal__body">
+                    <h2 id="details-lamenting-malice-title">Cynthoni — Lamenting Malice</h2>
+                    <p class="modal__meta">Cynthoni · Breakcore, Gabber · 2026<br>Лейбл: Not On Label (Cynthoni Self-released)<br>Артикул: CYN003-V</p>
+                    <h3>Трекліст (15 треків)</h3>
                     <ol class="tracklist">
                         <li>Unbirthing <span class="track-duration">1:06</span></li>
                         <li>The F***ing Apocalypse <span class="track-duration">4:02</span></li>
@@ -350,33 +325,17 @@
                         <li>Disappearing <span class="track-duration">6:48</span></li>
                         <li>It Is 0 Seconds To Midnight <span class="track-duration">7:03</span></li>
                     </ol>
-                </details>
-                <footer>
-                    <p>Артикул: <strong>UA-LP-11045</strong> | Жанр: <strong>Breakcore, Gabber</strong> | Рік: <strong>2026</strong></p>
-                </footer>
-            </article>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
 
-            <!-- Альбом 2: Usedcvnt (чистий img без підпису) -->
-            <article id="edition-ultraviolet">
-                <h3>Usedcvnt — Ultraviolet (2023)</h3>
-                <p class="edition-tags"><span class="artist-tag artist-tag--usedcvnt">Usedcvnt</span></p>
-                <p>Атмосферний реліз на перетині ембієнту, драм-енд-бейсу та джанглу з колабораціями та фірмовими мелодійними текстурами.</p>
-
-                <img src="images/ultraviolet-vinyl.jpg"
-                    alt="Прозоро-димчаста лімітована вінілова платівка Usedcvnt Ultraviolet"
-                    width="360" height="360"
-                    loading="lazy">
-
-                <section class="gallery">
-                    <h4>Додаткові ілюстрації</h4>
-                    <div class="gallery__items">
-                        <img src="images/card-3.jpg" alt="Ілюстрація до Ultraviolet: дівчинка з рожевим волоссям сидить біля ескалатора" loading="lazy">
-                        <img src="images/card-4.jpg" alt="Внутрішній конверт Ultraviolet зі списком треків на тлі голих дерев" loading="lazy">
-                    </div>
-                </section>
-
-                <details>
-                    <summary>Переглянути трекліст альбому (16 треків)</summary>
+            <dialog id="details-ultraviolet" class="modal" aria-labelledby="details-ultraviolet-title">
+                <div class="modal__body">
+                    <h2 id="details-ultraviolet-title">Usedcvnt — Ultraviolet</h2>
+                    <p class="modal__meta">Usedcvnt · Breakcore, Ambient · 2023<br>Лейбл: Kitty On Fire Records<br>Артикул: KOFXU1TRAVIO13T</p>
+                    <h3>Трекліст (16 треків)</h3>
                     <ol class="tracklist">
                         <li>Usedcvnt w/ Aak3 — Inhuman <span class="track-duration">2:07</span></li>
                         <li>Usedcvnt — 143 Ways To Lose Urself <span class="track-duration">2:27</span></li>
@@ -395,33 +354,17 @@
                         <li>Usedcvnt — Disappearing Until I Feel Better <span class="track-duration">2:59</span></li>
                         <li>Usedcvnt — They Called Me Violet (Bonus) <span class="track-duration">—</span></li>
                     </ol>
-                </details>
-                <footer>
-                    <p>Артикул: <strong>UA-LP-77020</strong> | Жанр: <strong>Breakcore, Ambient</strong> | Рік: <strong>2023</strong></p>
-                </footer>
-            </article>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
 
-            <!-- Альбом 3: Sewerslvt (чистий img без підпису) -->
-            <article id="edition-draining-love-story">
-                <h3>Sewerslvt — Draining Love Story (2020) <span class="edition-badge">Хіт</span></h3>
-                <p class="edition-tags"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span></p>
-                <p>Культовий альбом на 10 композицій загальною тривалістю близько 58 хвилин, що закріпив фірмовий стиль виконавиці на стику атмосферного драм-енд-бейсу та брейккору.</p>
-
-                <img src="images/draining-love-story-vinyl.jpg"
-                    alt="Колекційна вінілова платівка Sewerslvt Draining Love Story з біло-рожевим сплеттером"
-                    width="360" height="450"
-                    loading="lazy">
-
-                <section class="gallery">
-                    <h4>Додаткові ілюстрації</h4>
-                    <div class="gallery__items">
-                        <img src="images/card-5.jpg" alt="Рожевий вініл Draining Love Story, етикетка сторони A з назвами треків" loading="lazy">
-                        <img src="images/card-6.jpg" alt="Обкладинка Draining Love Story: ілюстрація дівчини з фіолетовим волоссям" loading="lazy">
-                    </div>
-                </section>
-
-                <details>
-                    <summary>Переглянути трекліст альбому (10 треків)</summary>
+            <dialog id="details-draining-love-story" class="modal" aria-labelledby="details-draining-love-story-title">
+                <div class="modal__body">
+                    <h2 id="details-draining-love-story-title">Sewerslvt — Draining Love Story</h2>
+                    <p class="modal__meta">Sewerslvt · Breakcore, Ambient · 2020<br>Лейбл: Geometric Lullaby<br>Артикул: GEO-SP12</p>
+                    <h3>Трекліст (10 треків)</h3>
                     <ol class="tracklist">
                         <li>Love Is a Mighty Big Word <span class="track-duration">2:18</span></li>
                         <li>Newlove <span class="track-duration">5:59</span></li>
@@ -434,33 +377,17 @@
                         <li>Down the Drain <span class="track-duration">8:08</span></li>
                         <li>Slowdeath <span class="track-duration">8:12</span></li>
                     </ol>
-                </details>
-                <footer>
-                    <p>Артикул: <strong>UA-LP-02020</strong> | Жанр: <strong>Breakcore, Ambient</strong> | Рік: <strong>2020</strong></p>
-                </footer>
-            </article>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
 
-            <!-- Альбом 4: Sewerslvt — The World Is Fvcked -->
-            <article id="edition-the-world-is-fvcked">
-                <h3>Sewerslvt — The World Is Fvcked (2020)</h3>
-                <p class="edition-tags"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span></p>
-                <p>Альбом 2020 року на стику джанглу, ембієнту, драм-енд-бейсу, експериментальної електроніки та трансу: сім треків загальною тривалістю близько 35 хвилин.</p>
-
-                <img src="images/card-8.jpg"
-                    alt="Обкладинка альбому The World Is Fvcked: колаж із чотирьох зображень і напис sewerslvt theworldisfvcked"
-                    width="360" height="360"
-                    loading="lazy">
-
-                <section class="gallery">
-                    <h4>Додаткові ілюстрації</h4>
-                    <div class="gallery__items">
-                        <img src="images/card-10.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A на сірому тлі" loading="lazy">
-                        <img src="images/card-9.jpg" alt="Золотава етикетка сторони B платівки The World Is Fvcked зі списком треків 5–7" loading="lazy">
-                    </div>
-                </section>
-
-                <details>
-                    <summary>Переглянути трекліст альбому (7 треків)</summary>
+            <dialog id="details-the-world-is-fvcked" class="modal" aria-labelledby="details-the-world-is-fvcked-title">
+                <div class="modal__body">
+                    <h2 id="details-the-world-is-fvcked-title">Sewerslvt — The World Is Fvcked</h2>
+                    <p class="modal__meta">Sewerslvt · Jungle, Ambient, Drum n Bass · 2020<br>Лейбл: Wave Racers Collective<br>Артикул: WRCV003</p>
+                    <h3>Трекліст (7 треків)</h3>
                     <ol class="tracklist">
                         <li>A Thousand Lonely <span class="track-duration">2:18</span></li>
                         <li>Make-Me-Sad <span class="track-duration">6:15</span></li>
@@ -470,34 +397,17 @@
                         <li>I Really Like You Pt2 <span class="track-duration">7:03</span></li>
                         <li>Jvnko Still Loves You <span class="track-duration">6:59</span></li>
                     </ol>
-                </details>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
 
-                <footer>
-                    <p>Артикул: <strong>UA-LP-02022</strong> | Жанр: <strong>Jungle, Ambient, Drum n Bass</strong> | Рік: <strong>2020</strong></p>
-                </footer>
-            </article>
-
-            <!-- Альбом 5: Sewerslvt Presents: Cynthoni — дві частини в одному виданні -->
-            <article id="edition-sewerslvt-presents-cynthoni">
-                <h3>Sewerslvt Presents: Cynthoni — Pt. 1 &amp; Pt. 2 (2024) <span class="edition-badge">Збірка</span></h3>
-                <p class="edition-tags"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span></p>
-                <p>Лімітована збірка з двох частин на одному вінілі (Blue/Purple Merge): Sewerslvt представляє Cynthoni. Випущена <time datetime="2024-10-03">3 жовтня 2024 року</time> на власному лейблі Cynthoni (CYN001) у стилях транс, джангл, брейккор та драм-енд-бейс; дванадцять треків загальною тривалістю близько 45 хвилин.</p>
-
-                <img src="images/card-11.jpg"
-                    alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками"
-                    width="360" height="360"
-                    loading="lazy">
-
-                <section class="gallery">
-                    <h4>Додаткові ілюстрації</h4>
-                    <div class="gallery__items">
-                        <img src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni" loading="lazy">
-                        <img src="images/card-13.jpg" alt="Темний конверт із голографічним написом sewerslvt presents: CYNThoni part 1/2" loading="lazy">
-                    </div>
-                </section>
-
-                <details>
-                    <summary>Переглянути трекліст, Pt. 1 (6 треків)</summary>
+            <dialog id="details-sewerslvt-presents-cynthoni-pt1" class="modal" aria-labelledby="details-sewerslvt-presents-cynthoni-pt1-title">
+                <div class="modal__body">
+                    <h2 id="details-sewerslvt-presents-cynthoni-pt1-title">Sewerslvt, Cynthoni — Presents: Cynthoni, Pt. 1</h2>
+                    <p class="modal__meta">Sewerslvt, Cynthoni · Trance, Jungle, Breakcore · 2024<br>Лейбл: Not On Label (Cynthoni Self-released)<br>Артикул: CYN001</p>
+                    <h3>Трекліст, Pt. 1 (6 треків)</h3>
                     <ol class="tracklist">
                         <li>Theme Of Cynthoni <span class="track-duration">3:00</span></li>
                         <li>Death Of The Endless <span class="track-duration">5:11</span></li>
@@ -506,10 +416,17 @@
                         <li>Grinding Of The Teeth <span class="track-duration">2:42</span></li>
                         <li>Monolithic Cyan Tsunami <span class="track-duration">3:43</span></li>
                     </ol>
-                </details>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
 
-                <details>
-                    <summary>Переглянути трекліст, Pt. 2 (6 треків)</summary>
+            <dialog id="details-sewerslvt-presents-cynthoni-pt2" class="modal" aria-labelledby="details-sewerslvt-presents-cynthoni-pt2-title">
+                <div class="modal__body">
+                    <h2 id="details-sewerslvt-presents-cynthoni-pt2-title">Sewerslvt, Cynthoni — Presents: Cynthoni, Pt. 2</h2>
+                    <p class="modal__meta">Sewerslvt, Cynthoni · Trance, Jungle, Breakcore · 2024<br>Лейбл: Not On Label (Cynthoni Self-released)<br>Артикул: CYN001</p>
+                    <h3>Трекліст, Pt. 2 (6 треків)</h3>
                     <ol class="tracklist" start="7">
                         <li>Nine Red Squares <span class="track-duration">3:33</span></li>
                         <li>Dancing Dots <span class="track-duration">4:45</span></li>
@@ -518,74 +435,632 @@
                         <li>Ekstaasi <span class="track-duration">3:25</span></li>
                         <li>Oublier <span class="track-duration">3:46</span></li>
                     </ol>
-                </details>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
 
-                <footer>
-                    <p>Артикули: <strong>UA-LP-24001</strong> (Pt. 1), <strong>UA-LP-24002</strong> (Pt. 2) | Жанр: <strong>Trance, Jungle, Breakcore, Drum n Bass</strong> | Рік: <strong>2024</strong></p>
-                </footer>
-            </article>
-        </section>
+            <dialog id="details-in-the-eyes-of-cynthoni" class="modal" aria-labelledby="details-in-the-eyes-of-cynthoni-title">
+                <div class="modal__body">
+                    <h2 id="details-in-the-eyes-of-cynthoni-title">Cynthoni — Draining Love Story (In The Eyes Of Cynthoni)</h2>
+                    <p class="modal__meta">Cynthoni · Breakcore, Jungle, Trance · 2025<br>Лейбл: Not On Label (Cynthoni Self-released)<br>Артикул: CYN002-V</p>
+                    <h3>Трекліст (13 треків, з них 3 бонусні)</h3>
+                    <ol class="tracklist">
+                        <li>It Is Happening Again... <span class="track-duration">2:39</span></li>
+                        <li>Lvstlove <span class="track-duration">6:06</span></li>
+                        <li>Yandere Era <span class="track-duration">3:47</span></li>
+                        <li>Swan Dive Into Eternity <span class="track-duration">6:02</span></li>
+                        <li>Lexapro Doesn't Work <span class="track-duration">7:23</span></li>
+                        <li>The Feeling Is Gone <span class="track-duration">4:34</span></li>
+                        <li>Femcels <span class="track-duration">4:56</span></li>
+                        <li>Cynthoni Of Flames <span class="track-duration">9:17</span></li>
+                        <li>Even Further Down The Drain <span class="track-duration">8:02</span></li>
+                        <li>Slowburn <span class="track-duration">7:07</span></li>
+                        <li>Cynthoni Of Flames (AgonyOST Remix) (Bonus) <span class="track-duration">6:54</span></li>
+                        <li>Even Further Down The Drain (Into An Ocean Of Stars Mix) (Bonus) <span class="track-duration">6:06</span></li>
+                        <li>Long Division (Cynthoni Cover) (Bonus) <span class="track-duration">5:37</span></li>
+                    </ol>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
+
+            <dialog id="details-man-bites-dog" class="modal" aria-labelledby="details-man-bites-dog-title">
+                <div class="modal__body">
+                    <h2 id="details-man-bites-dog-title">Femtanyl — Man Bites Dog</h2>
+                    <p class="modal__meta">Femtanyl · Breakcore, Gabber, Synthpunk · 2026<br>Лейбл: Entitii Records<br>Артикул: FEMT-850004</p>
+                    <h3>Трекліст (10 треків)</h3>
+                    <ol class="tracklist">
+                        <li>Body The Pistol <span class="track-duration">2:38</span></li>
+                        <li>Video Nasty <span class="track-duration">3:02</span></li>
+                        <li>Sick Of It <span class="track-duration">3:10</span></li>
+                        <li>Helltarget <span class="track-duration">3:41</span></li>
+                        <li>City <span class="track-duration">2:52</span></li>
+                        <li>Head Up <span class="track-duration">3:25</span></li>
+                        <li>My Head Hurts <span class="track-duration">2:46</span></li>
+                        <li>Shows You The Way To The Hiway <span class="track-duration">2:42</span></li>
+                        <li>Man Bites Dog <span class="track-duration">3:48</span></li>
+                        <li>Is This It <span class="track-duration">3:57</span></li>
+                    </ol>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
+
+            <dialog id="details-chaser" class="modal" aria-labelledby="details-chaser-title">
+                <div class="modal__body">
+                    <h2 id="details-chaser-title">Femtanyl — Chaser</h2>
+                    <p class="modal__meta">Femtanyl · Breakcore, Gabber, Footwork · 2024<br>Лейбл: Not On Label (Femtanyl Self-released)<br>Артикул: FEM-001</p>
+                    <h3>Трекліст (6 треків)</h3>
+                    <ol class="tracklist">
+                        <li>ACT RIGHT <span class="track-duration">2:24</span></li>
+                        <li>P3T <span class="track-duration">1:42</span></li>
+                        <li>PUSH UR T3MPRR <span class="track-duration">2:28</span></li>
+                        <li>KATAMARI <span class="track-duration">2:38</span></li>
+                        <li>MURDER EVERY 1 U KNOW! (feat. takihasdied) <span class="track-duration">2:05</span></li>
+                        <li>GIRL HELL 1999 <span class="track-duration">2:25</span></li>
+                    </ol>
+                    <form method="dialog">
+                        <button type="submit">Закрити</button>
+                    </form>
+                </div>
+            </dialog>
+
+           <table id="albums-table">
+      <caption>Зведена таблиця альбомів, виконавців, дат випуску та видавництв</caption>
+      <thead>
+        <tr>
+          <th rowspan="2" scope="col">Альбом</th>
+          <th rowspan="2" scope="col">Виконавець</th>
+          <th rowspan="2" scope="col">Рік</th>
+          <th colspan="2" scope="colgroup">Дані лейблу</th>
+        </tr>
+        <tr>
+          <th scope="col">Лейбл</th>
+          <th scope="col">Каталожний номер</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">LAMENTING MALICE</th>
+          <td>Cynthoni</td>
+          <td>2026</td>
+          <td>Not On Label (Cynthoni Self-released)</td>
+          <td>CYN003-V</td>
+        </tr>
+        <tr>
+          <th scope="row">DRAINING LOVE STORY (IN THE EYES OF CYNTHONI)</th>
+          <td>Cynthoni</td>
+          <td>2025</td>
+          <td>Not On Label (Cynthoni Self-released)</td>
+          <td>CYN002-V</td>
+        </tr>
+        <tr>
+          <th scope="row">ULTRAVIOLET</th>
+          <td>Usedcvnt</td>
+          <td>2023</td>
+          <td>Kitty On Fire Records</td>
+          <td>KOFXU1TRAVIO13T</td>
+        </tr>
+        <tr>
+          <th scope="row">SEWERSLVT PRESENTS: CYNTHONI (PT. 1 &amp; PT. 2)</th>
+          <td>Sewerslvt, Cynthoni</td>
+          <td>2024</td>
+          <td>Not On Label (Cynthoni Self-released)</td>
+          <td>CYN001</td>
+        </tr>
+        <tr data-group="sewerslvt">
+          <th scope="row">DRAINING LOVE STORY</th>
+          <td rowspan="3">Sewerslvt</td>
+          <td>2020</td>
+          <td>Geometric Lullaby</td>
+          <td>GEO-SP12</td>
+        </tr>
+        <tr data-group="sewerslvt">
+          <th scope="row">THE WORLD IS FVCKED</th>
+          <td>2020</td>
+          <td>Wave Racers Collective</td>
+          <td>WRCV003</td>
+        </tr>
+        <tr data-group="sewerslvt">
+          <th scope="row">WE HAD GOOD TIMES TOGETHER, DON'T FORGET THAT</th>
+          <td>2021</td>
+          <td>Not On Label (Sewerslvt Self-released)</td>
+          <td>SLVT-002</td>
+        </tr>
+        <tr data-group="femtanyl">
+          <th scope="row">MAN BITES DOG</th>
+          <td rowspan="2">Femtanyl</td>
+          <td>2026</td>
+          <td>Entitii Records</td>
+          <td>FEMT-850004</td>
+        </tr>
+        <tr data-group="femtanyl">
+          <th scope="row">CHASER</th>
+          <td>2024</td>
+          <td>Not On Label (Femtanyl Self-released)</td>
+          <td>FEM-001</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="3" scope="row">Разом релізів у каталозі</th>
+          <td colspan="2">9 платівок (2020–2026 рр.)</td>
+        </tr>
+      </tfoot>
+    </table>
+
+            <!-- Бонус: щільна галерея. Grid з grid-auto-flow: row dense: великі плитки (wide, tall)
+                 займають по кілька клітинок, а дрібні заповнюють порожнечі між ними -->
+            <section id="gallery">
+                <h2>Галерея обкладинок</h2>
+                <p>Мозаїка з обкладинок і вінілу каталогу: кілька плиток розтягнуті вшир або вгору, решта заповнює проміжки.</p>
+                <div class="gallery">
+                    <figure class="gallery__item gallery__item--wide"><img src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-3.jpg" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора" loading="lazy"></figure>
+                    <figure class="gallery__item gallery__item--wide gallery__item--tall"><img src="images/card-17.jpg" alt="Обкладинка Man Bites Dog: вогняний напис у формі дерева над освітленою травою на темному тлі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-6.jpg" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям" loading="lazy"></figure>
+                    <figure class="gallery__item gallery__item--tall"><img src="images/card-7.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-14.jpg" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і квітковим візерунком на одязі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-15.jpg" alt="Блакитно-рожевий мармуровий вініловий диск з чорною етикеткою, на якій рожевим намальовані очі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-20.jpg" alt="Обкладинка Chaser: чорно-білий малюнок кота з червоними плямами, що стоїть на акумуляторі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-21.jpg" alt="Білий вініл із малиновими бризками та великим помаранчевим малюнком морди на сліпматі" loading="lazy"></figure>
+                    <figure class="gallery__item"><img src="images/card-5.jpg" alt="Рожевий вініл Draining Love Story, етикетка сторони A з назвами треків" loading="lazy"></figure>
+                </div>
+            </section>
+
+             <!-- Секція 3: треклісти альбомів -->
+            <section id="tracklists">
+                <h2>Видання та треклісти</h2>
+
+                <!-- Альбом 1: Cynthoni (єдиний figure з figcaption за вимогою лаби) -->
+                <article id="edition-lamenting-malice">
+                    <h3>Cynthoni — Lamenting Malice (2026) <span class="edition-badge">Нове</span></h3>
+                    <p class="edition-tags"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></p>
+                    <p>Подвійне лімітоване вінілове видання (Black Ice &amp; White Marbled) на власному лейблі Cynthoni (CYN003-V) у стилях брейккор, драм-енд-бейс, джангл та габбер.</p>
+
+                    <figure>
+                        <img src="images/lamenting-malice-vinyl.jpg"
+                            alt="Подвійний мармуровий вініловий диск альбому Cynthoni Lamenting Malice"
+                            width="360" height="360"
+                            loading="lazy">
+                        <figcaption>Фізичний вигляд подвійного мармурового вінілу Lamenting Malice (Black Ice &amp; White Marbled)</figcaption>
+                    </figure>
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-1.jpg" alt="Чорно-білий мармуровий вініловий диск Lamenting Malice з етикеткою та назвами треків" loading="lazy">
+                            <img src="images/card-2.jpg" alt="Колаж із розвороту Lamenting Malice: напис Cynthoni, назви треків і графіка" loading="lazy">
+                        </div>
+                    </section>
+
+                    <section>
+                    <h4>Відеопрев'ю альбому</h4>
+                    <video controls width="360" poster="images/cynthoni-LM-prev.webp" preload="metadata">
+                        <source src="media/cynthoni-drop.mp4" type="video/mp4">
+                        <p>Ваш браузер не підтримує відео. <a href="media/cynthoni-drop.mp4">Завантажити MP4</a>.</p>
+                    </video>
+
+                    <h4>Аудіофрагмент треку</h4>
+                        <audio controls preload="metadata">
+                            <source src="media/cynthoni-drop.ogg" type="audio/ogg">
+                            <p>Ваш браузер не підтримує аудіо. <a href="media/cynthoni-drop.ogg">Завантажити OGG</a>.</p>
+                        </audio>
+                    </section>
+
+                    <details open>
+                        <summary>Переглянути трекліст альбому (15 треків)</summary>
+                        <ol class="tracklist">
+                            <li>Unbirthing <span class="track-duration">1:06</span></li>
+                            <li>The F***ing Apocalypse <span class="track-duration">4:02</span></li>
+                            <li>Ensh***ification <span class="track-duration">4:04</span></li>
+                            <li>BleakReality <span class="track-duration">3:48</span></li>
+                            <li>Hell Sings <span class="track-duration">4:28</span></li>
+                            <li>MentallyILL <span class="track-duration">5:23</span></li>
+                            <li>Imminent Eradication <span class="track-duration">4:51</span></li>
+                            <li>Nihilism Extremist <span class="track-duration">4:00</span></li>
+                            <li>Dead Doom Scrolls <span class="track-duration">4:41</span></li>
+                            <li>Endlessly Dying Machine <span class="track-duration">4:48</span></li>
+                            <li>(emotion)2 <span class="track-duration">5:12</span></li>
+                            <li>Shut Your B***h A** Up: Prolapse Of The Mind <span class="track-duration">1:06</span></li>
+                            <li>Fearful Avoidant Disorganised Attachment <span class="track-duration">4:23</span></li>
+                            <li>Disappearing <span class="track-duration">6:48</span></li>
+                            <li>It Is 0 Seconds To Midnight <span class="track-duration">7:03</span></li>
+                        </ol>
+                    </details>
+                    <footer>
+                        <p>Артикул: <strong>CYN003-V</strong> | Жанр: <strong>Breakcore, Gabber</strong> | Рік: <strong>2026</strong></p>
+                    </footer>
+                </article>
+
+                <!-- Альбом 2: Usedcvnt (чистий img без підпису) -->
+                <article id="edition-ultraviolet">
+                    <h3>Usedcvnt — Ultraviolet (2023)</h3>
+                    <p class="edition-tags"><span class="artist-tag artist-tag--usedcvnt">Usedcvnt</span></p>
+                    <p>Атмосферний реліз на перетині ембієнту, драм-енд-бейсу та джанглу з колабораціями та фірмовими мелодійними текстурами.</p>
+
+                    <img src="images/ultraviolet-vinyl.jpg"
+                        alt="Прозоро-димчаста лімітована вінілова платівка Usedcvnt Ultraviolet"
+                        width="360" height="360"
+                        loading="lazy">
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-3.jpg" alt="Ілюстрація до Ultraviolet: дівчинка з рожевим волоссям сидить біля ескалатора" loading="lazy">
+                            <img src="images/card-4.jpg" alt="Внутрішній конверт Ultraviolet зі списком треків на тлі голих дерев" loading="lazy">
+                        </div>
+                    </section>
+
+                    <details>
+                        <summary>Переглянути трекліст альбому (16 треків)</summary>
+                        <ol class="tracklist">
+                            <li>Usedcvnt w/ Aak3 — Inhuman <span class="track-duration">2:07</span></li>
+                            <li>Usedcvnt — 143 Ways To Lose Urself <span class="track-duration">2:27</span></li>
+                            <li>Usedcvnt w/ Akiba (3) — Limited In Love <span class="track-duration">2:52</span></li>
+                            <li>Usedcvnt w/ DXRKWRLD — You're My Friend Now <span class="track-duration">2:23</span></li>
+                            <li>Usedcvnt — Kittens <span class="track-duration">2:29</span></li>
+                            <li>Usedcvnt w/ Eden FM — Pls Tell Me What Is Ur Dream <span class="track-duration">2:38</span></li>
+                            <li>Usedcvnt — Just Leave Me To Bleed <span class="track-duration">3:01</span></li>
+                            <li>Usedcvnt — Sorry Mom, I'm Making Breakcore XD <span class="track-duration">1:55</span></li>
+                            <li>Usedcvnt w/ Iwakura — Illusion Of Control <span class="track-duration">2:27</span></li>
+                            <li>Usedcvnt w/ Abyssal.angel — Yours Forever <span class="track-duration">2:59</span></li>
+                            <li>Usedcvnt w/ Enkei — It's 2am, I Can't Sleep <span class="track-duration">1:55</span></li>
+                            <li>Usedcvnt — I Want To Eat Ur Heart Couse I Love U <span class="track-duration">1:55</span></li>
+                            <li>Usedcvnt w/ Sabuze — Taste Of Blood <span class="track-duration">1:36</span></li>
+                            <li>Usedcvnt — Overthinking <span class="track-duration">2:24</span></li>
+                            <li>Usedcvnt — Disappearing Until I Feel Better <span class="track-duration">2:59</span></li>
+                            <li>Usedcvnt — They Called Me Violet (Bonus) <span class="track-duration">—</span></li>
+                        </ol>
+                    </details>
+                    <footer>
+                        <p>Артикул: <strong>KOFXU1TRAVIO13T</strong> | Жанр: <strong>Breakcore, Ambient</strong> | Рік: <strong>2023</strong></p>
+                    </footer>
+                </article>
+
+                <!-- Альбом 3: Sewerslvt (чистий img без підпису) -->
+                <article id="edition-draining-love-story">
+                    <h3>Sewerslvt — Draining Love Story (2020) <span class="edition-badge">Хіт</span></h3>
+                    <p class="edition-tags"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span></p>
+                    <p>Культовий альбом на 10 композицій загальною тривалістю близько 58 хвилин, що закріпив фірмовий стиль виконавиці на стику атмосферного драм-енд-бейсу та брейккору.</p>
+
+                    <img src="images/draining-love-story-vinyl.jpg"
+                        alt="Колекційна вінілова платівка Sewerslvt Draining Love Story з біло-рожевим сплеттером"
+                        width="360" height="450"
+                        loading="lazy">
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-5.jpg" alt="Рожевий вініл Draining Love Story, етикетка сторони A з назвами треків" loading="lazy">
+                            <img src="images/card-6.jpg" alt="Обкладинка Draining Love Story: ілюстрація дівчини з фіолетовим волоссям" loading="lazy">
+                        </div>
+                    </section>
+
+                    <details>
+                        <summary>Переглянути трекліст альбому (10 треків)</summary>
+                        <ol class="tracklist">
+                            <li>Love Is a Mighty Big Word <span class="track-duration">2:18</span></li>
+                            <li>Newlove <span class="track-duration">5:59</span></li>
+                            <li>Yandere Complex <span class="track-duration">4:10</span></li>
+                            <li>Ecifircas <span class="track-duration">5:47</span></li>
+                            <li>Lexapro Delirium <span class="track-duration">7:15</span></li>
+                            <li>This Fleeting Feeling <span class="track-duration">3:31</span></li>
+                            <li>Swinging in His Cell <span class="track-duration">5:22</span></li>
+                            <li>Mr. Kill Myself <span class="track-duration">7:51</span></li>
+                            <li>Down the Drain <span class="track-duration">8:08</span></li>
+                            <li>Slowdeath <span class="track-duration">8:12</span></li>
+                        </ol>
+                    </details>
+                    <footer>
+                        <p>Артикул: <strong>GEO-SP12</strong> | Жанр: <strong>Breakcore, Ambient</strong> | Рік: <strong>2020</strong></p>
+                    </footer>
+                </article>
+
+                <!-- Альбом 4: Sewerslvt — The World Is Fvcked -->
+                <article id="edition-the-world-is-fvcked">
+                    <h3>Sewerslvt — The World Is Fvcked (2020)</h3>
+                    <p class="edition-tags"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span></p>
+                    <p>Альбом 2020 року на стику джанглу, ембієнту, драм-енд-бейсу, експериментальної електроніки та трансу: сім треків загальною тривалістю близько 35 хвилин.</p>
+
+                    <img src="images/card-8.jpg"
+                        alt="Обкладинка альбому The World Is Fvcked: колаж із чотирьох зображень і напис sewerslvt theworldisfvcked"
+                        width="360" height="360"
+                        loading="lazy">
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-10.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A на сірому тлі" loading="lazy">
+                            <img src="images/card-9.jpg" alt="Золотава етикетка сторони B платівки The World Is Fvcked зі списком треків 5–7" loading="lazy">
+                        </div>
+                    </section>
+
+                    <details>
+                        <summary>Переглянути трекліст альбому (7 треків)</summary>
+                        <ol class="tracklist">
+                            <li>A Thousand Lonely <span class="track-duration">2:18</span></li>
+                            <li>Make-Me-Sad <span class="track-duration">6:15</span></li>
+                            <li>Psychosis <span class="track-duration">3:49</span></li>
+                            <li>Something of Value Less Than That <span class="track-duration">4:36</span></li>
+                            <li>Ruined Snowy Day <span class="track-duration">4:19</span></li>
+                            <li>I Really Like You Pt2 <span class="track-duration">7:03</span></li>
+                            <li>Jvnko Still Loves You <span class="track-duration">6:59</span></li>
+                        </ol>
+                    </details>
+
+                    <footer>
+                        <p>Артикул: <strong>WRCV003</strong> | Жанр: <strong>Jungle, Ambient, Drum n Bass</strong> | Рік: <strong>2020</strong></p>
+                    </footer>
+                </article>
+
+                <!-- Альбом 5: Sewerslvt Presents: Cynthoni — дві частини в одному виданні -->
+                <article id="edition-sewerslvt-presents-cynthoni">
+                    <h3>Sewerslvt Presents: Cynthoni — Pt. 1 &amp; Pt. 2 (2024) <span class="edition-badge">Збірка</span></h3>
+                    <p class="edition-tags"><span class="artist-tag-group"><span class="artist-tag artist-tag--sewerslvt">Sewerslvt</span><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></span></p>
+                    <p>Лімітована збірка з двох частин на одному вінілі (Blue/Purple Merge): Sewerslvt представляє Cynthoni. Випущена <time datetime="2024-10-03">3 жовтня 2024 року</time> на власному лейблі Cynthoni (CYN001) у стилях транс, джангл, брейккор та драм-енд-бейс; дванадцять треків загальною тривалістю близько 45 хвилин.</p>
+
+                    <img src="images/card-11.jpg"
+                        alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками"
+                        width="360" height="360"
+                        loading="lazy">
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni" loading="lazy">
+                            <img src="images/card-13.jpg" alt="Темний конверт із голографічним написом sewerslvt presents: CYNThoni part 1/2" loading="lazy">
+                        </div>
+                    </section>
+
+                    <details>
+                        <summary>Переглянути трекліст, Pt. 1 (6 треків)</summary>
+                        <ol class="tracklist">
+                            <li>Theme Of Cynthoni <span class="track-duration">3:00</span></li>
+                            <li>Death Of The Endless <span class="track-duration">5:11</span></li>
+                            <li>Lychee Ice <span class="track-duration">2:21</span></li>
+                            <li>Flickering In The Gloom (feat. Projekt Melody) <span class="track-duration">3:48</span></li>
+                            <li>Grinding Of The Teeth <span class="track-duration">2:42</span></li>
+                            <li>Monolithic Cyan Tsunami <span class="track-duration">3:43</span></li>
+                        </ol>
+                    </details>
+
+                    <details>
+                        <summary>Переглянути трекліст, Pt. 2 (6 треків)</summary>
+                        <ol class="tracklist" start="7">
+                            <li>Nine Red Squares <span class="track-duration">3:33</span></li>
+                            <li>Dancing Dots <span class="track-duration">4:45</span></li>
+                            <li>System Link <span class="track-duration">2:50</span></li>
+                            <li>Meh.Tuhl.Hedz <span class="track-duration">6:02</span></li>
+                            <li>Ekstaasi <span class="track-duration">3:25</span></li>
+                            <li>Oublier <span class="track-duration">3:46</span></li>
+                        </ol>
+                    </details>
+
+                    <footer>
+                        <p>Артикул: <strong>CYN001</strong> (Pt. 1 і Pt. 2) | Жанр: <strong>Trance, Jungle, Breakcore, Drum n Bass</strong> | Рік: <strong>2024</strong></p>
+                    </footer>
+                </article>
+
+                <!-- Альбом 6: Cynthoni — In The Eyes Of Cynthoni -->
+                <article id="edition-in-the-eyes-of-cynthoni">
+                    <h3>Cynthoni — Draining Love Story: In The Eyes Of Cynthoni (2025) <span class="edition-badge">Лімітоване</span></h3>
+                    <p class="edition-tags"><span class="artist-tag artist-tag--cynthoni">Cynthoni</span></p>
+                    <p>Подвійне лімітоване вінілове видання (2 × LP, Blue &amp; Pink Marbled), випущене в червні 2025 року на власному лейблі Cynthoni (CYN002-V) у стилях брейккор, драм-енд-бейс, ембієнт, джангл, транс, хардстайл та хаус. Три сторони з основними треками й четверта з бонусами.</p>
+
+                    <img src="images/card-15.jpg"
+                        alt="Блакитно-рожевий мармуровий вініловий диск з чорною етикеткою, на якій рожевим намальовані очі"
+                        width="360" height="360"
+                        loading="lazy">
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-14.jpg" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і квітковим візерунком на одязі" loading="lazy">
+                            <img src="images/card-16.jpg" alt="Зворотний бік конверта: чорно-білий портрет у центрі, символи по боках і напис Draining Love Story" loading="lazy">
+                        </div>
+                    </section>
+
+                    <details>
+                        <summary>Переглянути трекліст альбому (13 треків, з них 3 бонусні)</summary>
+                        <ol class="tracklist">
+                            <li>It Is Happening Again... <span class="track-duration">2:39</span></li>
+                            <li>Lvstlove <span class="track-duration">6:06</span></li>
+                            <li>Yandere Era <span class="track-duration">3:47</span></li>
+                            <li>Swan Dive Into Eternity <span class="track-duration">6:02</span></li>
+                            <li>Lexapro Doesn't Work <span class="track-duration">7:23</span></li>
+                            <li>The Feeling Is Gone <span class="track-duration">4:34</span></li>
+                            <li>Femcels <span class="track-duration">4:56</span></li>
+                            <li>Cynthoni Of Flames <span class="track-duration">9:17</span></li>
+                            <li>Even Further Down The Drain <span class="track-duration">8:02</span></li>
+                            <li>Slowburn <span class="track-duration">7:07</span></li>
+                            <li>Cynthoni Of Flames (AgonyOST Remix) (Bonus) <span class="track-duration">6:54</span></li>
+                            <li>Even Further Down The Drain (Into An Ocean Of Stars Mix) (Bonus) <span class="track-duration">6:06</span></li>
+                            <li>Long Division (Cynthoni Cover) (Bonus) <span class="track-duration">5:37</span></li>
+                        </ol>
+                    </details>
+                    <footer>
+                        <p>Артикул: <strong>CYN002-V</strong> | Жанр: <strong>Breakcore, Drum n Bass, Ambient, Jungle, Trance, Hardstyle, House</strong> | Рік: <strong>2025</strong></p>
+                    </footer>
+                </article>
+
+                <!-- Альбом 7: Femtanyl — Man Bites Dog -->
+                <article id="edition-man-bites-dog">
+                    <h3>Femtanyl — Man Bites Dog (2026)</h3>
+                    <p class="edition-tags"><span class="artist-tag artist-tag--femtanyl">Femtanyl</span></p>
+                    <p>Альбом 2026 року з десяти треків на лейблі Entitii Records (FEMT-850004) у стилях брейккор, хардкор, габбер, синтпанк, брейкс та джук; видається на вінілі та CD.</p>
+
+                    <img src="images/card-17.jpg"
+                        alt="Обкладинка Man Bites Dog: вогняний напис у формі дерева над освітленою травою на темному тлі"
+                        width="360" height="360"
+                        loading="lazy">
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-18.jpg" alt="Чорний вініловий диск, що виглядає з конверта Man Bites Dog із вогняним написом" loading="lazy">
+                            <img src="images/card-19.jpg" alt="Запечатаний у плівку конверт із червоним написом Man Bites Dog на чорному тлі" loading="lazy">
+                        </div>
+                    </section>
+
+                    <details>
+                        <summary>Переглянути трекліст альбому (10 треків)</summary>
+                        <ol class="tracklist">
+                            <li>Body The Pistol <span class="track-duration">2:38</span></li>
+                            <li>Video Nasty <span class="track-duration">3:02</span></li>
+                            <li>Sick Of It <span class="track-duration">3:10</span></li>
+                            <li>Helltarget <span class="track-duration">3:41</span></li>
+                            <li>City <span class="track-duration">2:52</span></li>
+                            <li>Head Up <span class="track-duration">3:25</span></li>
+                            <li>My Head Hurts <span class="track-duration">2:46</span></li>
+                            <li>Shows You The Way To The Hiway <span class="track-duration">2:42</span></li>
+                            <li>Man Bites Dog <span class="track-duration">3:48</span></li>
+                            <li>Is This It <span class="track-duration">3:57</span></li>
+                        </ol>
+                    </details>
+                    <footer>
+                        <p>Артикул: <strong>FEMT-850004</strong> | Жанр: <strong>Breakcore, Hardcore, Gabber, Synthpunk, Breaks, Juke</strong> | Рік: <strong>2026</strong></p>
+                    </footer>
+                </article>
+
+                <!-- Альбом 8: Femtanyl — Chaser -->
+                <article id="edition-chaser">
+                    <h3>Femtanyl — Chaser (2024) <span class="edition-badge">Міспринт</span></h3>
+                    <p class="edition-tags"><span class="artist-tag artist-tag--femtanyl">Femtanyl</span></p>
+                    <p>Лімітований односторонній вініловий EP (LP, Single Sided, Misprint, White &amp; Blood Splatter), виданий у грудні 2024 року в США на власному лейблі Femtanyl (FEM-001) у стилях брейккор, хардкор, футворк, джук та габбер. Шість треків; ексклюзивний продавець — Downright Merch.</p>
+
+                    <img src="images/card-20.jpg"
+                        alt="Обкладинка Chaser: чорно-білий малюнок кота з червоними плямами, що стоїть на акумуляторі"
+                        width="360" height="360"
+                        loading="lazy">
+
+                    <section class="edition-gallery">
+                        <h4>Додаткові ілюстрації</h4>
+                        <div class="edition-gallery__items">
+                            <img src="images/card-21.jpg" alt="Білий вініл із малиновими бризками та великим помаранчевим малюнком морди на сліпматі" loading="lazy">
+                            <img src="images/card-22.jpg" alt="Білий вініл із малиновими бризками та білою етикеткою з червоним написом у центрі" loading="lazy">
+                        </div>
+                    </section>
+
+                    <details>
+                        <summary>Переглянути трекліст EP (6 треків)</summary>
+                        <ol class="tracklist">
+                            <li>ACT RIGHT <span class="track-duration">2:24</span></li>
+                            <li>P3T <span class="track-duration">1:42</span></li>
+                            <li>PUSH UR T3MPRR <span class="track-duration">2:28</span></li>
+                            <li>KATAMARI <span class="track-duration">2:38</span></li>
+                            <li>MURDER EVERY 1 U KNOW! (feat. takihasdied) <span class="track-duration">2:05</span></li>
+                            <li>GIRL HELL 1999 <span class="track-duration">2:25</span></li>
+                        </ol>
+                    </details>
+                    <footer>
+                        <p>Артикул: <strong>FEM-001</strong> | Жанр: <strong>Breakcore, Hardcore, Footwork, Juke, Gabber</strong> | Рік: <strong>2024</strong></p>
+                    </footer>
+                </article>
+            </section>
 
 
- <!-- Секція: Інструкція правильного прослуховування та догляду -->
-        <section id="vinyl-care">
-            <h2>Правила прослуховування та догляду за платівками</h2>
-            <ol>
-                <li>Переконайтеся, що програвач виставлений за рівнем і тонарм правильно збалансований.</li>
-                <li>Обережно дістаньте платівку з конверта, тримаючи її виключно за ребра або центральне яблуко.</li>
-                <li>Покладіть диск на сліпмат опорного диска програвача.</li>
-                <li>Очистіть поверхню вінілу антистатичною щіткою від пилу вздовж напрямку звукових канавок.</li>
-                <li>Увімкніть обертання двигуна та перевірте правильність обраної швидкості (33⅓ або 45 RPM).</li>
-            </ol>
+     <!-- Секція: Інструкція правильного прослуховування та догляду -->
+            <section id="vinyl-care">
+                <h2>Правила прослуховування та догляду за платівками</h2>
+                <ol>
+                    <li>Переконайтеся, що програвач виставлений за рівнем і тонарм правильно збалансований.</li>
+                    <li>Обережно дістаньте платівку з конверта, тримаючи її виключно за ребра або центральне яблуко.</li>
+                    <li>Покладіть диск на сліпмат опорного диска програвача.</li>
+                    <li>Очистіть поверхню вінілу антистатичною щіткою від пилу вздовж напрямку звукових канавок.</li>
+                    <li>Увімкніть обертання двигуна та перевірте правильність обраної швидкості (33⅓ або 45 RPM).</li>
+                </ol>
 
-            <p>Плавне опускання голки за допомогою мікроліфта є критичним моментом — опускання тонарма вручну може легко пошкодити звукову канавку або голку звукознімача.</p>
+                <p>Плавне опускання голки за допомогою мікроліфта є критичним моментом — опускання тонарма вручну може легко пошкодити звукову канавку або голку звукознімача.</p>
 
-            <ol start="6">
-                <li>Плавно опустіть голку на ввідну доріжку платівки за допомогою важеля мікроліфта.</li>
-                <li>Після завершення прослуховування поверніть тонарм на базу та обов'язково сховайте платівку в антистатичний пакет.</li>
-            </ol>
-        </section>
+                <ol start="6">
+                    <li>Плавно опустіть голку на ввідну доріжку платівки за допомогою важеля мікроліфта.</li>
+                    <li>Після завершення прослуховування поверніть тонарм на базу та обов'язково сховайте платівку в антистатичний пакет.</li>
+                </ol>
+            </section>
 
-        <!-- Секція: Музичний та аудіофільський глосарій -->
-        <section id="glossary">
-            <h2>Словник музичних та аудіофільських термінів</h2>
-            <dl>
-                <!-- Один dt до двох dd -->
-                <dt>Першопрес (First Press)</dt>
-                <dd>Оригінальний перший тираж альбому, відштампований із найперших лакових матриць одразу після виходу релізу.</dd>
-                <dd>Має найбільшу колекційну та акустичну цінність через максимальну чіткість геометрії звукових канавок.</dd>
+            <!-- Секція: Музичний та аудіофільський глосарій -->
+            <section id="glossary">
+                <h2>Словник музичних та аудіофільських термінів</h2>
+                <dl>
+                    <!-- Один dt до двох dd -->
+                    <dt>Першопрес (First Press)</dt>
+                    <dd>Оригінальний перший тираж альбому, відштампований із найперших лакових матриць одразу після виходу релізу.</dd>
+                    <dd>Має найбільшу колекційну та акустичну цінність через максимальну чіткість геометрії звукових канавок.</dd>
 
-                <!-- Два dt до одного dd -->
-                <dt>Аналоговий мастеринг</dt>
-                <dt>Вініловий мастеринг</dt>
-                <dd>Процес фінальної частотної та динамічної підготовки аудіозапису з урахуванням фізичних обмежень різання вінілового диска.</dd>
+                    <!-- Два dt до одного dd -->
+                    <dt>Аналоговий мастеринг</dt>
+                    <dt>Вініловий мастеринг</dt>
+                    <dd>Процес фінальної частотної та динамічної підготовки аудіозапису з урахуванням фізичних обмежень різання вінілового диска.</dd>
 
-                <dt>Семпл (Sample)</dt>
-                <dd>Фрагмент раніше записаного аудіотреку чи живого інструмента, перероблений та зациклений для побудови нової композиції в треках електронної музики.</dd>
+                    <dt>Семпл (Sample)</dt>
+                    <dd>Фрагмент раніше записаного аудіотреку чи живого інструмента, перероблений та зациклений для побудови нової композиції в треках електронної музики.</dd>
 
-                <dt>Антискейтинг (Anti-skate)</dt>
-                <dd>Механічна компенсація сили скочування тонарма до центру диска для забезпечення рівномірного притискання голки до обох стінок стереоканавки.</dd>
-            </dl>
-        </section>
+                    <dt>Антискейтинг (Anti-skate)</dt>
+                    <dd>Механічна компенсація сили скочування тонарма до центру диска для забезпечення рівномірного притискання голки до обох стінок стереоканавки.</dd>
+                </dl>
+            </section>
 
 
-    </main>
+        </main>
 
-    <!-- Блок зворотного зв'язку -->
-    <aside>
-        <h2>Зворотний зв'язок</h2>
-        <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?
-        <a href="form.html#feedback-section">Надішліть нам повідомлення</a>.</p>
-    </aside>
+        <!-- Зона side (grid-area: side): зворотний зв'язок -->
+        <aside class="layout__aside">
+            <!-- Фільтр за жанром без JavaScript: вибрана радіокнопка через :has() ховає картки з іншими жанрами (data-genres) -->
+            <section class="genre-filter">
+                <h2>Фільтр за жанром</h2>
+                <ul>
+                    <li><input type="radio" name="genre" id="genre-all" value="all" checked><label for="genre-all">Усі жанри</label></li>
+                    <li><input type="radio" name="genre" id="genre-breakcore" value="breakcore"><label for="genre-breakcore">Breakcore</label></li>
+                    <li><input type="radio" name="genre" id="genre-gabber" value="gabber"><label for="genre-gabber">Gabber</label></li>
+                    <li><input type="radio" name="genre" id="genre-ambient" value="ambient"><label for="genre-ambient">Ambient</label></li>
+                    <li><input type="radio" name="genre" id="genre-jungle" value="jungle"><label for="genre-jungle">Jungle</label></li>
+                    <li><input type="radio" name="genre" id="genre-trance" value="trance"><label for="genre-trance">Trance</label></li>
+                    <li><input type="radio" name="genre" id="genre-drum-n-bass" value="drum-n-bass"><label for="genre-drum-n-bass">Drum n Bass</label></li>
+                </ul>
+            </section>
 
-    <footer>
-        <address>
-            м. Ужгород | Email: <a href="mailto:yurii.tsarenko@student.uzhnu.edu.ua">yurii.tsarenko@student.uzhnu.edu.ua</a> | Telegram: <a href="https://t.me/althik">althik</a>
-        </address>
-        <p>Підгрупа 2, Царенко, 2026 рік</p>
-    </footer>
+            <section>
+                <h2>Зворотний зв'язок</h2>
+                <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?
+                <a href="form.html#feedback-section">Надішліть нам повідомлення</a>.</p>
+            </section>
+        </aside>
+
+        <footer class="layout__footer">
+            <address>
+                м. Ужгород | Email: <a href="mailto:yurii.tsarenko@student.uzhnu.edu.ua">yurii.tsarenko@student.uzhnu.edu.ua</a> | Telegram: <a href="https://t.me/althik">althik</a>
+            </address>
+            <p>Підгрупа 2, Царенко, 2026 рік</p>
+        </footer>
+
+    </div>
 
     <a class="to-top" href="#top" aria-label="Нагору">↑</a>
+
+
+    <!-- Керування модальними вікнами: кожна кнопка data-modal-open відкриває <dialog> зі своїм id через showModal()
+         (вмикає ::backdrop і top layer), Esc закриває вікно без коду -->
+    <script>
+        document.querySelectorAll("[data-modal-open]").forEach((button) => {
+            const dialog = document.getElementById(button.dataset.modalOpen);
+            button.addEventListener("click", () => dialog.showModal());
+        });
+
+        // Клік поза вмістом потрапляє на сам <dialog> (область ::backdrop) і закриває вікно
+        document.querySelectorAll("dialog.modal").forEach((dialog) => {
+            dialog.addEventListener("click", (event) => {
+                if (event.target === dialog) {
+                    dialog.close();
+                }
+            });
+        });
+    </script>
 
 </body>
 

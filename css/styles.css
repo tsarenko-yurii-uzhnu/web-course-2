@@ -5,6 +5,8 @@
    Дата: 2026-10-05
    Тема 4: CSS-основи, селектори, каскад, текст і шрифти
    Тема 5 (ЛР 5): нормалізація box-sizing, змінні розмірів, галерея в виданнях
+   Тема 6 (ЛР 6): Grid для макета, Flexbox для вмісту, відступи лише через gap,
+                  навігація на Flexbox, grid-template-areas, нативний <dialog>
    ========================================================================== */
 
 /* Моноширинний шрифт Google Fonts із кирилицею: Anonymous Pro — лише для
@@ -48,6 +50,7 @@
   --color-danger-bg: hsl(0, 70%, 95%);      /* Світлий фон поля з помилкою */
   --color-success: hsl(85, 28%, 32%);       /* Коректне поле: приглушений оливковий, у тон кремовій палітрі */
   --color-success-bg: hsl(85, 30%, 89%);    /* Світлий оливковий фон коректного поля */
+  --color-current: hsl(0, 78%, 46%);        /* Червона обводка поточного розділу в панелі змісту */
 
   /* Нетипові змінні (шрифти, геометрія, тіні) */
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -62,55 +65,103 @@
   /* Нові змінні розмірів (ЛР 5): жодних «магічних чисел» у відступах і сітці */
   --color-on-dark: hsl(0, 0%, 100%);  /* білий текст на темних плашках (теги авторів, SVG-діаграма) */
   --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
-  --page-width: 1100px;     /* максимальна ширина вмісту сторінки */
-  --card-width: 260px;      /* мінімальна ширина картки в сітці */
+  --page-width: 1400px;     /* максимальна ширина вмісту сторінки (макет із двома бічними колонками) */
+  /* Бічний відступ шапки й підвалу: вміст вирівнюється по краях макета,
+     а фон шапки лишається на всю ширину вікна */
+  --page-inset: max(var(--space), calc((100% - var(--page-width)) / 2 + var(--space)));
   --card-img-height: 260px; /* висота зображень у картках: дорівнює ширині картки — майже квадратна обкладинка */
   --gallery-img-height: 220px; /* висота ілюстрацій у галереї видання */
+
+  /* Змінні макета (ЛР 6): проміжки й ширини колонок беруться лише звідси */
+  --gap: 2rem;          /* проміжок між зонами макета, картками сітки та елементами flex-рядків */
+  --min-col: 260px;     /* мінімальна ширина колонки сітки каталогу */
+  --sidebar: 220px;     /* ширина бічних колонок макета (nav і side) */
+  --gap-tag: 2px;       /* тонкий проміжок між частинами спільного тега авторів */
+  --header-offset: 5rem;   /* висота липкої шапки з запасом: під неї «прилипає» зміст, і до неї скролляться якорі */
+
+  /* Змінні бонусів ЛР 6: щільна галерея та форма в дві колонки */
+  --gallery-cols: 4;    /* кількість колонок галереї */
+  --gallery-row: 120px; /* висота одного рядка галереї: wide/tall плитки кратні їй */
+  --form-label-col: minmax(12rem, 18rem); /* ліва колонка форми з підписами */
 
   /* Кольори авторів для тегів: взяті з їхніх обкладинок і вінілу
      (на всіх фонах текст тегу білий) */
   --artist-cynthoni: hsl(215, 18%, 30%);  /* крижано-мармуровий вініл Black Ice */
   --artist-usedcvnt: hsl(265, 40%, 38%);  /* ультрафіолет, прозоро-димчастий вініл */
   --artist-sewerslvt: hsl(330, 60%, 38%); /* рожево-малиновий сплеттер */
+  --artist-femtanyl: hsl(8, 65%, 34%);    /* вогняно-червоний з обкладинки Man Bites Dog */
 
   /* Базова тінь та тінь підйому карток при ховері */
   --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 6px 16px rgb(0 0 0 / 10%);
   --shadow-lift: 0 4px 12px rgb(0 0 0 / 12%), 0 12px 24px rgb(0 0 0 / 14%);
+  /* Тіні неоморфної картки: кольори у змінних, щоб темна тема їх перевизначала */
+  --neo-shadow-dark: rgb(0 0 0 / 15%);
+  --neo-shadow-light: rgb(255 255 255 / 70%);
+
+  /* Нові змінні для темної теми. У світлій темі дорівнюють попереднім значенням,
+     тому її вигляд не змінюється. Розв'язують конфлікт: --color-brand водночас
+     фон шапки/thead і колір заголовків, а їм у темній темі потрібні різні кольори */
+  --color-chrome: var(--color-brand);       /* фон шапки та рядків thead/tfoot */
+  --color-on-chrome: var(--color-bg);       /* текст на шапці та thead/tfoot */
+  --color-btn-hover: var(--color-brand);    /* фон кнопок при наведенні */
+  --glow-accent: none;                      /* світіння кнопок і плиток при наведенні */
 }
 
-/* БОНУС 1. Темна тема другим набором змінних: вмикається класом dark-theme
-   на <body> (вручну; перемикач буде в темі 9). Усі правила нижче вже
-   використовують var(...), тому дублювати їх не потрібно */
-body.dark-theme {
-  --color-brand: hsl(40, 30%, 90%);
-  --color-accent: hsl(16, 75%, 55%);
-  --color-accent-hover: hsl(16, 85%, 65%);
-  --color-visited: hsl(340, 50%, 68%);
-  --color-bg: hsl(20, 10%, 9%);
-  --color-surface: hsl(20, 8%, 15%);
-  --color-text: hsl(40, 20%, 88%);
-  --color-muted: hsl(32, 10%, 66%);
-  --color-border: hsl(24, 8%, 28%);
-  --color-highlight: hsl(42, 45%, 26%);
-  --color-row-hover: hsl(16, 28%, 24%);
-  --color-danger: hsl(0, 70%, 62%);
-  --color-danger-bg: hsl(0, 35%, 20%);
-  --color-success: hsl(85, 35%, 60%);
-  --color-success-bg: hsl(85, 20%, 18%);
+/* БОНУС 1. Темна тема: клас dark-theme на <body> (кнопка «Тема» в шапці) лише
+   перевизначає змінні палітри, жодного правила оформлення не дублюється.
+   Стиль: глибокий чорний фон, графітово-бордові поверхні, неоново-червоний акцент.
+   Контраст (WCAG): текст на фоні ≈ 18:1, акцент #ff293b на фоні ≈ 5,3:1,
+   на поверхні ≈ 4,7:1; чорний текст кнопок на акценті ≈ 5,3:1 */
+.dark-theme {
+  /* Фон і поверхні */
+  --color-bg: #0a0a0a;                       /* глибокий чорний */
+  --color-surface: hsl(350, 9%, 12%);        /* графіт із ледь помітним бордовим відтінком */
+  --color-chrome: hsl(350, 40%, 14%);        /* шапка та thead: темний бордо */
+  --color-on-chrome: hsl(0, 0%, 100%);
+
+  /* Текст */
+  --color-text: hsl(0, 0%, 94%);
+  --color-brand: hsl(0, 0%, 100%);           /* заголовки, підписи, hover посилань */
+  --color-muted: hsl(350, 6%, 68%);
+
+  /* Акцент */
+  --color-accent: #ff293b;                   /* чистий яскравий червоний */
+  --color-accent-hover: hsl(355, 100%, 68%);
+  --color-btn-hover: var(--color-accent-hover);
+  --color-visited: hsl(330, 40%, 68%);       /* відвідані: приглушений рожевий, не плутається з акцентом */
+  --color-current: hsl(355, 100%, 70%);
+
+  /* Межі й стани */
+  --color-border: hsl(350, 14%, 24%);
+  --color-highlight: hsl(355, 75%, 30%);
+  --color-row-hover: hsl(352, 45%, 17%);
+  --color-danger: hsl(24, 100%, 62%);        /* помилка: бурштиново-помаранчева, щоб не зливалась із червоним акцентом */
+  --color-danger-bg: hsl(24, 50%, 14%);
+  --color-success: hsl(145, 55%, 58%);
+  --color-success-bg: hsl(145, 30%, 12%);
+
+  /* Тіні та неонове світіння */
+  --shadow: 0 1px 2px rgb(0 0 0 / 70%),
+            0 8px 20px rgb(255 41 59 / 7%);
+  --shadow-lift: 0 0 0 1px rgb(255 41 59 / 35%),
+                 0 0 18px rgb(255 41 59 / 40%),
+                 0 10px 32px rgb(255 41 59 / 22%);
+  --glow-accent: 0 0 10px rgb(255 41 59 / 60%),
+                 0 0 26px rgb(255 41 59 / 35%);
+  --neo-shadow-dark: rgb(0 0 0 / 90%);
+  --neo-shadow-light: rgb(255 41 59 / 9%);   /* неоморфна картка світиться червоним, а не білим */
 }
 
 /* --------------------------------------------------------------------------
    2. Базові стилі та типографіка (rem, line-height числом)
    -------------------------------------------------------------------------- */
 
-html {
-  height: 100%;
-}
-
+/* Футер притиснуто до низу через Flexbox: body — flex-колонка висотою не менше вікна,
+   а блок, що росте (.layout або main), забирає весь вільний простір (flex: 1) */
 body {
-  position: relative;
-  min-height: 100%;
-  padding-bottom: 12rem; /* місце під футер, що лежить внизу body */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: var(--font-body);
   font-size: 1rem;       /* 16px */
   line-height: 1.6;      /* комфортний інтерліньяж числом */
@@ -152,7 +203,7 @@ img {
 }
 
 /* --------------------------------------------------------------------------
-   3. Наскрізна шапка та горизонтальне меню (display: inline-block)
+   3. Наскрізна шапка та горизонтальне меню (Flexbox)
    -------------------------------------------------------------------------- */
 
 /* [8.3] Комбінатор > (дитина): стилі лише для шапки, що є прямою дитиною body,
@@ -160,61 +211,57 @@ img {
 /* Липка шапка: sticky тримає її вгорі вікна під час прокручування.
    Фон — суцільний колір палітри (не прозорий), щоб текст сторінки не просвічував.
    z-index працює лише в елементів із position, відмінним від static, тому шапці
-   потрібен саме position: sticky разом із z-index: сам по собі z-index ігнорується,
-   а картки з position: relative могли б опинитися поверх шапки. */
+   потрібен саме position: sticky разом із z-index. */
+/* Шапка — Flex-контейнер: логотип ліворуч, меню праворуч (space-between), по вертикалі
+   вони по центру, а проміжок між ними задає лише gap. flex-wrap дає меню перейти
+   під логотип на вузькому екрані. */
 body > header {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: var(--color-brand);
-  color: var(--color-bg);
-  padding: var(--space-sm) 0;
-}
-
-/* Вміст шапки й підвалу — тієї ж ширини, що й main */
-body > header > *,
-body > footer > * {
-  max-width: var(--page-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--space);
-  padding-right: var(--space);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  padding: var(--space-sm) var(--page-inset);
+  background-color: var(--color-chrome);
+  color: var(--color-on-chrome);
 }
 
 /* Єдиний вигляд назви сайту для всіх сторінок */
 body > header .logo {
-  display: block;
   font-size: 2.25rem;
   line-height: 1.2;
-  margin-top: 0;
-  margin-bottom: var(--space-sm);
+  margin: 0;
 }
 
 body > header nav {
-  background-color: var(--color-brand);
+  background-color: var(--color-chrome);
 }
 
-body > header nav ul {
+/* Вміст диктує Flex: пункти меню йдуть у рядок, проміжок дає лише gap.
+   Без старих хаків розкладки та без margin на <li> */
+body > header nav .menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
   list-style: none;
-  padding-left: 0;
-  margin: 0 0 0 -8px; /* вирівнює текст першого пункту з логотипом */
-}
-
-body > header nav li {
-  display: inline-block;
-  margin-right: var(--space-sm);
+  margin: 0;
+  padding: 0;
 }
 
 body > header .logo:link,
 body > header .logo:visited,
 body > header nav a:link,
 body > header nav a:visited {
-  color: var(--color-bg);
+  color: var(--color-on-chrome);
   text-decoration: none;
 }
 
+/* Посилання лишаються плитками: блок із власним padding */
 body > header nav a {
-  display: inline-block;
+  display: block;
   padding: var(--space-sm);
 }
 
@@ -270,7 +317,7 @@ a:active {
 }
 
 /* --------------------------------------------------------------------------
-   5. Головний контейнер та блочна розкладка (inline-block замість flex)
+   5. Головний контейнер та блочна розкладка
    -------------------------------------------------------------------------- */
 
 main {
@@ -281,11 +328,22 @@ main {
 
 main h1 {
   margin-top: 0;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
 }
 
 main > p {
   margin-bottom: var(--space-lg);
+}
+
+/* Сторінки без .layout (about, form): main росте й притискає футер до низу;
+   width: 100% потрібен, бо auto-відступи не дають flex-елементу розтягнутися */
+body > main {
+  flex: 1;
+  width: 100%;
+}
+
+body > aside {
+  width: 100%;
 }
 
 /* --------------------------------------------------------------------------
@@ -400,29 +458,45 @@ article footer {
   color: var(--color-muted);
 }
 
-/* Варіант №11: окремий стиль назв треків — моноширинний шрифт
-   із вирівняною по правому краю тривалістю (float: right) */
+/* Варіант №11: окремий стиль назв треків — моноширинний шрифт. Рядок треку —
+   flex-контейнер: номер, назва й тривалість стоять в одному рядку. Номер
+   малюють лічильником CSS, бо display: flex прибирає стандартний маркер <li>;
+   margin-left: auto на тривалості забирає вільне місце й притискає її праворуч
+   (без обтікання та ручного скидання). */
 .tracklist {
   max-width: 32rem;
-  padding-left: 2rem;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: track;
+}
+
+/* Друга частина збірки починається з 7-го треку (атрибут start у HTML) */
+.tracklist[start="7"] {
+  counter-reset: track 6;
 }
 
 .tracklist li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap);
   padding: 6px 0;
+  counter-increment: track;
+}
+
+.tracklist li::before {
+  content: counter(track) ".";
+  flex-shrink: 0;
+  min-width: 3ch;
+  text-align: right;
+  color: var(--color-accent);
+  font-weight: 700;
 }
 
 .track-duration {
-  float: right;
+  flex-shrink: 0;
+  margin-left: auto;
   color: var(--color-accent);
   font-weight: 700;
-  margin-left: var(--space);
-}
-
-/* Скидання обтікання: рядок треку охоплює float із тривалістю */
-.tracklist li::after {
-  content: "";
-  display: table;
-  clear: both;
 }
 
 /* --------------------------------------------------------------------------
@@ -452,8 +526,8 @@ th, td {
 }
 
 thead th, tfoot th {
-  background-color: var(--color-brand);
-  color: var(--color-bg);
+  background-color: var(--color-chrome);
+  color: var(--color-on-chrome);
 }
 
 tbody th {
@@ -480,12 +554,12 @@ tbody tr:nth-child(even) {
 
 /* Підсвітка рядка під курсором (після зебри, щоб перемагати за порядком).
    Рядки, об'єднані через rowspan (один виконавець — кілька альбомів),
-   підсвічуються разом: з будь-якого з них видно всю групу.
-   :has(td[rowspan]) — рядок, де починається об'єднана клітинка;
-   + tr — наступний за ним рядок; :has(+ tr:hover) — рядок перед тим, що під курсором */
+   підсвічуються разом, скільки б їх не було: рядки групи позначені атрибутом
+   data-group у HTML, а :has() на tbody вмикає підсвітку всієї групи, коли
+   курсор стоїть над будь-яким її рядком. */
 tbody tr:hover,
-tbody tr:hover:has(td[rowspan]) + tr,
-tbody tr:has(td[rowspan]):has(+ tr:hover) {
+tbody:has(tr[data-group="sewerslvt"]:hover) tr[data-group="sewerslvt"],
+tbody:has(tr[data-group="femtanyl"]:hover) tr[data-group="femtanyl"] {
   background-color: var(--color-row-hover);
 }
 
@@ -601,7 +675,7 @@ button {
     color: var(--color-bg);
 
     &:hover {
-      background-color: var(--color-brand);
+      background-color: var(--color-btn-hover);
     }
   }
 
@@ -719,24 +793,131 @@ aside p {
    12. Підвал сайту (<footer>)
    -------------------------------------------------------------------------- */
 
-body > footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+/* Підвал сторінок без .layout (about, form): звичайний блок у кінці flex-колонки body,
+   до низу його притискає main з flex: 1 */
+body > footer,
+.layout__footer {
   background-color: var(--color-surface);
   border-top: 1px solid var(--color-border);
-  padding: var(--space-lg) 0;
   font-size: 0.9rem;
   color: var(--color-muted);
 }
 
-body > footer address {
+body > footer {
+  padding: var(--space-lg) var(--page-inset);
+}
+
+body > footer address,
+.layout__footer address {
   margin-bottom: var(--space-sm);
 }
 
-body > footer p {
+body > footer p,
+.layout__footer p {
   margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   13. Макет сторінки (index, catalog): Grid і grid-template-areas
+   -------------------------------------------------------------------------- */
+
+/* Макет диктує Grid: три колонки (бічна, основна, бічна) і два рядки (вміст, підвал).
+   Зони названі у grid-template-areas, а кожен блок сам каже, у яку зону йому.
+   flex: 1 — .layout росте всередині flex-колонки body й притискає підвал до низу;
+   margin: 0 auto лише центрує сам макет, а проміжки між зонами дає gap. */
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    "nav  main side"
+    "foot foot foot";
+  gap: var(--gap);
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space);
+}
+
+/* Зміст завжди збоку: position: sticky не виймає блок із потоку (як fixed), тому він лишається
+   у своїй колонці й під час прокручування «прилипає» під шапкою. align-self: start потрібен,
+   бо за замовчуванням колонка розтягується на всю висоту рядка, і прилипати було б нікуди. */
+.layout__nav {
+  grid-area: nav;
+  position: sticky;
+  top: var(--header-offset);
+  align-self: start;
+}
+
+.layout__main   { grid-area: main; }
+.layout__aside  { grid-area: side; }
+.layout__footer { grid-area: foot; }
+
+/* min-width: 0 дозволяє колонці 1fr стискатися, коли всередині широка таблиця чи діаграма */
+.layout__main {
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Бічна колонка: блоки всередині ставить Flex, а проміжок між ними дає gap */
+.layout__aside {
+  position: sticky;           /* бонус: прокручується разом зі сторінкою й зупиняється під шапкою */
+  top: var(--header-offset);
+  align-self: start;          /* без цього колонка розтягнута на всю висоту рядка, і липнути нікуди */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.layout__nav h2,
+.layout__aside h2 {
+  font-size: 1.15rem;
+}
+
+/* Панель змісту компактна: дрібніший заголовок, маленькі відступи */
+.layout__nav h2 {
+  margin: 0 0 var(--space-sm);
+  font-size: 1rem;
+}
+
+/* У вузькій колонці кнопки змісту стають стовпчиком */
+.layout__nav ul {
+  flex-direction: column;
+}
+
+.layout__footer {
+  padding: var(--space-lg) var(--space);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* Вузький екран: зони складаються в одну колонку одна під одною */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "nav"
+      "main"
+      "side"
+      "foot";
+  }
+
+  /* Зміст над вмістом не липне: у верхньому рядку він займав би пів екрана */
+  .layout__nav,
+  .layout__aside {
+    position: static;
+  }
+
+  .layout__nav ul {
+    flex-direction: row;
+  }
 }
 
 
@@ -811,12 +992,12 @@ a[href^="http"]::after {
   border-radius: var(--radius);
   padding: var(--space-md);
   margin: 0 0 var(--space-lg);
-  box-shadow: 8px 8px 16px rgb(0 0 0 / 15%),
-              -8px -8px 16px rgb(255 255 255 / 70%);
+  box-shadow: 8px 8px 16px var(--neo-shadow-dark),
+              -8px -8px 16px var(--neo-shadow-light);
 
   &:active {
-    box-shadow: inset 8px 8px 16px rgb(0 0 0 / 15%),
-                inset -8px -8px 16px rgb(255 255 255 / 70%);
+    box-shadow: inset 8px 8px 16px var(--neo-shadow-dark),
+                inset -8px -8px 16px var(--neo-shadow-light);
   }
 }
 
@@ -828,13 +1009,15 @@ a[href^="http"]::after {
   margin-bottom: var(--space-xl);
 }
 
-/* Контейнер карток: сам нічого не малює, лише тримає картки одну за одною.
-   Поки немає Flexbox і Grid, картки стають у рядок через inline-block;
-   коли ряд заповнений, наступна картка переноситься на новий. */
-/* transform: scale(1) нічого не масштабує, але створює новий контекст
+/* Макет диктує Grid: колонки підбираються автоматично (auto-fit + minmax),
+   проміжки між картками дає лише gap, без margin.
+   transform: scale(1) нічого не масштабує, але створює новий контекст
    накладання: z-index карток і бейджів порівнюються лише всередині .cards,
    а шапка (z-index: 10) лишається над усім блоком */
 .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
+  gap: var(--gap);
   margin: 0;
   transform: scale(1);
 }
@@ -849,12 +1032,14 @@ a[href^="http"]::after {
 }
 
 /* Картка. Селектор .cards .card, а не просто .card, бо клас card ще є
-   в блоці «Що ми пропонуємо» на головній — йому ширина картки не потрібна. */
+   в блоці «Що ми пропонуємо» на головній — йому колонкова розкладка не потрібна.
+   Вміст диктує Flex: усередині картка — колонка. Ширину задає колонка сітки,
+   тож width не потрібен. margin: 0 лише скасовує margin-bottom із загального
+   правила «article, fieldset, table, .card»: інакше до gap додався б зайвий відступ. */
 .cards .card {
-  display: inline-block;
-  vertical-align: top; /* картки різної висоти вирівнюються по верхньому краю */
-  width: var(--card-width);
-  margin: 0 var(--space-md) var(--space-lg) 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
   padding: 0;          /* відступи — лише в .card__body, щоб фото йшло до самого краю */
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -885,6 +1070,7 @@ a[href^="http"]::after {
    кілька пікселів під рядок; блоковий img цей проміжок прибирає. */
 .card__img {
   display: block;
+  flex-shrink: 0; /* у flex-колонці фото не стискається, коли тіла багато тексту */
   width: 100%;
   height: var(--card-img-height);
   object-fit: cover;
@@ -893,8 +1079,14 @@ a[href^="http"]::after {
   border-radius: 0;
 }
 
-/* Внутрішні відступи задає тільки тіло картки, а не сама картка */
+/* Внутрішні відступи задає тільки тіло картки, а не сама картка.
+   Тіло — теж flex-колонка і займає весь залишок висоти картки; проміжки між
+   її рядками дає gap, тому окремих margin у дочірніх елементів немає */
 .card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-sm);
   padding: var(--space-md);
 }
 
@@ -903,7 +1095,7 @@ a[href^="http"]::after {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0 0 var(--space-sm); /* відступ лише знизу, як і в решти абзаців картки */
+  margin: 0;
   font-size: 1.1rem;
   line-height: 1.4;
   color: var(--color-brand);
@@ -923,8 +1115,7 @@ a[href^="http"]::after {
 }
 
 .card__meta {
-  margin-top: 0;
-  margin-bottom: var(--space-sm);
+  margin: 0;
   font-size: 0.9rem;
   color: var(--color-muted);
 }
@@ -939,12 +1130,61 @@ a[href^="http"]::after {
   color: var(--color-text);
 }
 
+/* Обгортка дій — рядок кнопок унизу картки. Flex з gap ставить «Замовити» і
+   «Швидкий перегляд» поруч, а margin-top: auto стоїть один раз на обгортці,
+   тому кнопки між собою не конфліктують. */
+.card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  /* auto забирає весь вільний простір по головній осі: так само, як margin: 0 auto
+     віддає залишок ширини боковим відступам і центрує блок, тут верхній відступ
+     забирає весь залишок висоти й притискає кнопки до низу картки. */
+  margin-top: auto;
+}
+
+/* Кнопка «Замовити» */
+.card__action {
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card__action:link,
+.card__action:visited {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+.card__action:hover {
+  background-color: var(--color-btn-hover);
+  color: var(--color-bg);
+}
+
+/* Кнопка «Швидкий перегляд» — другорядна: світла, з рамкою */
+.card__quick {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.card__quick:hover {
+  background-color: var(--color-border);
+}
+
 /* ==========================================================================
    14. Видання як «товар»: позначка в заголовку та галерея ілюстрацій
    ========================================================================== */
 
 .edition-badge {
-  display: inline-block;
+  display: inline-flex;
   vertical-align: middle;
   margin-left: var(--space-sm);
   padding: var(--space-xs) var(--space-sm);
@@ -957,13 +1197,13 @@ a[href^="http"]::after {
   letter-spacing: 0.05em;
 }
 
-.gallery__items {
+.edition-gallery__items {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
 }
 
-.gallery__items img {
+.edition-gallery__items img {
   width: auto;
   max-width: 100%;
   height: var(--gallery-img-height);
@@ -1054,7 +1294,7 @@ a[href^="http"]::after {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: 0 0 var(--space-sm);
+  margin: 0;
   font-size: 0.9rem;
   color: var(--color-muted);
 }
@@ -1064,7 +1304,7 @@ a[href^="http"]::after {
    ========================================================================== */
 
 .artist-tag {
-  display: inline-block;
+  display: inline-flex;
   margin-bottom: var(--space-xs);
   padding: var(--space-xs) var(--space-sm);
   border-radius: 999px;
@@ -1079,12 +1319,13 @@ a[href^="http"]::after {
 .artist-tag--cynthoni  { background-color: var(--artist-cynthoni); }
 .artist-tag--usedcvnt  { background-color: var(--artist-usedcvnt); }
 .artist-tag--sewerslvt { background-color: var(--artist-sewerslvt); }
+.artist-tag--femtanyl  { background-color: var(--artist-femtanyl); }
 
 /* Спільний тег двох авторів: дві частини одного «капсула» з власним
    кольором кожного автора, між ними тонкий проміжок */
 .artist-tag-group {
   display: inline-flex;
-  gap: 2px;
+  gap: var(--gap-tag);
   margin-bottom: var(--space-xs);
 }
 
@@ -1111,13 +1352,13 @@ a[href^="http"]::after {
 
 /* Якір не ховається під липкою шапкою */
 [id] {
-  scroll-margin-top: 7rem;
+  scroll-margin-top: var(--header-offset);
 }
 
 .page-nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1125,21 +1366,50 @@ a[href^="http"]::after {
 
 .page-nav a:link,
 .page-nav a:visited {
-  display: inline-block;
-  padding: var(--space-sm) var(--space);
+  display: block;
+  padding: var(--space-xs) var(--space-sm);
   border: 1px solid var(--color-border);
   border-radius: 999px;
   background-color: var(--color-surface);
   color: var(--color-text);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, outline-color 0.2s ease;
 }
 
 .page-nav a:hover {
   border-color: var(--color-accent);
   background-color: var(--color-accent);
   color: var(--color-bg);
+}
+
+/* Поточний розділ: червона обводка по зовнішньому контуру плитки, без JavaScript.
+   outline йде ззовні рамки й повторює її заокруглення, тож розмір плитки не змінюється. */
+
+/* scroll-target-group: auto — нова можливість CSS (Chrome/Edge 135+, поза лекційним
+   матеріалом): браузер сам вважає посилання змісту групою й стежить за прокручуванням. */
+.layout__nav {
+  scroll-target-group: auto;
+}
+
+/* :target-current — стан «розділ цього посилання зараз на екрані»; у браузерах без
+   підтримки правило просто ігнорується, тож нічого не ламається. */
+.page-nav a:target-current {
+  outline: 2px solid var(--color-current);
+}
+
+/* Запасний варіант для всіх браузерів: :target — елемент, до якого щойно перейшли за
+   посиланням з #id, а :has() піднімає цей стан до body, щоб підсвітити відповідний пункт. */
+body:has(#genres:target) .page-nav a[href="#genres"],
+body:has(#catalog-cards:target) .page-nav a[href="#catalog-cards"],
+body:has(#albums-table:target) .page-nav a[href="#albums-table"],
+body:has(#gallery:target) .page-nav a[href="#gallery"],
+body:has(#tracklists:target) .page-nav a[href="#tracklists"],
+body:has(#vinyl-care:target) .page-nav a[href="#vinyl-care"],
+body:has(#glossary:target) .page-nav a[href="#glossary"],
+body:has(#about-section:target) .page-nav a[href="#about-section"],
+body:has(#offers:target) .page-nav a[href="#offers"] {
+  outline: 2px solid var(--color-current);
 }
 
 .sunburst-wrap {
@@ -1298,10 +1568,247 @@ a[href^="http"]::after {
    відстань між сусідніми картками по вертикалі буде НЕ 24+16=40px, а 24px:
    два вертикальні відступи, що стикаються, не додаються, а зливаються в один —
    більший із двох. Горизонтальні відступи так не поводяться, вони завжди додаються.
-   У картках каталогу (inline-block) відступи не схлопуються взагалі, і було б
+   У Grid- і Flex-контейнерах (картки каталогу) відступи не схлопуються взагалі, і було б
    справді 40px. Саме тому в цій роботі вертикальні відступи задані лише
    в один бік — знизу.
 
 .card { margin-bottom: 24px; }
 .card + .card { margin-top: 16px; }
 */
+
+/* ==========================================================================
+   19. Модальне вікно «Швидкий перегляд» (нативний <dialog>)
+   ========================================================================== */
+
+/* Цій модалці не потрібен z-index: вікно, відкрите через showModal(), потрапляє
+   в top layer браузера, який завжди лежить над усім вмістом сторінки, зокрема
+   над липкою шапкою. Розташування по центру дає сам браузер (margin: auto). */
+.modal {
+  width: min(90%, 480px);
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Затемнення сторінки під вікном малює псевдоелемент ::backdrop */
+.modal::backdrop {
+  background-color: rgb(0 0 0 / 55%);
+}
+
+/* Відступи — на внутрішній обгортці, щоб клік по самому <dialog> означав клік по затемненню */
+.modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--space-lg);
+}
+
+.modal__body > * {
+  margin: 0;
+}
+
+.modal h2 {
+  font-size: 1.4rem;
+}
+
+.modal img {
+  width: 100%;
+}
+
+.modal__meta {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* Поки модалка відкрита, фонова сторінка не прокручується */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   20. Бонуси ЛР 6
+   ========================================================================== */
+
+/* --- Перемикач теми в шапці: кнопка стоїть праворуч поруч із меню --- */
+body > header nav {
+  margin-left: auto;
+}
+
+.theme-toggle {
+  background-color: transparent;
+  color: var(--color-on-chrome);
+  border-color: var(--color-on-chrome);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* --- Закріплена картка: «Хіт» стоїть у HTML третьою, але в сітці займає весь перший
+   рядок (grid-column: 1 / -1 + grid-row: 1), порядок у розмітці не змінюється.
+   Решта карток сама розтікається по рядках нижче --- */
+.cards .card--featured {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lift);
+}
+
+.card--featured .card__img {
+  height: calc(var(--card-img-height) * 1.5);
+}
+
+/* --- Щільна галерея: Grid із grid-auto-flow: row dense. Рядки однакові,
+   wide розтягує плитку на дві колонки, tall — на два рядки, а dense
+   дозволяє дрібним плиткам заповнювати порожнечі, що лишились --- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-cols), 1fr);
+  grid-auto-rows: var(--gallery-row);
+  grid-auto-flow: row dense;
+  gap: var(--gap);
+  margin-bottom: var(--space-xl);
+}
+
+.gallery__item {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.gallery__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.gallery__item--wide { grid-column: span 2; }
+.gallery__item--tall { grid-row: span 2; }
+
+/* --- Форма у дві колонки: підписи ліворуч, поля праворуч.
+   Форма й кожен fieldset — Grid з двома колонками; кожен рядок <p> бере ці
+   колонки через subgrid, тож підписи й поля вирівнюються по одній лінії.
+   Проміжки — лише gap. <br> між підписом і полем у рядках приховано
+   (зірочка обов'язкових полів шукає його в DOM, тому в розмітці він лишається) --- */
+.form-grid,
+.form-grid fieldset {
+  display: grid;
+  grid-template-columns: var(--form-label-col) 1fr;
+  align-items: baseline;
+}
+
+.form-grid {
+  gap: var(--space-lg) var(--gap);
+}
+
+.form-grid fieldset {
+  grid-column: 1 / -1;
+  gap: var(--space) var(--gap);
+  margin: 0;
+}
+
+.form-grid p {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  max-width: none;
+  margin: 0;
+}
+
+.form-grid p:not(.form__control) br {
+  display: none;
+}
+
+/* Пара «заголовок групи — елементи групи»: перший у лівій колонці, другий у правій */
+.form-grid p.form__term {
+  display: block;
+  grid-column: 1;
+}
+
+.form-grid p.form__control {
+  display: block;
+  grid-column: 2;
+}
+
+/* Кнопки: рядок займає обидві колонки (grid-column: 1 / -1), «Надіслати» розтягнута */
+.form-grid p.form__actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.form__actions button[type="submit"] {
+  flex: 1;
+}
+
+/* --- Вузький екран: галерея в дві колонки, форма в одну --- */
+@media (max-width: 900px) {
+  .gallery {
+    --gallery-cols: 2;
+  }
+}
+
+@media (max-width: 700px) {
+  .form-grid,
+  .form-grid fieldset {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid p.form__term,
+  .form-grid p.form__control {
+    grid-column: 1;
+  }
+}
+
+/* --- Фільтр за жанром в aside (без JavaScript): радіокнопка в aside і картки
+   в main — нащадки одного .layout, тож :has() на ньому вмикає потрібне правило --- */
+.genre-filter ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.genre-filter li {
+  margin: 0;
+}
+
+.layout:has(#genre-breakcore:checked) .card:not([data-genres~="breakcore"]) { display: none; }
+.layout:has(#genre-gabber:checked) .card:not([data-genres~="gabber"]) { display: none; }
+.layout:has(#genre-ambient:checked) .card:not([data-genres~="ambient"]) { display: none; }
+.layout:has(#genre-jungle:checked) .card:not([data-genres~="jungle"]) { display: none; }
+.layout:has(#genre-trance:checked) .card:not([data-genres~="trance"]) { display: none; }
+.layout:has(#genre-drum-n-bass:checked) .card:not([data-genres~="drum-n-bass"]) { display: none; }
+
+/* ==========================================================================
+   21. Світіння при наведенні (значення — у змінній --glow-accent;
+       у світлій темі вона none, тож правило нічого не змінює)
+   ========================================================================== */
+
+button:not(:disabled):hover,
+.card__action:hover,
+.page-nav a:hover,
+body > header nav a:hover {
+  box-shadow: var(--glow-accent);
+}
+
+.cards .card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-lift);
+  }
