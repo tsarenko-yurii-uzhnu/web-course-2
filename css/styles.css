@@ -263,6 +263,54 @@ body > header nav .menu {
   padding: 0;
 }
 
+body > header nav .menu--desktop {
+  display: none;
+}
+
+body > header .menu-disclosure .menu {
+  flex-direction: column;
+}
+
+body > header .menu-disclosure summary {
+  cursor: pointer;
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
+  color: var(--color-on-chrome);
+  list-style-position: inside;
+}
+
+body > header .menu-disclosure summary:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+body > header .menu-disclosure summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+body > header .menu-disclosure:not([open]) .menu {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  body > header .menu-disclosure {
+    display: none;
+  }
+
+  body > header nav .menu--desktop {
+    display: flex;
+  }
+
+  body > header nav .menu--desktop {
+    flex-direction: row;
+  }
+
+  body > header .menu-disclosure summary {
+    display: none;
+  }
+}
+
 body > header .logo:link,
 body > header .logo:visited,
 body > header nav a:link,
@@ -376,9 +424,11 @@ article, fieldset, table, .card {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-article:hover, fieldset:hover, .card:hover {
-  border-color: var(--color-accent);
-  box-shadow: var(--shadow-lift, 0 8px 24px rgb(0 0 0 / 14%));
+@media (hover: hover) {
+  article:hover, fieldset:hover, .card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-lift, 0 8px 24px rgb(0 0 0 / 14%));
+  }
 }
 
 /* БОНУС 2. «Батьківський селектор» :has(): картка з розкритим треклістом
@@ -1076,9 +1126,24 @@ a[href^="http"]::after {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  transition: transform 250ms ease, opacity 250ms ease;
   /* overflow: hidden потрібен разом із border-radius, щоб кути зображення
      обрізалися по закругленню рамки й не виступали за неї. */
   overflow: hidden;
+}
+
+.cards .card:focus-within {
+  transform: translateY(-6px);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lift);
+}
+
+@media (hover: hover) {
+  .cards .card:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-lift);
+  }
 }
 
 .card__badge {
@@ -1629,6 +1694,31 @@ body:has(#offers:target) .page-nav a[href="#offers"] {
   background-color: rgb(0 0 0 / 55%);
 }
 
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes backdrop-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal[open] {
+  animation: modal-pop 280ms ease-out both;
+}
+
+.modal[open]::backdrop {
+  animation: backdrop-fade 280ms ease-out both;
+}
+
 /* Відступи — на внутрішній обгортці, щоб клік по самому <dialog> означав клік по затемненню */
 .modal__body {
   display: flex;
@@ -1844,7 +1934,7 @@ body > header nav a:hover {
        анімації скорочуються практично до нуля
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *, *::before, *::after, dialog::backdrop {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
