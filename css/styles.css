@@ -1087,6 +1087,34 @@ a[href^="http"]::after {
   transform: scale(1);
 }
 
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space);
+}
+
+.loader[hidden] {
+  display: none;
+}
+
+.loader p {
+  margin: 0;
+}
+
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 0.3rem solid var(--color-surface);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spinner-spin 800ms linear infinite;
+}
+
+@keyframes spinner-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* База - телефон: --min-col = 260px, колонка вузька, тож картка одна в ряд.
    Від планшета main займає лише частину екрана, тому мінімальну ширину колонки
    зменшено: у планшетній розкладці виходить дві картки, у десктопній — три
