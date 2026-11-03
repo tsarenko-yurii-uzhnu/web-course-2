@@ -1108,6 +1108,7 @@ a[href^="http"]::after {
   border: 0.3rem solid var(--color-surface);
   border-top-color: var(--color-accent);
   border-radius: 50%;
+  /* linear обертає спінер з однаковою швидкістю; ease змушував би його прискорюватися й сповільнюватися. */
   animation: spinner-spin 800ms linear infinite;
 }
 
@@ -1783,7 +1784,13 @@ body:has(dialog[open]) {
 
 /* --- Перемикач теми в шапці: кнопка стоїть праворуч поруч із меню --- */
 body > header nav {
-  margin-left: auto;
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  body > header nav {
+    margin-left: auto;
+  }
 }
 
 .theme-toggle {
