@@ -32,7 +32,7 @@
                 </ul>
             </details>
         </nav>
-        <button type="button" class="theme-toggle" onclick="document.body.classList.toggle('dark-theme')">Тема</button>
+        <button type="button" class="theme-toggle" onclick="const root = document.documentElement; const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; const isDark = document.body.classList.contains('dark-theme') || (!root.classList.contains('light-theme') && prefersDark); document.body.classList.toggle('dark-theme', !isDark); root.classList.toggle('light-theme', isDark);">Тема</button>
     </header>
 
     <!-- Макет сторінки: Grid із зонами nav / main / side / foot (grid-template-areas у CSS) -->
@@ -171,13 +171,39 @@
                 <div class="loader" hidden>
                     <div class="spinner" aria-hidden="true"></div>
                     <p role="status">Завантажуємо каталог...</p>
+                    <div class="skeleton-grid" aria-hidden="true">
+                        <div class="skeleton-card">
+                            <div class="skeleton skeleton--image"></div>
+                            <div class="skeleton-card__body">
+                                <span class="skeleton skeleton--line skeleton--title"></span>
+                                <span class="skeleton skeleton--line"></span>
+                                <span class="skeleton skeleton--line skeleton--short"></span>
+                            </div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton skeleton--image"></div>
+                            <div class="skeleton-card__body">
+                                <span class="skeleton skeleton--line skeleton--title"></span>
+                                <span class="skeleton skeleton--line"></span>
+                                <span class="skeleton skeleton--line skeleton--short"></span>
+                            </div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton skeleton--image"></div>
+                            <div class="skeleton-card__body">
+                                <span class="skeleton skeleton--line skeleton--title"></span>
+                                <span class="skeleton skeleton--line"></span>
+                                <span class="skeleton skeleton--line skeleton--short"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="cards">
 
                     <!-- Картка 1: новий реліз, свідомо довга назва, горизонтальне фото -->
                     <article class="card" data-genres="breakcore gabber">
                         <span class="card__badge">Нове</span>
-                        <img class="card__img" src="images/card-2.jpg" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
+                        <img class="card__img" src="images/card-2.jpg" srcset="images/card-2-360.jpg 360w, images/card-2.jpg 598w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Колаж із розвороту альбому Lamenting Malice гурту Cynthoni з назвами треків">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-lamenting-malice">Lamenting Malice (Limited Double LP, Black Ice &amp; White Marbled Vinyl, Gatefold Sleeve)</a></h3>
                             <p class="card__excerpt">Подвійний мармуровий вініл із розворотом: брейккор, джангл і габер.</p>
@@ -192,7 +218,7 @@
 
                     <!-- Картка 2: свідомо довга назва, квадратне фото -->
                     <article class="card" data-genres="breakcore ambient">
-                        <img class="card__img" src="images/card-3.jpg" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора">
+                        <img class="card__img" src="images/card-3.jpg" srcset="images/card-3-360.jpg 360w, images/card-3.jpg 600w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Ілюстрація до альбому Ultraviolet: дівчинка з рожевим волоссям біля ескалатора">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-ultraviolet">Ultraviolet (Exclusive Smoky Clear Vinyl Edition Featuring Bonus Tracks)</a></h3>
                             <p class="card__excerpt">Прозоро-димчастий вініл, атмосферний брейккор і колаборації.</p>
@@ -208,7 +234,7 @@
                     <!-- Картка 3: культовий альбом, бейдж «Хіт» -->
                     <article class="card card--featured" data-genres="breakcore ambient">
                         <span class="card__badge">Хіт</span>
-                        <img class="card__img" src="images/card-6.jpg" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям">
+                        <img class="card__img" src="images/card-6.jpg" srcset="images/card-6-360.jpg 360w, images/card-6.jpg 600w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Обкладинка альбому Draining Love Story: дівчина з фіолетовим волоссям">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-draining-love-story">Draining Love Story</a></h3>
                             <p class="card__excerpt">Культовий альбом на межі драм-енд-бейсу й брейккору.</p>
@@ -223,7 +249,7 @@
 
                     <!-- Картка 4: вертикальне фото -->
                     <article class="card" data-genres="jungle ambient drum-n-bass">
-                        <img class="card__img" src="images/card-7.jpg" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A">
+                        <img class="card__img" src="images/card-7.jpg" srcset="images/card-7-360.jpg 360w, images/card-7.jpg 400w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Фіолетово-малиновий вініл The World Is Fvcked із золотавою етикеткою сторони A">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-the-world-is-fvcked">The World Is Fvcked</a></h3>
                             <p class="card__excerpt">Сім треків джанглу, ембієнту та експериментальної електроніки.</p>
@@ -238,7 +264,7 @@
 
                     <!-- Картки 5 і 6: дві частини однієї збірки, об'єднані спільним тегом двох авторів -->
                     <article class="card" data-genres="trance jungle breakcore">
-                        <img class="card__img" src="images/card-11.jpg" alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками">
+                        <img class="card__img" src="images/card-11.jpg" srcset="images/card-11-360.jpg 360w, images/card-11.jpg 600w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Голографічна обкладинка збірки Sewerslvt Presents: Cynthoni з чорно-білими портретами та веселковими відблисками">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 1</a></h3>
                             <p class="card__excerpt">Перша частина збірки: транс, джангл і брейккор.</p>
@@ -252,7 +278,7 @@
                     </article>
 
                     <article class="card" data-genres="trance jungle breakcore">
-                        <img class="card__img" src="images/card-12.jpg" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni">
+                        <img class="card__img" src="images/card-12.jpg" srcset="images/card-12-360.jpg 360w, images/card-12.jpg 600w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Блакитно-фіолетовий мармуровий вініл Blue/Purple Merge з чорною етикеткою Cynthoni">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-sewerslvt-presents-cynthoni">Presents: Cynthoni, Pt. 2</a></h3>
                             <p class="card__excerpt">Друга частина збірки на блакитно-фіолетовому вінілі.</p>
@@ -267,7 +293,7 @@
 
                     <!-- Картка 7: Cynthoni, подвійний мармуровий вініл 2025 -->
                     <article class="card" data-genres="breakcore jungle trance">
-                        <img class="card__img" src="images/card-14.jpg" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і яскравим квітковим візерунком на одязі">
+                        <img class="card__img" src="images/card-14.jpg" srcset="images/card-14-360.jpg 360w, images/card-14.jpg 600w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Чорна обкладинка зі штриховим білим портретом дівчини з темним волоссям і яскравим квітковим візерунком на одязі">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-in-the-eyes-of-cynthoni">Draining Love Story (In The Eyes Of Cynthoni)</a></h3>
                             <p class="card__excerpt">Подвійний вініл Blue &amp; Pink Marbled із бонус-треками: брейккор, джангл і транс.</p>
@@ -282,7 +308,7 @@
 
                     <!-- Картка 8: Femtanyl, Entitii Records 2026 -->
                     <article class="card" data-genres="breakcore gabber synthpunk">
-                        <img class="card__img" src="images/card-17.jpg" alt="Обкладинка Man Bites Dog: вогняний напис у формі дерева над освітленою травою на темному тлі">
+                        <img class="card__img" src="images/card-17.jpg" srcset="images/card-17-360.jpg 360w, images/card-17.jpg 600w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Обкладинка Man Bites Dog: вогняний напис у формі дерева над освітленою травою на темному тлі">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-man-bites-dog">Man Bites Dog</a></h3>
                             <p class="card__excerpt">Десять треків 2026 року: брейккор, габбер і синтпанк на вінілі та CD.</p>
@@ -298,7 +324,7 @@
                     <!-- Картка 9: Femtanyl, лімітований міспринт 2024 -->
                     <article class="card" data-genres="breakcore footwork gabber">
                         <span class="card__badge">Міспринт</span>
-                        <img class="card__img" src="images/card-20.jpg" alt="Обкладинка Chaser: чорно-білий малюнок кота з червоними плямами, що стоїть на акумуляторі">
+                        <img class="card__img" src="images/card-20.jpg" srcset="images/card-20-360.jpg 360w, images/card-20.jpg 600w" sizes="(min-width: 1024px) 18vw, (min-width: 768px) 20vw, calc(100vw - 2rem)" alt="Обкладинка Chaser: чорно-білий малюнок кота з червоними плямами, що стоїть на акумуляторі">
                         <div class="card__body">
                             <h3 class="card__title"><a href="#edition-chaser">Chaser (Limited Single Sided EP, White &amp; Blood Splatter, Misprint)</a></h3>
                             <p class="card__excerpt">Односторонній лімітований EP на біло-червоному сплеттері: шість коротких треків.</p>

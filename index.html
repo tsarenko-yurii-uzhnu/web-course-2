@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body id="top">
+<body id="top" class="home-page">
 
     <!-- Шапка сторінки з єдиним головним меню -->
     <header>
@@ -32,11 +32,11 @@
                 </ul>
             </details>
         </nav>
-        <button type="button" class="theme-toggle" onclick="document.body.classList.toggle('dark-theme')">Тема</button>
+        <button type="button" class="theme-toggle" onclick="const root = document.documentElement; const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; const isDark = document.body.classList.contains('dark-theme') || (!root.classList.contains('light-theme') && prefersDark); document.body.classList.toggle('dark-theme', !isDark); root.classList.toggle('light-theme', isDark);">Тема</button>
     </header>
 
     <!-- Макет сторінки: Grid із зонами nav / main / side / foot (grid-template-areas у CSS) -->
-    <div class="layout">
+    <div class="layout layout--home">
 
         <!-- Зона nav (grid-area: nav): зміст сторінки -->
         <nav class="page-nav layout__nav" aria-label="Навігація по сторінці">
@@ -124,20 +124,22 @@
 
         <!-- Зона side (grid-area: side): поради колекціонерам і зворотний зв'язок -->
         <aside class="layout__aside">
-            <section>
-                <h2>Поради для колекціонерів</h2>
-                <ul>
-                    <li>Зберігайте платівки тільки у вертикальному положенні, щоб уникнути викривлення диску.</li>
-                    <li>Використовуйте антистатичну щітку перед кожним опусканням голки програвача.</li>
-                    <li>Уникайте потрапляння прямих сонячних променів на конверти та вінілову масу.</li>
-                </ul>
-            </section>
+            <div class="layout__aside-content">
+                <section>
+                    <h2>Поради для колекціонерів</h2>
+                    <ul>
+                        <li>Зберігайте платівки тільки у вертикальному положенні, щоб уникнути викривлення диску.</li>
+                        <li>Використовуйте антистатичну щітку перед кожним опусканням голки програвача.</li>
+                        <li>Уникайте потрапляння прямих сонячних променів на конверти та вінілову масу.</li>
+                    </ul>
+                </section>
 
-            <section>
-                <h2>Зворотний зв'язок</h2>
-                <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?
-                <a href="form.html#feedback-section">Надішліть нам повідомлення</a>.</p>
-            </section>
+                <section>
+                    <h2>Зворотний зв'язок</h2>
+                    <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?
+                    <a href="form.html#feedback-section">Надішліть нам повідомлення</a>.</p>
+                </section>
+            </div>
         </aside>
 
 

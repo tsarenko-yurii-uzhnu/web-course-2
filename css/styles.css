@@ -46,6 +46,8 @@ img, video, iframe {
    1. Палітра у custom properties (:root) та нетипові змінні
    -------------------------------------------------------------------------- */
 :root {
+  color-scheme: light;
+
   /* Обов'язкова 6-колірна HSL-палітра та допоміжні стани */
   --color-brand: hsl(0, 0%, 12%);           /* Чорний вініл */
   --color-accent: hsl(16, 85%, 36%);        /* Палений бурштин / теракота */
@@ -125,6 +127,8 @@ img, video, iframe {
    Контраст (WCAG): текст на фоні ≈ 18:1, акцент #ff293b на фоні ≈ 5,3:1,
    на поверхні ≈ 4,7:1; чорний текст кнопок на акценті ≈ 5,3:1 */
 .dark-theme {
+  color-scheme: dark;
+
   /* Фон і поверхні */
   --color-bg: #0a0a0a;                       /* глибокий чорний */
   --color-surface: hsl(350, 9%, 12%);        /* графіт із ледь помітним бордовим відтінком */
@@ -162,6 +166,36 @@ img, video, iframe {
                  0 0 26px rgb(255 41 59 / 35%);
   --neo-shadow-dark: rgb(0 0 0 / 90%);
   --neo-shadow-light: rgb(255 41 59 / 9%);   /* неоморфна картка світиться червоним, а не білим */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-theme) {
+    color-scheme: dark;
+    --color-bg: #0a0a0a;
+    --color-surface: hsl(350, 9%, 12%);
+    --color-chrome: hsl(350, 40%, 14%);
+    --color-on-chrome: hsl(0, 0%, 100%);
+    --color-text: hsl(0, 0%, 94%);
+    --color-brand: hsl(0, 0%, 100%);
+    --color-muted: hsl(350, 6%, 68%);
+    --color-accent: #ff293b;
+    --color-accent-hover: hsl(355, 100%, 68%);
+    --color-btn-hover: var(--color-accent-hover);
+    --color-visited: hsl(330, 40%, 68%);
+    --color-current: hsl(355, 100%, 70%);
+    --color-border: hsl(350, 14%, 24%);
+    --color-highlight: hsl(355, 75%, 30%);
+    --color-row-hover: hsl(352, 45%, 17%);
+    --color-danger: hsl(24, 100%, 62%);
+    --color-danger-bg: hsl(24, 50%, 14%);
+    --color-success: hsl(145, 55%, 58%);
+    --color-success-bg: hsl(145, 30%, 12%);
+    --shadow: 0 1px 2px rgb(0 0 0 / 70%), 0 8px 20px rgb(255 41 59 / 7%);
+    --shadow-lift: 0 0 0 1px rgb(255 41 59 / 35%), 0 0 18px rgb(255 41 59 / 40%), 0 10px 32px rgb(255 41 59 / 22%);
+    --glow-accent: 0 0 10px rgb(255 41 59 / 60%), 0 0 26px rgb(255 41 59 / 35%);
+    --neo-shadow-dark: rgb(0 0 0 / 90%);
+    --neo-shadow-light: rgb(255 41 59 / 9%);
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -975,6 +1009,17 @@ body > footer p,
     align-self: start;
   }
 
+  .layout--home .layout__aside {
+    display: block;
+    align-self: stretch;
+    position: static;
+  }
+
+  .layout--home .layout__aside-content {
+    position: sticky;
+    top: var(--header-offset);
+  }
+
   /* У вузькій колонці кнопки змісту стають стовпчиком */
   .layout__nav ul {
     flex-direction: column;
@@ -1068,6 +1113,7 @@ a[href^="http"]::after {
 /* Відступ лише знизу, як і скрізь у роботі */
 .catalog {
   margin-bottom: var(--space-xl);
+  container-type: inline-size;
 }
 
 /* Макет диктує Grid: колонки підбираються автоматично (auto-fit + minmax),
@@ -1094,8 +1140,74 @@ a[href^="http"]::after {
   display: none;
 }
 
+.catalog:has(> .loader:not([hidden])) > .cards {
+  display: none;
+}
+
 .loader p {
   margin: 0;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min-col)), 1fr));
+  gap: var(--gap);
+  width: 100%;
+}
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+  min-width: 0;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+}
+
+.skeleton-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-border);
+}
+
+.skeleton::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 55%), transparent);
+  content: "";
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton--image {
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+}
+
+.skeleton--line {
+  width: 100%;
+  height: var(--space);
+  border-radius: var(--radius);
+}
+
+.skeleton--title {
+  width: 78%;
+}
+
+.skeleton--short {
+  width: 55%;
+}
+
+@keyframes skeleton-shimmer {
+  to { transform: translateX(100%); }
 }
 
 .spinner {
@@ -1820,6 +1932,21 @@ body > header nav {
   height: calc(var(--card-img-height) * 1.5);
 }
 
+/* Контейнерний запит перебудовує широку картку-хіт, не змінюючи сітку каталогу. */
+@container (min-width: 500px) {
+  .cards .card--featured {
+    flex-direction: row;
+  }
+
+  .cards .card--featured .card__img {
+    width: 35%;
+    height: auto;
+    aspect-ratio: 1;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 0;
+  }
+}
+
 /* --- Щільна галерея: Grid із grid-auto-flow: row dense. Рядки однакові,
    wide розтягує плитку на дві колонки, tall — на два рядки, а dense
    дозволяє дрібним плиткам заповнювати порожнечі, що лишились --- */
@@ -1975,5 +2102,54 @@ body > header nav a:hover {
   .cards .card:focus-within {
     transform: none;
     background-color: var(--color-surface);
+  }
+}
+
+@media print {
+  :root {
+    color-scheme: light !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    color: #000 !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    border-color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    display: block;
+    min-height: 0;
+  }
+
+  body > header {
+    position: static;
+  }
+
+  body > header nav,
+  .menu-disclosure,
+  .theme-toggle,
+  .layout__nav,
+  .layout__aside,
+  .loader,
+  .spinner,
+  .skeleton-grid {
+    display: none !important;
+  }
+
+  .layout {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cards .card {
+    break-inside: avoid;
   }
 }
