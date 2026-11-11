@@ -161,7 +161,62 @@ function numberedList(items) {
   return lines;
 }
 
+// Приймає альбом, повертає назву узагальненої жанрової групи.
+function categoryOf(item) {
+  switch (item.genre) {
+    case "брейккор":
+    case "габбер":
+      return "Жорстка електроніка";
+    case "джангл":
+    case "драм-енд-бейс":
+      return "Брейкбіт";
+    case "ембієнт":
+      return "Атмосферний звук";
+    default:
+      return "Інші жанри";
+  }
+}
+
+// Приймає масив альбомів і жанр, повертає альбоми саме цього жанру.
+const filterByGenre = (items, value) => items.filter((item) => item.genre === value);
+
+// Приймає масив альбомів і рік, повертає альбоми, видані цього року або пізніше.
+const filterByYearFrom = (items, minYear) => items.filter((item) => item.year >= minYear);
+
+// Приймає масив альбомів, повертає нову копію, відсортовану за роком випуску (від старіших).
+const sortByYear = (items) => [...items].sort((a, b) => a.year - b.year);
+
+// Приймає масив альбомів, повертає нову копію, відсортовану за назвою за українською абеткою.
+const sortByTitle = (items) => [...items].sort((a, b) => a.album.localeCompare(b.album, "uk"));
+
+// Приймає масив альбомів і заголовок, повертає рядки для блока фільтра: підсумок і список назв.
+const describeFound = (heading, found) => [
+  `${heading}: знайдено ${found.length}`,
+  found.length === 0 ? "  нічого не знайдено" : found.map((item) => `  • ${item.album}`).join("\n")
+];
+
 // ===== Виведення на сторінку =====
+
+const breakcore = filterByGenre(albums, "брейккор");
+const missingGenre = filterByGenre(albums, "кантрі");
+const recent = filterByYearFrom(albums, 2024);
+
+const byYear = sortByYear(albums);
+const byTitle = sortByTitle(albums);
 
 show("out-count", `Альбомів у каталозі: ${albums.length}`);
 show("out-numbered", numberedList(albums));
+show("out-categories", albums.map((item) => `${item.album} → ${categoryOf(item)}`));
+show("out-filter", [
+  ...describeFound("Жанр «брейккор»", breakcore),
+  ...describeFound("Жанр «кантрі»", missingGenre),
+  ...describeFound("Видані з 2024 року", recent)
+]);
+show("out-sorted", [
+  "За роком:",
+  byYear.map((item) => `  ${item.year} — ${item.album}`).join("\n"),
+  "За назвою:",
+  byTitle.map((item) => `  ${item.album}`).join("\n"),
+  "Вихідний порядок (масив не змінено):",
+  albums.map((item) => `  ${item.id}. ${item.album}`).join("\n")
+]);
