@@ -149,6 +149,19 @@ const show = (id, value) => {
   box.textContent = Array.isArray(value) ? value.join("\n") : value;
 };
 
+// Приймає рядок тривалості "3:36", повертає кількість секунд (216).
+const toSeconds = (length) => {
+  const parts = length.split(":");
+  return Number(parts[0]) * 60 + Number(parts[1]);
+};
+
+// Приймає кількість секунд, повертає рядок "хв:сс" із двома цифрами секунд.
+const formatDuration = (totalSeconds) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+};
+
 // ===== Функції обробки =====
 
 // Приймає масив альбомів, повертає масив рядків «1. Назва — виконавець, рік (лейбл, номер)».
@@ -195,6 +208,43 @@ const describeFound = (heading, found) => [
   found.length === 0 ? "  нічого не знайдено" : found.map((item) => `  • ${item.album}`).join("\n")
 ];
 
+// Приймає альбом, повертає загальну тривалість усіх його треків у секундах.
+// Початкове значення 0: без нього накопичувачем став би перший трек-об'єкт, і сума перетворилася б на рядок "[object Object]…".
+const albumSeconds = (item) => item.tracks.reduce((sum, track) => sum + toSeconds(track.length), 0);
+
+// Приймає альбом, повертає середню оцінку слухачів числом.
+const averageRating = (item) => item.ratings.reduce((sum, rating) => sum + rating, 0) / item.ratings.length;
+
+// Приймає альбом, повертає його найдовший трек (об'єкт { title, length }).
+const longestTrackOf = (item) =>
+  item.tracks.reduce((best, track) => (toSeconds(track.length) > toSeconds(best.length) ? track : best), item.tracks[0]);
+
+// Приймає масив альбомів, повертає об'єкт статистики: кількість, сумарна й середня тривалість,
+// найдовший альбом, найдовший трек добірки, найвища середня оцінка, кількість різних жанрів.
+const statsForAlbums = (items) => {
+  // total: сума тривалостей альбомів. Початкове значення 0 потрібне, бо без нього
+  // reduce узяв би за накопичувач перший альбом-об'єкт, і результат став би рядком "[object Object]…".
+  const total = items.reduce((sum, item) => sum + albumSeconds(item), 0);
+  // max: альбом із найбільшою тривалістю — накопичувач порівнюється з поточним альбомом.
+  const max = items.reduce((best, item) => (albumSeconds(item) > albumSeconds(best) ? item : best), items[0]);
+  // Найдовший трек добірки: альбом, чий найдовший трек довший за найдовші треки інших.
+  const longestTrackAlbum = items.reduce(
+    (best, item) => (toSeconds(longestTrackOf(item).length) > toSeconds(longestTrackOf(best).length) ? item : best),
+    items[0]
+  );
+  const topRated = items.reduce((best, item) => (averageRating(item) > averageRating(best) ? item : best), items[0]);
+  const genres = items.map((item) => item.genre);
+  return {
+    count: items.length,
+    total: total,
+    average: (total / items.length / 60).toFixed(1),
+    max: max,
+    longestTrackAlbum: longestTrackAlbum,
+    topRated: topRated,
+    categories: genres.filter((genre, index) => genres.indexOf(genre) === index).length
+  };
+};
+
 // ===== Виведення на сторінку =====
 
 const breakcore = filterByGenre(albums, "брейккор");
@@ -203,6 +253,8 @@ const recent = filterByYearFrom(albums, 2024);
 
 const byYear = sortByYear(albums);
 const byTitle = sortByTitle(albums);
+
+const stats = statsForAlbums(albums);
 
 show("out-count", `Альбомів у каталозі: ${albums.length}`);
 show("out-numbered", numberedList(albums));
@@ -219,4 +271,15 @@ show("out-sorted", [
   byTitle.map((item) => `  ${item.album}`).join("\n"),
   "Вихідний порядок (масив не змінено):",
   albums.map((item) => `  ${item.id}. ${item.album}`).join("\n")
+]);
+show("out-stats", [
+  `Альбомів: ${stats.count}`,
+  `Загальна тривалість: ${formatDuration(stats.total)}`,
+  `Середня тривалість альбому: ${stats.average} хв`,
+  `Найдовший альбом: ${stats.max.album} (${formatDuration(albumSeconds(stats.max))})`,
+  `Найдовший трек добірки: ${longestTrackOf(stats.longestTrackAlbum).title} — ${stats.longestTrackAlbum.album} (${longestTrackOf(stats.longestTrackAlbum).length})`,
+  `Найвища середня оцінка: ${stats.topRated.album} (${averageRating(stats.topRated).toFixed(1)} з 10)`,
+  `Різних жанрів: ${stats.categories}`,
+  "Середня оцінка кожного альбому:",
+  albums.map((item) => `  ${item.album}: ${averageRating(item).toFixed(1)} (оцінок: ${item.ratings.length})`).join("\n")
 ]);
