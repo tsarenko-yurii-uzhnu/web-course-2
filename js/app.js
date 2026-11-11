@@ -3,7 +3,9 @@
 
 // ===== Дані =====
 
-// Альбоми каталогу. const забороняє лише перепризначити змінну albums на інший масив,
+// Альбоми каталогу. ratings — середні оцінки слухачів, переведені в шкалу 1–10, у порядку:
+// RateYourMusic (×2), Album of the Year (÷10), Discogs (×2), Sputnikmusic (×2, лише де є).
+// const забороняє лише перепризначити змінну albums на інший масив,
 // а сам масив лишається тим самим об'єктом, тож додавати в нього елементи через push можна.
 const albums = [
   {
@@ -13,7 +15,7 @@ const albums = [
     year: 2026,
     genre: "брейккор",
     label: { name: "Not On Label (Cynthoni Self-released)", catalogNumber: "CYN-003" },
-    ratings: [9, 8, 10, 9, 7],
+    ratings: [7.1, 7.7, 9.6, 9.0],
     tracks: [
       { title: "Unbirthing", length: "1:06" },
       { title: "The F***ing Apocalypse", length: "4:02" },
@@ -39,7 +41,7 @@ const albums = [
     year: 2023,
     genre: "ембієнт",
     label: { name: "Kitty On Fire Records", catalogNumber: "KOF-013" },
-    ratings: [8, 7, 8],
+    ratings: [6.2, 6.6, 9.3],
     tracks: [
       { title: "Inhuman", length: "2:07" },
       { title: "143 Ways To Lose Urself", length: "2:27" },
@@ -65,7 +67,7 @@ const albums = [
     year: 2020,
     genre: "драм-енд-бейс",
     label: { name: "Geometric Lullaby", catalogNumber: "GEO-012" },
-    ratings: [10, 9, 10, 9, 10, 8],
+    ratings: [6.8, 7.7, 9.2],
     tracks: [
       { title: "Love Is a Mighty Big Word", length: "2:18" },
       { title: "Newlove", length: "5:59" },
@@ -86,7 +88,7 @@ const albums = [
     year: 2020,
     genre: "джангл",
     label: { name: "Wave Racers Collective", catalogNumber: "WRCV-003" },
-    ratings: [8, 9, 7, 8],
+    ratings: [6.5, 7.3, 9.4],
     tracks: [
       { title: "A Thousand Lonely", length: "2:18" },
       { title: "Make-Me-Sad", length: "6:15" },
@@ -104,7 +106,7 @@ const albums = [
     year: 2026,
     genre: "габбер",
     label: { name: "Entitii Records", catalogNumber: "FEMT-850004" },
-    ratings: [9, 8],
+    ratings: [6.8, 7.4, 9.6],
     tracks: [
       { title: "Body The Pistol", length: "2:38" },
       { title: "Video Nasty", length: "3:02" },
@@ -125,7 +127,7 @@ const albums = [
     year: 2024,
     genre: "футворк",
     label: { name: "Not On Label (Femtanyl Self-released)", catalogNumber: "FEM-001" },
-    ratings: [9, 10, 8, 9, 9, 10, 8],
+    ratings: [7.2, 7.9, 9.1],
     tracks: [
       { title: "ACT RIGHT", length: "2:24" },
       { title: "P3T", length: "1:42" },
@@ -333,7 +335,7 @@ show("out-stats", [
   `Найвища середня оцінка: ${stats.topRated.album} (${averageRating(stats.topRated).toFixed(1)} з 10)`,
   `Різних жанрів: ${stats.categories}`,
   "Середня оцінка кожного альбому:",
-  albums.map((item) => `  ${item.album}: ${averageRating(item).toFixed(1)} (оцінок: ${item.ratings.length})`).join("\n")
+  albums.map((item) => `  ${item.album}: ${averageRating(item).toFixed(1)} (джерел: ${item.ratings.length})`).join("\n")
 ]);
 
 show("out-search", searches.map((query) => describeFound(`Запит «${query}»`, searchByText(albums, query)).join("\n")));
