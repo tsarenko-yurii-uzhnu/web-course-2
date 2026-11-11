@@ -245,6 +245,54 @@ const statsForAlbums = (items) => {
   };
 };
 
+// ----- Бонусні функції -----
+
+// Приймає масив альбомів і запит, повертає альбоми, у назві або в назві будь-якого треку яких є запит (без урахування регістру).
+const searchByText = (items, query) => {
+  const needle = query.toLowerCase();
+  return items.filter(
+    (item) =>
+      item.album.toLowerCase().includes(needle) ||
+      item.tracks.filter((track) => track.title.toLowerCase().includes(needle)).length > 0
+  );
+};
+
+// Приймає масив альбомів, назву числового поля рядком і n, повертає n альбомів із найбільшим значенням цього поля.
+const topBy = (items, field, n = 3) => [...items].sort((a, b) => b[field] - a[field]).slice(0, n);
+
+// Приймає альбом і одразу розбирає потрібні поля, повертає короткий рядок «назва (рік), каталожний номер».
+const cardLine = ({ album, year, label: { catalogNumber } }) => `${album} (${year}), ${catalogNumber}`;
+
+// Приймає масив альбомів, повертає об'єкт «назва жанрової групи → кількість альбомів у ній».
+const countByCategory = (items) =>
+  items.reduce((groups, item) => {
+    const group = categoryOf(item);
+    groups[group] = (groups[group] || 0) + 1;
+    return groups;
+  }, {});
+
+// Приймає масив альбомів, повертає масив рядків-зауважень (порожній, якщо дані коректні).
+const validate = (items) => {
+  const problems = [];
+  const referenceKeys = Object.keys(items[0]).join();
+  items.forEach((item, index) => {
+    const name = `Запис ${index + 1}`;
+    if (Object.keys(item).join() !== referenceKeys) {
+      problems.push(`${name}: інший набір полів (${Object.keys(item).join(", ")})`);
+    }
+    if (typeof item.id !== "number" || typeof item.year !== "number") {
+      problems.push(`${name}: id і year мають бути числами, а year зараз ${typeof item.year}`);
+    }
+    if (typeof item.album !== "string" || item.album.trim() === "") {
+      problems.push(`${name}: порожня назва альбому`);
+    }
+    if (typeof item.label !== "object" || item.label === null) {
+      problems.push(`${name}: немає вкладеного об'єкта label`);
+    }
+  });
+  return problems;
+};
+
 // ===== Виведення на сторінку =====
 
 const breakcore = filterByGenre(albums, "брейккор");
@@ -255,6 +303,10 @@ const byYear = sortByYear(albums);
 const byTitle = sortByTitle(albums);
 
 const stats = statsForAlbums(albums);
+
+const searches = ["love", "KATAMARI", "vaporwave"];
+const newest = topBy(albums, "year");
+const problems = validate(albums);
 
 show("out-count", `Альбомів у каталозі: ${albums.length}`);
 show("out-numbered", numberedList(albums));
@@ -283,3 +335,14 @@ show("out-stats", [
   "Середня оцінка кожного альбому:",
   albums.map((item) => `  ${item.album}: ${averageRating(item).toFixed(1)} (оцінок: ${item.ratings.length})`).join("\n")
 ]);
+
+show("out-search", searches.map((query) => describeFound(`Запит «${query}»`, searchByText(albums, query)).join("\n")));
+show("out-top", [
+  "Топ-3 за роком:",
+  newest.map((item) => `  ${item.year} — ${item.album}`).join("\n"),
+  "Топ-2 за роком:",
+  topBy(albums, "year", 2).map((item) => `  ${item.year} — ${item.album}`).join("\n")
+]);
+show("out-lines", albums.map(cardLine));
+show("out-groups", Object.entries(countByCategory(albums)).map((entry) => `${entry[0]}: ${entry[1]}`));
+show("out-validate", problems.length === 0 ? "Помилок не знайдено" : problems);

@@ -2106,6 +2106,7 @@ body > header nav a:hover {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
   gap: var(--gap);
+  margin-bottom: var(--space-xl);
 }
 
 .demo__panel {
