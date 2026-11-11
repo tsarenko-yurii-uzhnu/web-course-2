@@ -137,4 +137,31 @@ const albums = [
   }
 ];
 
-console.log("app.js підключено");
+// ===== Допоміжні функції =====
+
+// Записує текст у вказаний елемент. Масив рядків склеює переносами.
+const show = (id, value) => {
+  const box = document.getElementById(id);
+  if (box === null) {
+    console.error("Немає елемента з id:", id);
+    return;
+  }
+  box.textContent = Array.isArray(value) ? value.join("\n") : value;
+};
+
+// ===== Функції обробки =====
+
+// Приймає масив альбомів, повертає масив рядків «1. Назва — виконавець, рік (лейбл, номер)».
+function numberedList(items) {
+  const lines = [];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    lines.push(`${i + 1}. ${item.album} — ${item.artist}, ${item.year} (${item.label.name}, ${item.label.catalogNumber})`);
+  }
+  return lines;
+}
+
+// ===== Виведення на сторінку =====
+
+show("out-count", `Альбомів у каталозі: ${albums.length}`);
+show("out-numbered", numberedList(albums));

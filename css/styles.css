@@ -2097,7 +2097,56 @@ body > header nav a:hover {
   }
 
 /* ==========================================================================
-   22. Зменшення руху: користувачам із prefers-reduced-motion переходи й
+   22. ЛР8: блок «Демонстрація роботи» (вивід js/app.js)
+   ========================================================================== */
+
+/* Панелі з результатами: та сама сітка auto-fit + minmax, що й каталог,
+   тож на телефоні 1 колонка, далі 2–3 без жодного медіазапиту */
+.demo__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
+  gap: var(--gap);
+}
+
+.demo__panel {
+  min-width: 0;
+}
+
+.demo__panel h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 1rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Нумерований список довгий, тож на ширшому екрані займає весь рядок сітки */
+@media (min-width: 768px) {
+  .demo__panel--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+/* white-space: pre-line зберігає переноси \n, які ставить show() через join("\n"), і
+   переносить довгі рядки по ширині блока; без нього весь вивід злипся б в один рядок,
+   бо браузер за замовчуванням замінює переноси рядків на пробіли. */
+.js-out {
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius);
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   23. Зменшення руху: користувачам із prefers-reduced-motion переходи й
        анімації скорочуються практично до нуля
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
