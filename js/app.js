@@ -412,6 +412,9 @@ const resetButton = document.getElementById("reset");
 const dlg = document.getElementById("details");
 const orderForm = document.getElementById("order-form");
 const receiptBox = document.getElementById("receipt");
+const burger = document.getElementById("burger");
+const menu = document.getElementById("menu");
+const themeButton = document.getElementById("theme");
 const toast = document.getElementById("toast");
 
 // Поточний порядок сортування (бонус ЛР9). Пошук і жанр читаються прямо з полів.
@@ -594,6 +597,28 @@ function showToast(text) {
   }, 2500);
 }
 
+// Мобільне меню: клас-стан на списку й aria-expanded на кнопці змінюються разом.
+function setMenu(open) {
+  menu.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", String(open));
+}
+
+// Тема: явний вибір людини (клас на <html>) важливіший за системну схему.
+function isDark() {
+  const root = document.documentElement;
+  if (root.classList.contains("dark-theme")) return true;
+  if (root.classList.contains("light-theme")) return false;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+function applyTheme(dark) {
+  const root = document.documentElement;
+  root.classList.toggle("dark-theme", dark);
+  root.classList.toggle("light-theme", !dark);
+  themeButton.setAttribute("aria-pressed", String(dark));
+  themeButton.textContent = dark ? "☀ Світла тема" : "🌙 Темна тема";
+}
+
 // Власна перевірка форми, яку не зробити HTML-атрибутами: подарункове паковання — лише для нових платівок.
 // Коли умова виконана, setCustomValidity("") обов'язково знімає помилку, інакше поле лишилося б невалідним назавжди.
 function checkGiftWrap() {
@@ -681,6 +706,22 @@ function benchmarkRender(count) {
 }
 
 // ===== Виведення на сторінку і обробники подій =====
+
+// --- Шапка на всіх сторінках: меню і тема ---
+
+burger.addEventListener("click", () => setMenu(burger.getAttribute("aria-expanded") !== "true"));
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") setMenu(false);
+});
+
+// Клік будь-де поза меню й поза кнопкою закриває меню.
+document.addEventListener("click", (event) => {
+  if (!event.target.closest("#menu, #burger")) setMenu(false);
+});
+
+applyTheme(isDark());
+themeButton.addEventListener("click", () => applyTheme(!isDark()));
 
 // --- Каталог ---
 

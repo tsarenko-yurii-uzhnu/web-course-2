@@ -17,23 +17,16 @@
     <header>
         <a href="index.html" class="logo">Вініл-Клуб</a>
         <nav aria-label="Головне меню">
-            <ul class="menu menu--desktop">
+            <!-- ЛР9: справжня кнопка меню; клас open на списку і aria-expanded змінює js/app.js -->
+            <button type="button" id="burger" class="burger" aria-expanded="false" aria-controls="menu">☰ Меню</button>
+            <ul id="menu" class="menu">
                 <li><a href="index.html">Головна</a></li>
                 <li><a href="catalog.html" class="current" aria-current="page">Каталог</a></li>
                 <li><a href="about.html">Про проєкт</a></li>
                 <li><a href="form.html">Замовлення</a></li>
             </ul>
-            <details class="menu-disclosure">
-                <summary>Меню</summary>
-                <ul class="menu">
-                    <li><a href="index.html">Головна</a></li>
-                    <li><a href="catalog.html" class="current" aria-current="page">Каталог</a></li>
-                    <li><a href="about.html">Про проєкт</a></li>
-                    <li><a href="form.html">Замовлення</a></li>
-                </ul>
-            </details>
         </nav>
-        <button type="button" class="theme-toggle" onclick="const root = document.documentElement; const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; const isDark = document.body.classList.contains('dark-theme') || (!root.classList.contains('light-theme') && prefersDark); document.body.classList.toggle('dark-theme', !isDark); root.classList.toggle('light-theme', isDark);">Тема</button>
+        <button type="button" id="theme" class="theme-toggle" aria-pressed="false">🌙 Темна тема</button>
     </header>
 
     <!-- Макет сторінки: Grid із зонами nav / main / side / foot (grid-template-areas у CSS) -->

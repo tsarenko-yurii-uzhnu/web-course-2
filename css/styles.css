@@ -121,12 +121,14 @@ img, video, iframe {
   --glow-accent: none;                      /* світіння кнопок і плиток при наведенні */
 }
 
-/* БОНУС 1. Темна тема: клас dark-theme на <body> (кнопка «Тема» в шапці) лише
-   перевизначає змінні палітри, жодного правила оформлення не дублюється.
+/* БОНУС 1. Темна тема: клас dark-theme на кореневому елементі <html> (кнопка теми в шапці,
+   з ЛР9 її ставить js/app.js) лише перевизначає змінні палітри, жодного правила
+   оформлення не дублюється. Клас на :root, а не на <body>, бо змінні й color-scheme
+   оголошені саме на :root, і клас-перебивач має стояти на тому самому елементі.
    Стиль: глибокий чорний фон, графітово-бордові поверхні, неоново-червоний акцент.
    Контраст (WCAG): текст на фоні ≈ 18:1, акцент #ff293b на фоні ≈ 5,3:1,
    на поверхні ≈ 4,7:1; чорний текст кнопок на акценті ≈ 5,3:1 */
-.dark-theme {
+:root.dark-theme {
   color-scheme: dark;
 
   /* Фон і поверхні */
@@ -166,6 +168,13 @@ img, video, iframe {
                  0 0 26px rgb(255 41 59 / 35%);
   --neo-shadow-dark: rgb(0 0 0 / 90%);
   --neo-shadow-light: rgb(255 41 59 / 9%);   /* неоморфна картка світиться червоним, а не білим */
+}
+
+/* ЛР9: другий клас-перебивач. Світлі значення змінних уже стоять у базовому :root,
+   а системний темний блок нижче діє лише на :root:not(.light-theme). Тож клас light-theme
+   вимикає системну темну схему, і сторінка повертається до світлих значень з :root. */
+:root.light-theme {
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -300,51 +309,67 @@ body > header nav .menu {
   padding: 0;
 }
 
-body > header nav .menu--desktop {
+/* ЛР9: на телефоні меню сховане, доки js/app.js не додасть списку клас-стан open
+   (разом з aria-expanded="true" на кнопці #burger). Список стає колонкою під кнопкою. */
+body > header nav .menu {
   display: none;
-}
-
-body > header .menu-disclosure .menu {
   flex-direction: column;
 }
 
-body > header .menu-disclosure summary {
-  cursor: pointer;
-  padding: var(--space-sm) var(--space);
-  border-radius: var(--radius);
-  color: var(--color-on-chrome);
-  list-style-position: inside;
+body > header nav .menu.open {
+  display: flex;
 }
 
-body > header .menu-disclosure summary:hover {
+/* Відкритий список випадає під кнопкою поверх сторінки й не розтягує шапку */
+body > header nav {
+  position: relative;
+}
+
+body > header nav .menu.open {
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  right: 0;
+  min-width: 12rem;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-chrome);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Кнопка меню — у стилі колишнього <summary>: прозора, зі світлою рамкою */
+.burger {
+  background-color: transparent;
+  color: var(--color-on-chrome);
+  border-color: var(--color-on-chrome);
+}
+
+.burger:hover {
   background-color: var(--color-accent);
+  border-color: var(--color-accent);
   color: var(--color-bg);
 }
 
-body > header .menu-disclosure summary:focus-visible {
+.burger:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-body > header .menu-disclosure:not([open]) .menu {
-  display: none;
-}
-
+/* На широкому екрані меню видно завжди, а кнопка не потрібна */
 @media (min-width: 768px) {
-  body > header .menu-disclosure {
+  .burger {
     display: none;
   }
 
-  body > header nav .menu--desktop {
+  body > header nav .menu,
+  body > header nav .menu.open {
+    position: static;
     display: flex;
-  }
-
-  body > header nav .menu--desktop {
     flex-direction: row;
-  }
-
-  body > header .menu-disclosure summary {
-    display: none;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
   }
 }
 
@@ -2315,7 +2340,7 @@ input[type="checkbox"].invalid {
   }
 
   body > header nav,
-  .menu-disclosure,
+  .burger,
   .theme-toggle,
   .layout__nav,
   .layout__aside,
