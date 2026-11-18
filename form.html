@@ -7,6 +7,7 @@
     <title>Замовлення платівки — Вініл-Клуб</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/app.js" defer></script>
 </head>
 
 <body id="top">
@@ -38,7 +39,7 @@
         <p>Ця форма призначена для оформлення замовлення або бронювання колекційних вінілових платівок із нашого каталогу. Після надсилання заявки менеджер перевірить фізичну наявність екземпляра на складі та зв'яжеться з вами впродовж робочого дня для підтвердження даних доставки й надання платіжних реквізитів.</p>
 
         <!-- Основна форма 1: Замовлення платівки -->
-        <form class="form-grid" action="/submit" method="post" enctype="multipart/form-data">
+        <form class="form-grid" id="order-form" action="/submit" method="post" enctype="multipart/form-data" novalidate>
             <!-- method="post": форма створює нове замовлення платівки, тому конфіденційні контактні дані не повинні потрапляти в URL, а запит не має дублюватися при оновленні сторінки -->
 
             <!-- Група 1: Контактні дані замовника та доставка -->
@@ -48,11 +49,13 @@
                 <p>
                     <label for="customer-fullname">Прізвище та ім'я:</label><br>
                     <input type="text" id="customer-fullname" name="customer_fullname" placeholder="Антон Барабас" minlength="2" maxlength="60" autocomplete="name" required>
+                    <span class="error" id="err-customer-fullname"></span>
                 </p>
 
                 <p>
                     <label for="customer-email">Електронна пошта:</label><br>
                     <input type="email" id="customer-email" name="customer_email" placeholder="name@example.com" autocomplete="email" required>
+                    <span class="error" id="err-customer-email"></span>
                 </p>
 
                 <!-- Розбір регулярного виразу для телефону:
@@ -66,11 +69,13 @@
                 <p>
                     <label for="customer-phone">Номер телефону:</label><br>
                     <input type="tel" id="customer-phone" name="customer_phone" pattern="\+380[0-9]{9}" title="Формат: +380XXXXXXXXX (знак плюс, міжнародний код 380 та 9 цифр номера телефону)" placeholder="+380XXXXXXXXX" autocomplete="tel" required>
+                    <span class="error" id="err-customer-phone"></span>
                 </p>
 
                 <p>
                     <label for="delivery-date">Бажана дата доставки:</label><br>
                     <input type="date" id="delivery-date" name="delivery_date" min="2026-10-06" max="2027-06-30" required>
+                    <span class="error" id="err-delivery-date"></span>
                 </p>
 
                 <p>
@@ -82,6 +87,7 @@
                         <option value="meest-poshta">Міст Пошта</option>
                         <option value="warehouse-pickup">Самовивіз зі складу</option>
                     </select>
+                    <span class="error" id="err-delivery-method"></span>
                 </p>
             </fieldset>
 
@@ -110,6 +116,7 @@
                         <option value="sewerslvt-draining-love-story">Sewerslvt — Draining Love Story (2020)</option>
                         <option value="sewerslvt-good-times">Sewerslvt — We had good times together, don't forget that (2021)</option>
                     </select>
+                    <span class="error" id="err-album-select"></span>
                 </p>
 
                 <!-- Розбір регулярного виразу для каталожного номера (тег лейблу, дефіс, номер):
@@ -124,11 +131,13 @@
                 <p>
                     <label for="catalog-number">Каталожний номер видання (тег-номер, напр. SLVT-002):</label><br>
                     <input type="text" id="catalog-number" name="catalog_number" pattern="[A-Z]{2,4}-[0-9]{3,6}" title="Формат: тег лейблу з 2–4 великих латинських літер, дефіс і 3–6 цифр, напр. SLVT-002 або FEM-001" placeholder="SLVT-002" required>
+                    <span class="error" id="err-catalog-number"></span>
                 </p>
 
                 <p>
                     <label for="album-quantity">Кількість примірників:</label><br>
                     <input type="number" id="album-quantity" name="quantity" min="1" max="5" step="1" value="1" required>
+                    <span class="error" id="err-album-quantity"></span>
                 </p>
 
                 <p class="form__term"><strong>Стан платівки:</strong></p>
@@ -152,7 +161,8 @@
                     <label for="opt-poster">Постер альбому в комплекті</label><br>
 
                     <input type="checkbox" id="opt-gift-wrap" name="extra_options" value="gift_wrap">
-                    <label for="opt-gift-wrap">Подарункове паковання</label>
+                    <label for="opt-gift-wrap">Подарункове паковання</label><br>
+                    <span class="error" id="err-opt-gift-wrap"></span>
                 </p>
             </fieldset>
 
@@ -163,12 +173,14 @@
                 <p>
                     <label for="order-comment">Коментар до замовлення:</label><br>
                     <textarea id="order-comment" name="order_comment" rows="4" cols="50" minlength="10" maxlength="300" placeholder="Наприклад, уточнити номер відділення або зателефонувати перед відправкою"></textarea>
+                    <span class="error" id="err-order-comment"></span>
                 </p>
 
                 <p class="form__term"><strong>Підтвердження:</strong></p>
                 <p class="form__control">
                     <input type="checkbox" id="return-consent" name="return_consent" value="agreed" required>
-                    <label for="return-consent">Я погоджуюся з умовами повернення товару та правилами замовлення</label>
+                    <label for="return-consent">Я погоджуюся з умовами повернення товару та правилами замовлення</label><br>
+                    <span class="error" id="err-return-consent"></span>
                 </p>
 
                 <p>
@@ -183,6 +195,9 @@
                 <button type="reset">Очистити форму</button>
             </p>
         </form>
+
+        <!-- ЛР9: «квитанція» після успішного оформлення, будується через createElement -->
+        <div id="receipt" class="receipt" aria-live="polite" hidden></div>
 
         <hr>
 
@@ -233,6 +248,9 @@
         </address>
         <p>Підгрупа 2, Царенко, 2026 рік</p>
     </footer>
+
+    <!-- ЛР9: тимчасове повідомлення, показує й ховає showToast() -->
+    <div id="toast" class="toast" role="status" hidden></div>
 
     <a class="to-top" href="#top" aria-label="Нагору">↑</a>
 

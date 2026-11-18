@@ -410,6 +410,9 @@ const countBox = document.getElementById("count");
 const sortBox = document.getElementById("sort");
 const resetButton = document.getElementById("reset");
 const dlg = document.getElementById("details");
+const orderForm = document.getElementById("order-form");
+const receiptBox = document.getElementById("receipt");
+const toast = document.getElementById("toast");
 
 // Поточний порядок сортування (бонус ЛР9). Пошук і жанр читаються прямо з полів.
 let sortOrder = "default";
@@ -578,6 +581,87 @@ function openDetails(item) {
   dlg.showModal();
 }
 
+// Тост: один таймер на всі виклики.
+// clearTimeout скасовує попередній таймер: без нього таймер від першого виклику
+// сховав би вже нове повідомлення раніше, ніж минуть його 2,5 секунди.
+let toastTimer;
+function showToast(text) {
+  toast.textContent = text;
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.hidden = true;
+  }, 2500);
+}
+
+// Власна перевірка форми, яку не зробити HTML-атрибутами: подарункове паковання — лише для нових платівок.
+// Коли умова виконана, setCustomValidity("") обов'язково знімає помилку, інакше поле лишилося б невалідним назавжди.
+function checkGiftWrap() {
+  const giftWrap = document.getElementById("opt-gift-wrap");
+  const condition = orderForm.querySelector('input[name="condition"]:checked');
+  const isNew = condition !== null && condition.value === "new";
+  giftWrap.setCustomValidity(
+    giftWrap.checked && !isNew ? "Подарункове паковання доступне лише для нових запечатаних платівок." : ""
+  );
+}
+
+// Показує або ховає помилки під усіма полями, що мають контейнер span.error. Повертає true, якщо помилок немає.
+function showFieldErrors() {
+  let allOk = true;
+  for (const field of orderForm.querySelectorAll("input, select, textarea")) {
+    const error = document.getElementById("err-" + field.id);
+    if (error === null) continue;
+    const ok = field.checkValidity();
+    error.textContent = ok ? "" : field.validationMessage;
+    field.classList.toggle("invalid", !ok);
+    if (!ok) allOk = false;
+  }
+  return allOk;
+}
+
+// Повертає текст підпису <label> для поля з указаним id.
+const labelText = (id) => orderForm.querySelector(`label[for="${id}"]`).textContent;
+
+// Будує «квитанцію» з надісланих значень: тільки createElement і textContent.
+function renderReceipt() {
+  const fullname = document.getElementById("customer-fullname").value.trim();
+  const delivery = document.getElementById("delivery-method");
+  const album = document.getElementById("album-select");
+  const quantity = Number(document.getElementById("album-quantity").value);
+  const condition = orderForm.querySelector('input[name="condition"]:checked');
+  const extras = [];
+  for (const box of orderForm.querySelectorAll('input[name="extra_options"]:checked')) {
+    extras.push(labelText(box.id));
+  }
+  const comment = document.getElementById("order-comment").value.trim();
+
+  const rows = [
+    `Покупець: ${fullname}`,
+    `Email: ${document.getElementById("customer-email").value}`,
+    `Телефон: ${document.getElementById("customer-phone").value}`,
+    `Дата доставки: ${document.getElementById("delivery-date").value}`,
+    `Доставка: ${delivery.options[delivery.selectedIndex].textContent}`,
+    `Альбом: ${album.options[album.selectedIndex].textContent}`,
+    `Каталожний номер: ${document.getElementById("catalog-number").value}`,
+    `Кількість: ${quantity} шт.`,
+    `Стан: ${condition === null ? "не обрано" : labelText(condition.id)}`,
+    `Опції: ${extras.length === 0 ? "без додаткових опцій" : extras.join("; ")}`,
+    `Коментар: ${comment === "" ? "—" : comment}`,
+    `Згода з умовами: ${document.getElementById("return-consent").checked ? "так" : "ні"}`
+  ];
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Квитанція замовлення";
+  const list = document.createElement("ul");
+  for (const row of rows) {
+    const li = document.createElement("li");
+    li.textContent = row;
+    list.append(li);
+  }
+  receiptBox.replaceChildren(heading, list);
+  receiptBox.hidden = false;
+}
+
 // Бонус ЛР9: замір рендеру. Викликається вручну з консолі: benchmarkRender(2000).
 // Будує count карток двома способами — по одній у документ і через DocumentFragment — і повертає каталог.
 function benchmarkRender(count) {
@@ -688,6 +772,7 @@ if (cardsBox !== null) {
     searchInput.value = "";
     genreSelect.value = "all";
     sortBox.querySelector('button[data-sort="default"]').click();
+    showToast("Фільтр скинуто");
   });
 
   // Делегування: один слухач на контейнері .cards. Клік по будь-якому елементу картки
@@ -703,4 +788,41 @@ if (cardsBox !== null) {
   });
 
   document.getElementById("d-close").addEventListener("click", () => dlg.close());
+}
+
+// --- Форма замовлення ---
+
+if (orderForm !== null) {
+  orderForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    // Ця перевірка лише підказує людині: її легко вимкнути в DevTools або надіслати запит в обхід сторінки,
+    // тому справжня перевірка даних — на сервері, який приймає замовлення.
+    checkGiftWrap();
+    if (!showFieldErrors()) {
+      showToast("Перевірте поля, позначені червоним");
+      return;
+    }
+    renderReceipt();
+    showToast("Замовлення оформлено");
+    orderForm.reset();
+  });
+
+  // Після виправлення поля його помилка зникає одразу, не чекаючи наступного submit.
+  orderForm.addEventListener("change", () => {
+    checkGiftWrap();
+    for (const field of orderForm.querySelectorAll(".invalid")) {
+      const ok = field.checkValidity();
+      document.getElementById("err-" + field.id).textContent = ok ? "" : field.validationMessage;
+      field.classList.toggle("invalid", !ok);
+    }
+  });
+
+  orderForm.addEventListener("reset", () => {
+    for (const error of orderForm.querySelectorAll(".error")) {
+      error.textContent = "";
+    }
+    for (const field of orderForm.querySelectorAll(".invalid")) {
+      field.classList.remove("invalid");
+    }
+  });
 }
