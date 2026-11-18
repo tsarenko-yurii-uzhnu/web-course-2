@@ -2146,7 +2146,132 @@ body > header nav a:hover {
 }
 
 /* ==========================================================================
-   23. Зменшення руху: користувачам із prefers-reduced-motion переходи й
+   23. ЛР9: панель пошуку, бейдж-модифікатор, тост, помилки форми, квитанція
+   ========================================================================== */
+
+/* Панель керування над сіткою: поля й кнопки йдуть рядком і переносяться на вузькому екрані */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--gap);
+  margin-bottom: var(--space-lg);
+}
+
+.controls__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1 1 12rem;
+}
+
+.controls__field label {
+  font-weight: 700;
+}
+
+.controls__sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* Активна кнопка сортування (бонус ЛР9) — заливка акцентом */
+.controls__sort .active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.controls__count {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.empty {
+  padding: var(--space-md);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+  overflow-wrap: anywhere;
+}
+
+/* Лімітоване видання: бейдж-«пігулка» без заливки, лише з рамкою акценту */
+.card__badge--limited {
+  background-color: var(--color-surface);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+/* Тост: фіксовано в правому нижньому куті, над вмістом і над кнопкою «Нагору» */
+.toast {
+  position: fixed;
+  right: var(--space);
+  bottom: var(--space);
+  left: var(--space);
+  z-index: 20;
+  max-width: 22rem;
+  margin-left: auto;
+  padding: var(--space-sm) var(--space);
+  border-radius: var(--radius);
+  background-color: var(--color-brand);
+  color: var(--color-bg);
+  box-shadow: var(--shadow-lift);
+  overflow-wrap: anywhere;
+  animation: toast-in 200ms ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Помилки форми, які малює js/app.js з validationMessage */
+.error {
+  display: block;
+  margin-top: var(--space-xs);
+  color: var(--color-danger);
+  font-size: 0.85rem;
+}
+
+.error:empty {
+  display: none;
+}
+
+input.invalid,
+select.invalid,
+textarea.invalid {
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+/* Прапорець із помилкою: рамку чекбоксу не видно, тож обводимо його */
+input[type="checkbox"].invalid {
+  outline: 2px solid var(--color-danger);
+  outline-offset: 2px;
+}
+
+.receipt {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  border: 1px solid var(--color-success);
+  border-radius: var(--radius);
+  background-color: var(--color-success-bg);
+  overflow-wrap: anywhere;
+}
+
+.receipt h2 {
+  margin-top: 0;
+}
+
+/* ==========================================================================
+   24. Зменшення руху: користувачам із prefers-reduced-motion переходи й
        анімації скорочуються практично до нуля
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
