@@ -1,247 +1,18 @@
-// «Вініл-Клуб» — дані каталогу, їх обробка (ЛР8) і поведінка сторінок (ЛР9).
-// Порядок у файлі: дані → допоміжні функції → функції обробки → функції інтерфейсу →
-// виклики й обробники подій у кінці файла.
-// Скрипт підключено на всіх сторінках, тому код, що стосується лише каталогу чи форми,
+// «Вініл-Клуб» — обробка даних каталогу (ЛР8), поведінка сторінок (ЛР9),
+// завантаження даних із data.json і пам'ять у localStorage (ЛР10).
+// Порядок у файлі: дані → допоміжні функції → функції обробки → сховище → завантаження →
+// функції інтерфейсу → запуск і обробники подій у кінці файла.
+// Скрипт підключено на всіх сторінках, тому код, що стосується лише каталогу, форми чи статистики,
 // виконується тільки там, де є потрібні елементи.
 
 // ===== Дані =====
 
-// Альбоми каталогу. Дані зібрані вручну з карток і таблиці каталогу (ЛР5–ЛР6), а оцінки —
-// з RateYourMusic, Album of the Year, Discogs і Sputnikmusic (див. README).
-// У ЛР10 цей масив переїде в зовнішній файл JSON, і сторінка завантажуватиме його через fetch.
-// ratings — оцінки слухачів, переведені в шкалу 1–10:
-// для альбомів 1–6 це середні з RateYourMusic (×2), Album of the Year (÷10), Discogs (×2), Sputnikmusic (×2, лише де є);
-// для альбомів 7–9 сервіси мають замало голосів, тому тут Sputnikmusic і окремі оцінки користувачів AOTY.
-// limited — лімітоване видання (від нього залежить бейдж картки), img — обкладинка для картки,
-// tags — латинські жанри для фільтра в боковій панелі (data-genres).
-// Назва альбому 9 навмисно записана з кутовими дужками: перевірка, що textContent показує їх як текст.
-// const забороняє лише перепризначити змінну albums на інший масив,
-// а сам масив лишається тим самим об'єктом, тож додавати в нього елементи через push можна.
-const albums = [
-  {
-    id: 1,
-    album: "Lamenting Malice",
-    artist: "Cynthoni",
-    year: 2026,
-    genre: "брейккор",
-    limited: true,
-    note: "Подвійний мармуровий вініл із розворотом: брейккор, джангл і габер.",
-    img: "images/card-2.jpg",
-    tags: "breakcore gabber",
-    label: { name: "Not On Label (Cynthoni Self-released)", catalogNumber: "CYN-003" },
-    ratings: [7.1, 7.7, 9.6, 9.0],
-    tracks: [
-      { title: "Unbirthing", length: "1:06" },
-      { title: "The F***ing Apocalypse", length: "4:02" },
-      { title: "Ensh***ification", length: "4:04" },
-      { title: "BleakReality", length: "3:48" },
-      { title: "Hell Sings", length: "4:28" },
-      { title: "MentallyILL", length: "5:23" },
-      { title: "Imminent Eradication", length: "4:51" },
-      { title: "Nihilism Extremist", length: "4:00" },
-      { title: "Dead Doom Scrolls", length: "4:41" },
-      { title: "Endlessly Dying Machine", length: "4:48" },
-      { title: "(emotion)2", length: "5:12" },
-      { title: "Shut Your B***h A** Up: Prolapse Of The Mind", length: "1:06" },
-      { title: "Fearful Avoidant Disorganised Attachment", length: "4:23" },
-      { title: "Disappearing", length: "6:48" },
-      { title: "It Is 0 Seconds To Midnight", length: "7:03" }
-    ]
-  },
-  {
-    id: 2,
-    album: "Ultraviolet",
-    artist: "Usedcvnt",
-    year: 2023,
-    genre: "ембієнт",
-    limited: true,
-    note: "Прозоро-димчастий вініл, атмосферний брейккор і колаборації.",
-    img: "images/card-3.jpg",
-    tags: "breakcore ambient",
-    label: { name: "Kitty On Fire Records", catalogNumber: "KOF-013" },
-    ratings: [6.2, 6.6, 9.3],
-    tracks: [
-      { title: "Inhuman", length: "2:07" },
-      { title: "143 Ways To Lose Urself", length: "2:27" },
-      { title: "Limited In Love", length: "2:52" },
-      { title: "You're My Friend Now", length: "2:23" },
-      { title: "Kittens", length: "2:29" },
-      { title: "Pls Tell Me What Is Ur Dream", length: "2:38" },
-      { title: "Just Leave Me To Bleed", length: "3:01" },
-      { title: "Sorry Mom, I'm Making Breakcore XD", length: "1:55" },
-      { title: "Illusion Of Control", length: "2:27" },
-      { title: "Yours Forever", length: "2:59" },
-      { title: "It's 2am, I Can't Sleep", length: "1:55" },
-      { title: "I Want To Eat Ur Heart Couse I Love U", length: "1:55" },
-      { title: "Taste Of Blood", length: "1:36" },
-      { title: "Overthinking", length: "2:24" },
-      { title: "Disappearing Until I Feel Better", length: "2:59" }
-    ]
-  },
-  {
-    id: 3,
-    album: "Draining Love Story",
-    artist: "Sewerslvt",
-    year: 2020,
-    genre: "драм-енд-бейс",
-    limited: false,
-    note: "Культовий альбом на межі драм-енд-бейсу й брейккору.",
-    img: "images/card-6.jpg",
-    tags: "breakcore ambient",
-    label: { name: "Geometric Lullaby", catalogNumber: "GEO-012" },
-    ratings: [6.8, 7.7, 9.2],
-    tracks: [
-      { title: "Love Is a Mighty Big Word", length: "2:18" },
-      { title: "Newlove", length: "5:59" },
-      { title: "Yandere Complex", length: "4:10" },
-      { title: "Ecifircas", length: "5:47" },
-      { title: "Lexapro Delirium", length: "7:15" },
-      { title: "This Fleeting Feeling", length: "3:31" },
-      { title: "Swinging in His Cell", length: "5:22" },
-      { title: "Mr. Kill Myself", length: "7:51" },
-      { title: "Down the Drain", length: "8:08" },
-      { title: "Slowdeath", length: "8:12" }
-    ]
-  },
-  {
-    id: 4,
-    album: "The World Is Fvcked",
-    artist: "Sewerslvt",
-    year: 2020,
-    genre: "джангл",
-    limited: false,
-    note: "Сім треків джанглу, ембієнту та експериментальної електроніки.",
-    img: "images/card-7.jpg",
-    tags: "jungle ambient drum-n-bass",
-    label: { name: "Wave Racers Collective", catalogNumber: "WRCV-003" },
-    ratings: [6.5, 7.3, 9.4],
-    tracks: [
-      { title: "A Thousand Lonely", length: "2:18" },
-      { title: "Make-Me-Sad", length: "6:15" },
-      { title: "Psychosis", length: "3:49" },
-      { title: "Something of Value Less Than That", length: "4:36" },
-      { title: "Ruined Snowy Day", length: "4:19" },
-      { title: "I Really Like You Pt2", length: "7:03" },
-      { title: "Jvnko Still Loves You", length: "6:59" }
-    ]
-  },
-  {
-    id: 5,
-    album: "Man Bites Dog",
-    artist: "Femtanyl",
-    year: 2026,
-    genre: "габбер",
-    limited: false,
-    note: "Десять треків 2026 року: брейккор, габбер і синтпанк на вінілі та CD.",
-    img: "images/card-17.jpg",
-    tags: "breakcore gabber synthpunk",
-    label: { name: "Entitii Records", catalogNumber: "FEMT-850004" },
-    ratings: [6.8, 7.4, 9.6],
-    tracks: [
-      { title: "Body The Pistol", length: "2:38" },
-      { title: "Video Nasty", length: "3:02" },
-      { title: "Sick Of It", length: "3:10" },
-      { title: "Helltarget", length: "3:41" },
-      { title: "City", length: "2:52" },
-      { title: "Head Up", length: "3:25" },
-      { title: "My Head Hurts", length: "2:46" },
-      { title: "Shows You The Way To The Hiway", length: "2:42" },
-      { title: "Man Bites Dog", length: "3:48" },
-      { title: "Is This It", length: "3:57" }
-    ]
-  },
-  {
-    id: 6,
-    album: "Chaser",
-    artist: "Femtanyl",
-    year: 2024,
-    genre: "футворк",
-    limited: true,
-    note: "Односторонній лімітований EP на біло-червоному сплеттері: шість коротких треків.",
-    img: "images/card-20.jpg",
-    tags: "breakcore footwork gabber",
-    label: { name: "Not On Label (Femtanyl Self-released)", catalogNumber: "FEM-001" },
-    ratings: [7.2, 7.9, 9.1],
-    tracks: [
-      { title: "ACT RIGHT", length: "2:24" },
-      { title: "P3T", length: "1:42" },
-      { title: "PUSH UR T3MPRR", length: "2:28" },
-      { title: "KATAMARI", length: "2:38" },
-      { title: "MURDER EVERY 1 U KNOW! (feat. takihasdied)", length: "2:05" },
-      { title: "GIRL HELL 1999", length: "2:25" }
-    ]
-  },
-  {
-    id: 7,
-    album: "Sewerslvt Presents: Cynthoni, Pt. 1",
-    artist: "Sewerslvt, Cynthoni",
-    year: 2024,
-    genre: "транс",
-    limited: true,
-    note: "Перша частина збірки: транс, джангл і брейккор.",
-    img: "images/card-11.jpg",
-    tags: "trance jungle breakcore",
-    label: { name: "Not On Label (Cynthoni Self-released)", catalogNumber: "CYN-101" },
-    ratings: [7.2, 7.8],
-    tracks: [
-      { title: "Theme Of Cynthoni", length: "3:00" },
-      { title: "Death Of The Endless", length: "5:11" },
-      { title: "Lychee Ice", length: "2:21" },
-      { title: "Flickering In The Gloom (feat. Projekt Melody)", length: "3:48" },
-      { title: "Grinding Of The Teeth", length: "2:42" },
-      { title: "Monolithic Cyan Tsunami", length: "3:43" }
-    ]
-  },
-  {
-    id: 8,
-    album: "Sewerslvt Presents: Cynthoni, Pt. 2",
-    artist: "Sewerslvt, Cynthoni",
-    year: 2024,
-    genre: "транс",
-    limited: true,
-    note: "Друга частина збірки на блакитно-фіолетовому вінілі.",
-    img: "images/card-12.jpg",
-    tags: "trance jungle breakcore",
-    label: { name: "Not On Label (Cynthoni Self-released)", catalogNumber: "CYN-102" },
-    ratings: [7.4, 7.1],
-    tracks: [
-      { title: "Nine Red Squares", length: "3:33" },
-      { title: "Dancing Dots", length: "4:45" },
-      { title: "System Link", length: "2:50" },
-      { title: "Meh.Tuhl.Hedz", length: "6:02" },
-      { title: "Ekstaasi", length: "3:25" },
-      { title: "Oublier", length: "3:46" }
-    ]
-  },
-  {
-    id: 9,
-    album: "Draining Love Story <In The Eyes Of Cynthoni>",
-    artist: "Cynthoni",
-    year: 2025,
-    genre: "брейккор",
-    limited: true,
-    note: "Подвійний вініл Blue & Pink Marbled із бонус-треками: брейккор, джангл і транс.",
-    img: "images/card-14.jpg",
-    tags: "breakcore jungle trance",
-    label: { name: "Not On Label (Cynthoni Self-released)", catalogNumber: "CYN-002" },
-    ratings: [5.0, 7.0, 7.7, 8.7],
-    tracks: [
-      { title: "It Is Happening Again...", length: "2:39" },
-      { title: "Lvstlove", length: "6:06" },
-      { title: "Yandere Era", length: "3:47" },
-      { title: "Swan Dive Into Eternity", length: "6:02" },
-      { title: "Lexapro Doesn't Work", length: "7:23" },
-      { title: "The Feeling Is Gone", length: "4:34" },
-      { title: "Femcels", length: "4:56" },
-      { title: "Cynthoni Of Flames", length: "9:17" },
-      { title: "Even Further Down The Drain", length: "8:02" },
-      { title: "Slowburn", length: "7:07" },
-      { title: "Cynthoni Of Flames (AgonyOST Remix) (Bonus)", length: "6:54" },
-      { title: "Even Further Down The Drain (Into An Ocean Of Stars Mix) (Bonus)", length: "6:06" },
-      { title: "Long Division (Cynthoni Cover) (Bonus)", length: "5:37" }
-    ]
-  }
-];
+// Альбоми каталогу. До ЛР10 масив був записаний прямо в коді, тепер його заповнює init()
+// даними з data.json. Тут let, а не const: значення присвоюється пізніше, після завантаження.
+let albums = [];
+
+// Адреса файла даних варіанта (лежить поруч з index.html).
+const DATA_URL = "data.json";
 
 // ===== Допоміжні функції =====
 
@@ -268,14 +39,23 @@ const formatDuration = (totalSeconds) => {
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
+// У data.json немає поля id, а сам файл змінювати не можна. Тому id — порядковий номер запису
+// у файлі (від 1): він стабільний, поки порядок записів не змінюється. Повертає той самий масив.
+function addIds(list) {
+  list.forEach((item, index) => {
+    item.id = index + 1;
+  });
+  return list;
+}
+
 // ===== Функції обробки =====
 
-// Приймає масив альбомів, повертає масив рядків «1. Назва — виконавець, рік (лейбл, номер)».
+// Приймає масив альбомів, повертає масив рядків «1. Назва — виконавець, рік (лейбл, країна)».
 function numberedList(items) {
   const lines = [];
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
-    lines.push(`${i + 1}. ${item.album} — ${item.artist}, ${item.year} (${item.label.name}, ${item.label.catalogNumber})`);
+    lines.push(`${i + 1}. ${item.album} — ${item.artist}, ${item.year} (${item.label.name}, ${item.label.country})`);
   }
   return lines;
 }
@@ -283,14 +63,18 @@ function numberedList(items) {
 // Приймає альбом, повертає назву узагальненої жанрової групи.
 function categoryOf(item) {
   switch (item.genre) {
-    case "брейккор":
-    case "габбер":
-      return "Жорстка електроніка";
-    case "джангл":
-    case "драм-енд-бейс":
-      return "Брейкбіт";
-    case "ембієнт":
-      return "Атмосферний звук";
+    case "Rock":
+    case "Hard Rock":
+    case "Punk Rock":
+    case "Grunge":
+    case "Nu Metal":
+      return "Рок і метал";
+    case "Pop":
+      return "Поп";
+    case "Electronic":
+      return "Електроніка";
+    case "Hip-Hop":
+      return "Хіп-хоп";
     default:
       return "Інші жанри";
   }
@@ -314,14 +98,15 @@ const describeFound = (heading, found) => [
   found.length === 0 ? "  нічого не знайдено" : found.map((item) => `  • ${item.album}`).join("\n")
 ];
 
-// Приймає альбом, повертає загальну тривалість усіх його треків у секундах.
+// Приймає альбом, повертає загальну тривалість усіх його треків у секундах (у даних цього поля немає — воно обчислюване).
 // Початкове значення 0: без нього накопичувачем став би перший трек-об'єкт, і сума перетворилася б на рядок "[object Object]…".
 const albumSeconds = (item) => item.tracks.reduce((sum, track) => sum + toSeconds(track.length), 0);
 
-// Приймає альбом, повертає середню оцінку слухачів числом.
-const averageRating = (item) => item.ratings.reduce((sum, rating) => sum + rating, 0) / item.ratings.length;
+// Приймає альбом, повертає середню оцінку слухачів (шкала 1–5) або 0, якщо оцінок немає.
+const averageRating = (item) =>
+  item.ratings.length === 0 ? 0 : item.ratings.reduce((sum, rating) => sum + rating, 0) / item.ratings.length;
 
-// Приймає альбом, повертає його найдовший трек (об'єкт { title, length }).
+// Приймає альбом, повертає його найдовший трек (об'єкт { title, length }) або undefined, якщо треків немає.
 const longestTrackOf = (item) =>
   item.tracks.reduce((best, track) => (toSeconds(track.length) > toSeconds(best.length) ? track : best), item.tracks[0]);
 
@@ -366,8 +151,8 @@ const searchByText = (items, query) => {
 // Приймає масив альбомів, назву числового поля рядком і n, повертає n альбомів із найбільшим значенням цього поля.
 const topBy = (items, field, n = 3) => [...items].sort((a, b) => b[field] - a[field]).slice(0, n);
 
-// Приймає альбом і одразу розбирає потрібні поля, повертає короткий рядок «назва (рік), каталожний номер».
-const cardLine = ({ album, year, label: { catalogNumber } }) => `${album} (${year}), ${catalogNumber}`;
+// Приймає альбом і одразу розбирає потрібні поля, повертає короткий рядок «назва (рік), лейбл, країна».
+const cardLine = ({ album, year, label: { name, country } }) => `${album} (${year}), ${name}, ${country}`;
 
 // Приймає масив альбомів, повертає об'єкт «назва жанрової групи → кількість альбомів у ній».
 const countByCategory = (items) =>
@@ -399,16 +184,161 @@ const validate = (items) => {
   return problems;
 };
 
-// ===== ЛР9: функції інтерфейсу =====
+// Виводить у секцію «Демонстрація роботи» результати функцій ЛР8.
+// Викликається з init() лише після завантаження: до того масив albums порожній.
+function renderDemo() {
+  const stats = statsForAlbums(albums);
+  const problems = validate(albums);
+
+  show("out-count", `Альбомів у каталозі: ${albums.length}`);
+  show("out-numbered", numberedList(albums));
+  show("out-categories", albums.map((item) => `${item.album} → ${categoryOf(item)}`));
+  show("out-filter", [
+    ...describeFound("Жанр «Pop»", filterByGenre(albums, "Pop")),
+    ...describeFound("Жанр «Country»", filterByGenre(albums, "Country")),
+    ...describeFound("Видані з 2000 року", filterByYearFrom(albums, 2000))
+  ]);
+  show("out-sorted", [
+    "За роком:",
+    sortByYear(albums).map((item) => `  ${item.year} — ${item.album}`).join("\n"),
+    "За назвою:",
+    sortByTitle(albums).map((item) => `  ${item.album}`).join("\n"),
+    "Вихідний порядок (масив не змінено):",
+    albums.map((item) => `  ${item.id}. ${item.album}`).join("\n")
+  ]);
+  show("out-stats", [
+    `Альбомів: ${stats.count}`,
+    `Загальна тривалість: ${formatDuration(stats.total)}`,
+    `Середня тривалість альбому: ${stats.average} хв`,
+    `Найдовший альбом: ${stats.max.album} (${formatDuration(albumSeconds(stats.max))})`,
+    `Найдовший трек добірки: ${longestTrackOf(stats.longestTrackAlbum).title} — ${stats.longestTrackAlbum.album} (${longestTrackOf(stats.longestTrackAlbum).length})`,
+    `Найвища середня оцінка: ${stats.topRated.album} (${averageRating(stats.topRated).toFixed(2)} з 5)`,
+    `Різних жанрів: ${stats.categories}`,
+    "Середня оцінка кожного альбому:",
+    albums.map((item) => `  ${item.album}: ${averageRating(item).toFixed(2)} (оцінок: ${item.ratings.length})`).join("\n")
+  ]);
+
+  show("out-search", ["love", "BEAT", "vaporwave"].map((query) => describeFound(`Запит «${query}»`, searchByText(albums, query)).join("\n")));
+  show("out-top", [
+    "Топ-3 за роком:",
+    topBy(albums, "year").map((item) => `  ${item.year} — ${item.album}`).join("\n"),
+    "Топ-2 за роком:",
+    topBy(albums, "year", 2).map((item) => `  ${item.year} — ${item.album}`).join("\n")
+  ]);
+  show("out-lines", albums.map(cardLine));
+  show("out-groups", Object.entries(countByCategory(albums)).map((entry) => `${entry[0]}: ${entry[1]}`));
+  show("out-validate", problems.length === 0 ? "Помилок не знайдено" : problems);
+}
+
+// ===== ЛР10: сховище (localStorage) =====
+// Сховище приймає лише рядки, тому масиви й об'єкти записуються через JSON.stringify,
+// а читаються через JSON.parse у try/catch: вміст могли зіпсувати вручну в DevTools або інший скрипт.
+// Тут лежать лише favorites, theme і ключі бонусів (filters, albums-cache) — нічого чутливого.
+
+// Повертає масив id обраних альбомів; порожній, якщо ключа ще немає або вміст зіпсовано.
+function loadFavorites() {
+  const raw = localStorage.getItem("favorites");
+  if (!raw) return []; // ключа ще немає
+  try {
+    const list = JSON.parse(raw);
+    return Array.isArray(list) ? list : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+// Записує масив id обраних альбомів.
+function saveFavorites(list) {
+  localStorage.setItem("favorites", JSON.stringify(list));
+}
+
+// Бонус: повертає збережений стан фільтрів { query, genre, sort, onlyFavorites } або null.
+function loadFilters() {
+  const raw = localStorage.getItem("filters");
+  if (!raw) return null;
+  try {
+    const filters = JSON.parse(raw);
+    return typeof filters === "object" && filters !== null ? filters : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+// Бонус: повертає кеш даних { savedAt, data } або null, якщо кешу немає чи він зіпсований.
+function loadCache() {
+  const raw = localStorage.getItem("albums-cache");
+  if (!raw) return null;
+  try {
+    const cache = JSON.parse(raw);
+    if (cache === null || !Array.isArray(cache.data) || cache.data.length === 0 || typeof cache.savedAt !== "number") {
+      return null;
+    }
+    return cache;
+  } catch (error) {
+    return null;
+  }
+}
+
+// Бонус: зберігає копію даних разом із часом збереження.
+function saveCache(data) {
+  localStorage.setItem("albums-cache", JSON.stringify({ savedAt: Date.now(), data: data }));
+}
+
+// ===== ЛР10: завантаження даних =====
+
+// Завантажує data.json і повертає масив альбомів.
+// fetch відхиляє проміс лише тоді, коли відповіді немає зовсім (немає мережі). Відповідь 404 чи 500
+// для нього — успіх, тож catch її не побачить. Тому response.ok перевіряємо самі і кидаємо помилку
+// з кодом: інакше код спробував би розібрати сторінку «404 Not Found» як JSON і впав би з
+// незрозумілою помилкою розбору замість зрозумілого «HTTP 404».
+async function loadData() {
+  const response = await fetch(DATA_URL);
+
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+  }
+
+  const data = await response.json();
+
+  if (!Array.isArray(data) || data.length === 0) {
+    throw new Error("Файл даних порожній або має неправильну структуру");
+  }
+
+  return data;
+}
+
+// Бонус: та сама функція на ланцюжку then/catch. Не викликається — лежить для порівняння в README.
+// Помилку ловить той, хто викличе: loadDataWithThen().then(...).catch(showLoadError).
+function loadDataWithThen() {
+  return fetch(DATA_URL)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error("Файл даних порожній або має неправильну структуру");
+      }
+      return data;
+    });
+}
+
+// ===== Функції інтерфейсу =====
 
 // Елементи сторінки. На сторінках, де якогось елемента немає, змінна дорівнює null.
 const cardsBox = document.getElementById("cards");
 const searchInput = document.getElementById("q");
 const genreSelect = document.getElementById("filter");
+const onlyFavoritesBox = document.getElementById("only-fav");
 const emptyBox = document.getElementById("empty");
 const countBox = document.getElementById("count");
 const sortBox = document.getElementById("sort");
 const resetButton = document.getElementById("reset");
+const loader = document.querySelector(".loader");
+const loadErrorBox = document.getElementById("load-error");
+const cacheNote = document.getElementById("cache-note");
 const dlg = document.getElementById("details");
 const orderForm = document.getElementById("order-form");
 const receiptBox = document.getElementById("receipt");
@@ -416,9 +346,12 @@ const burger = document.getElementById("burger");
 const menu = document.getElementById("menu");
 const themeButton = document.getElementById("theme");
 const toast = document.getElementById("toast");
+const artistSelect = document.getElementById("artist");
+const artistInfo = document.getElementById("artist-info");
 
-// Поточний порядок сортування (бонус ЛР9). Пошук і жанр читаються прямо з полів.
+// Стан каталогу: порядок сортування і масив id обраних альбомів.
 let sortOrder = "default";
+let favorites = loadFavorites();
 
 // Кладе текст у елемент і виділяє в ньому перший збіг із needle тегом <mark>.
 // Рядок ріжеться через slice на три частини, а append робить із рядків текстові вузли,
@@ -434,38 +367,24 @@ function highlightInto(element, text, needle) {
   element.append(text.slice(0, position), mark, text.slice(position + needle.length));
 }
 
-// Будує плашку виконавця (одного або кількох, як у статичних картках ЛР5).
-function artistTags(artist) {
-  const tags = [];
-  for (const name of artist.split(", ")) {
-    const tag = document.createElement("span");
-    tag.className = "artist-tag artist-tag--" + name.toLowerCase();
-    tag.textContent = name;
-    tags.push(tag);
-  }
-  if (tags.length === 1) return tags[0];
-  const group = document.createElement("span");
-  group.className = "artist-tag-group";
-  group.append(...tags);
-  return group;
-}
-
-// Будує одну картку альбому з тими самими класами, що були в статичній розмітці.
+// Будує одну картку альбому з тими самими класами, що були в статичній розмітці ЛР5–ЛР7.
 function createCard(item, needle) {
   const card = document.createElement("article");
   card.className = "card";
   card.dataset.id = item.id;
-  card.dataset.genres = item.tags;
 
-  // Бейдж залежить від даних: лімітовані видання отримують клас-модифікатор.
+  // Бейдж залежить від даних: альбоми із середньою оцінкою від 4,75 отримують клас-модифікатор «хіт».
+  const rating = averageRating(item);
+  const isHit = rating >= 4.75;
   const badge = document.createElement("span");
-  badge.className = item.limited ? "card__badge card__badge--limited" : "card__badge";
-  badge.textContent = item.limited ? "Лімітоване" : "Стандартне";
+  badge.className = isHit ? "card__badge card__badge--hot" : "card__badge";
+  badge.textContent = `${isHit ? "Хіт · " : ""}★ ${rating.toFixed(1)}`;
 
+  // Обкладинок у даних немає, тому картинка — заглушка, стабільна для кожного id.
   const img = document.createElement("img");
   img.className = "card__img";
-  img.src = item.img;
-  img.alt = `Обкладинка: ${item.album} — ${item.artist}`;
+  img.src = "https://picsum.photos/seed/vinyl-" + item.id + "/600/400";
+  img.alt = `Фото-заглушка до альбому ${item.album} — ${item.artist}`;
   img.loading = "lazy";
 
   const body = document.createElement("div");
@@ -477,21 +396,19 @@ function createCard(item, needle) {
 
   const excerpt = document.createElement("p");
   excerpt.className = "card__excerpt";
-  excerpt.textContent = item.note;
+  excerpt.textContent = `Треків: ${item.tracks.length} · Тривалість: ${formatDuration(albumSeconds(item))}`;
+
+  const artist = document.createElement("span");
+  artist.className = "artist-tag";
+  highlightInto(artist, item.artist, needle);
 
   const meta = document.createElement("p");
   meta.className = "card__meta";
-  meta.append(
-    artistTags(item.artist),
-    document.createElement("br"),
-    `Жанр: ${item.genre}`,
-    document.createElement("br"),
-    `Рік: ${item.year}`
-  );
+  meta.append(artist, document.createElement("br"), `Жанр: ${item.genre}`, document.createElement("br"), `Рік: ${item.year}`);
 
-  const code = document.createElement("p");
-  code.className = "card__id";
-  code.textContent = `Артикул: ${item.label.catalogNumber}`;
+  const label = document.createElement("p");
+  label.className = "card__id";
+  label.textContent = `Лейбл: ${item.label.name} (${item.label.country})`;
 
   const actions = document.createElement("div");
   actions.className = "card__actions";
@@ -501,21 +418,29 @@ function createCard(item, needle) {
   order.href = "form.html";
   order.textContent = "Замовити";
 
-  // Справжня кнопка: фокусується з клавіатури, Enter і Space її натискають,
-  // а клік по ній спливає до того самого обробника на контейнері.
+  // Справжня кнопка: фокусується з клавіатури, а клік по ній спливає до обробника на контейнері.
   const more = document.createElement("button");
   more.type = "button";
   more.className = "card__quick";
   more.textContent = "Детальніше";
 
-  actions.append(order, more);
-  body.append(title, excerpt, meta, code, actions);
+  const isFavorite = favorites.includes(item.id);
+  const fav = document.createElement("button");
+  fav.className = "fav";
+  fav.type = "button";
+  fav.dataset.id = item.id;
+  fav.textContent = isFavorite ? "❤️" : "🤍";
+  fav.setAttribute("aria-pressed", String(isFavorite));
+  fav.setAttribute("aria-label", "Додати до обраного");
+
+  actions.append(order, more, fav);
+  body.append(title, excerpt, meta, label, actions);
   card.append(badge, img, body);
   return card;
 }
 
 // Малює картки з масиву. needle — рядок пошуку для підсвітки.
-// Картки спершу збираються у DocumentFragment, а в документ потрапляють однією вставкою (бонус ЛР9);
+// Картки спершу збираються у DocumentFragment, а в документ потрапляють однією вставкою;
 // з useFragment = false кожна картка вставляється окремо — так можна порівняти швидкість.
 function renderCards(list, needle = "", useFragment = true) {
   cardsBox.replaceChildren();
@@ -528,7 +453,7 @@ function renderCards(list, needle = "", useFragment = true) {
   }
 }
 
-// Повертає копію списку в обраному порядку; "default" лишає порядок масиву.
+// Повертає копію списку в обраному порядку; "default" лишає порядок файла даних.
 function sortList(items, order) {
   switch (order) {
     case "title":
@@ -542,46 +467,253 @@ function sortList(items, order) {
   }
 }
 
-// Лічильники для бонусу «debounce»: скільки разів спрацювала подія input і скільки разів реально виконався пошук.
-let inputEvents = 0;
-let searchRuns = 0;
+// Будує опції списку жанрів із даних: унікальні значення поля genre за абеткою.
+// Так список ніколи не розійдеться з файлом даних. Обраний жанр зберігається, якщо він ще є.
+function fillGenreOptions() {
+  const current = genreSelect.value;
+  const genres = albums.map((item) => item.genre);
+  const unique = genres.filter((genre, index) => genres.indexOf(genre) === index).sort((a, b) => a.localeCompare(b, "uk"));
 
-// Збирає пошук, жанр і сортування разом і перемальовує список.
+  const all = document.createElement("option");
+  all.value = "all";
+  all.textContent = "усі";
+  genreSelect.replaceChildren(all);
+  for (const genre of unique) {
+    const option = document.createElement("option");
+    option.value = genre;
+    option.textContent = genre;
+    genreSelect.append(option);
+  }
+  genreSelect.value = unique.includes(current) ? current : "all";
+}
+
+// Робить активною кнопку сортування з указаним data-sort.
+function setSortButton(order) {
+  sortOrder = order;
+  for (const button of sortBox.querySelectorAll("button[data-sort]")) {
+    const active = button.dataset.sort === order;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  }
+}
+
+// Збирає пошук, жанр, «тільки обране» і сортування разом і перемальовує список.
+// Наприкінці запам'ятовує стан фільтрів (бонус).
 function applyFilters() {
-  searchRuns++;
   const needle = searchInput.value.trim().toLowerCase();
   const genre = genreSelect.value;
   const byGenre = genre === "all" ? albums : filterByGenre(albums, genre);
   const found = byGenre.filter(
-    (item) => item.album.toLowerCase().includes(needle) || item.artist.toLowerCase().includes(needle)
+    (item) =>
+      (item.album.toLowerCase().includes(needle) || item.artist.toLowerCase().includes(needle)) &&
+      (!onlyFavoritesBox.checked || favorites.includes(item.id))
   );
   const result = sortList(found, sortOrder);
 
   renderCards(result, needle);
   emptyBox.hidden = result.length > 0;
-  emptyBox.textContent = `Нічого не знайдено за запитом «${searchInput.value.trim()}». Спробуйте інший запит.`;
-  countBox.textContent = `Знайдено: ${result.length} із ${albums.length}`;
+  emptyBox.textContent = `Нічого не знайдено за запитом «${searchInput.value.trim()}». Спробуйте інший запит або скиньте фільтри.`;
+  countBox.textContent = `Показано ${result.length} із ${albums.length}`;
+
+  localStorage.setItem(
+    "filters",
+    JSON.stringify({ query: searchInput.value, genre: genre, sort: sortOrder, onlyFavorites: onlyFavoritesBox.checked })
+  );
 }
 
-// Заповнює модалку даними альбому і відкриває її.
-function openDetails(item) {
-  document.getElementById("d-title").textContent = `${item.artist} — ${item.album}`;
-  document.getElementById("d-line1").textContent = `Жанр: ${item.genre} · Рік: ${item.year} · ${item.limited ? "лімітоване" : "стандартне"} видання`;
-  document.getElementById("d-line2").textContent = `Лейбл: ${item.label.name} · Артикул: ${item.label.catalogNumber}`;
-  document.getElementById("d-line3").textContent =
-    `Треків: ${item.tracks.length} · Тривалість: ${formatDuration(albumSeconds(item))} · Середня оцінка: ${averageRating(item).toFixed(1)} з 10`;
+// Бонус: ставить елементи керування у збережений стан. Викликається лише після завантаження,
+// бо опцій жанрів до того ще немає, і збережений жанр нікуди було б обрати.
+function restoreFilters() {
+  const saved = loadFilters();
+  if (saved === null) return;
+  searchInput.value = typeof saved.query === "string" ? saved.query : "";
+  // Значення зі сховища могли змінити вручну, тож беремо лише ті, що справді є серед варіантів.
+  const genreValues = [...genreSelect.options].map((option) => option.value);
+  genreSelect.value = genreValues.includes(saved.genre) ? saved.genre : "all";
+  onlyFavoritesBox.checked = saved.onlyFavorites === true;
+  const sortValues = [...sortBox.querySelectorAll("button[data-sort]")].map((button) => button.dataset.sort);
+  setSortButton(sortValues.includes(saved.sort) ? saved.sort : "default");
+}
 
-  const list = document.getElementById("d-tracks");
-  list.replaceChildren();
-  for (const track of item.tracks) {
-    const li = document.createElement("li");
-    const length = document.createElement("span");
-    length.className = "track-duration";
-    length.textContent = track.length;
-    li.append(track.title + " ", length);
-    list.append(li);
+// Додає альбом до обраного або прибирає з нього, зберігає список і перемальовує картки.
+function toggleFavorite(id) {
+  if (favorites.includes(id)) {
+    favorites = favorites.filter((favoriteId) => favoriteId !== id);
+    showToast("Прибрано з обраного");
+  } else {
+    favorites.push(id);
+    showToast("Додано до обраного");
   }
+  saveFavorites(favorites);
+  applyFilters();
+  // Після перемальовування кнопка — новий елемент, тож повертаємо на неї фокус для клавіатури.
+  cardsBox.querySelector(`.fav[data-id="${id}"]`)?.focus();
+}
+
+// Приймає масив пар [підпис, значення], повертає список означень <dl>.
+function definitionList(pairs) {
+  const list = document.createElement("dl");
+  list.className = "details-list";
+  for (const [term, value] of pairs) {
+    const dt = document.createElement("dt");
+    dt.textContent = term;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    list.append(dt, dd);
+  }
+  return list;
+}
+
+// Повертає заголовок секції модалки.
+function sectionHeading(text) {
+  const heading = document.createElement("h3");
+  heading.textContent = text;
+  return heading;
+}
+
+// Повертає абзац для порожнього масиву, щоб замість дірки людина бачила пояснення.
+function emptyNote(text) {
+  const note = document.createElement("p");
+  note.className = "modal__meta";
+  note.textContent = text;
+  return note;
+}
+
+// Підписи для ключів вкладеного об'єкта label; невідомий ключ виводиться як є.
+const LABEL_FIELDS = { name: "Назва", country: "Країна" };
+
+// Заповнює модалку всіма даними альбому і відкриває її.
+// Кожен контейнер спершу очищається, інакше дані попереднього альбому змішалися б із новими.
+function openDetails(item) {
+  const main = document.getElementById("d-main");
+  const object = document.getElementById("d-object");
+  const list = document.getElementById("d-list");
+  const table = document.getElementById("d-table");
+  main.replaceChildren();
+  object.replaceChildren();
+  list.replaceChildren();
+  table.replaceChildren();
+
+  document.getElementById("d-title").textContent = `${item.artist} — ${item.album}`;
+
+  // Прості й обчислювані поля.
+  const longest = longestTrackOf(item);
+  main.append(
+    definitionList([
+      ["Виконавець", item.artist],
+      ["Жанр", `${item.genre} (${categoryOf(item)})`],
+      ["Рік", String(item.year)],
+      ["Треків", String(item.tracks.length)],
+      ["Загальна тривалість", formatDuration(albumSeconds(item))],
+      ["Найдовший трек", longest === undefined ? "—" : `${longest.title} (${longest.length})`],
+      ["Середня оцінка", item.ratings.length === 0 ? "ще немає оцінок" : `${averageRating(item).toFixed(2)} з 5`]
+    ])
+  );
+
+  // Вкладений об'єкт: перебір ключів, щоб не загубити поле, якого немає в інших записах.
+  const labelPairs = [];
+  for (const [key, value] of Object.entries(item.label)) {
+    labelPairs.push([LABEL_FIELDS[key] ?? key, String(value)]);
+  }
+  object.append(sectionHeading("Лейбл"), definitionList(labelPairs));
+
+  // Масив чисел: оцінки слухачів списком.
+  list.append(sectionHeading(`Оцінки слухачів (${item.ratings.length})`));
+  if (item.ratings.length === 0) {
+    list.append(emptyNote("Слухачі ще не оцінили цей альбом."));
+  } else {
+    const ratingsList = document.createElement("ul");
+    ratingsList.className = "ratings";
+    item.ratings.forEach((rating, index) => {
+      const li = document.createElement("li");
+      li.textContent = `Оцінка ${index + 1}: ${"★".repeat(rating)}${"☆".repeat(5 - rating)} (${rating} з 5)`;
+      ratingsList.append(li);
+    });
+    list.append(ratingsList);
+  }
+
+  // Масив об'єктів: трекліст таблицею. Широку таблицю на телефоні прокручує обгортка .table-wrap.
+  table.append(sectionHeading("Трекліст"));
+  if (item.tracks.length === 0) {
+    table.append(emptyNote("Трекліст поки не додано."));
+  } else {
+    const wrap = document.createElement("div");
+    wrap.className = "table-wrap";
+    const tracksTable = document.createElement("table");
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+    for (const heading of ["№", "Назва", "Тривалість"]) {
+      const th = document.createElement("th");
+      th.scope = "col";
+      th.textContent = heading;
+      headRow.append(th);
+    }
+    thead.append(headRow);
+    const tbody = document.createElement("tbody");
+    item.tracks.forEach((track, index) => {
+      const row = document.createElement("tr");
+      for (const value of [String(index + 1), track.title, track.length]) {
+        const td = document.createElement("td");
+        td.textContent = value;
+        row.append(td);
+      }
+      tbody.append(row);
+    });
+    tracksTable.append(thead, tbody);
+    wrap.append(tracksTable);
+    table.append(wrap);
+  }
+
   dlg.showModal();
+}
+
+// Показує людині, що завантаження не вдалося, і що з цим робити.
+// Якщо на сторінці вже є дані з кешу, повідомлення каже, що показано збережену копію.
+function showLoadError(error, fromCache = false) {
+  loadErrorBox.hidden = false;
+  loadErrorBox.textContent =
+    (fromCache
+      ? "Не вдалося оновити каталог, тому показано збережену копію. "
+      : "Не вдалося завантажити каталог. ") +
+    "Перевірте з'єднання з інтернетом і оновіть сторінку. Технічні подробиці: " + error.message;
+}
+
+// Показує каталог із поточного масиву albums: опції жанрів, збережені фільтри, картки й демо-блок.
+function showCatalog() {
+  fillGenreOptions();
+  restoreFilters();
+  applyFilters();
+  renderDemo();
+}
+
+// Запуск каталогу: дані з кешу (якщо є) показуються одразу, свіжі завантажуються з data.json.
+async function initCatalog() {
+  const cached = loadCache();
+  if (cached !== null) {
+    albums = addIds(cached.data);
+    showCatalog();
+    cacheNote.hidden = false;
+    cacheNote.textContent = `Показано дані з кешу від ${new Date(cached.savedAt).toLocaleString("uk-UA")}. Оновлюємо…`;
+  } else {
+    loader.hidden = false; // спінер потрібен лише тоді, коли показати поки нічого
+  }
+
+  try {
+    const data = await loadData();
+    saveCache(data);
+    albums = addIds(data);
+    showCatalog();
+    cacheNote.hidden = true;
+  } catch (error) {
+    showLoadError(error, cached !== null);
+    if (cached !== null) {
+      cacheNote.textContent = `Показано дані з кешу від ${new Date(cached.savedAt).toLocaleString("uk-UA")}.`;
+    }
+  } finally {
+    // Ховаємо тут, а не в кінці try: після помилки виконання стрибає одразу в catch,
+    // рядок у кінці try не виконався б, і спінер крутився б вічно поруч із повідомленням про помилку.
+    loader.hidden = true;
+  }
 }
 
 // Тост: один таймер на всі виклики.
@@ -687,25 +819,94 @@ function renderReceipt() {
   receiptBox.hidden = false;
 }
 
-// Бонус ЛР9: замір рендеру. Викликається вручну з консолі: benchmarkRender(2000).
-// Будує count карток двома способами — по одній у документ і через DocumentFragment — і повертає каталог.
+// Бонус: замір рендеру. Викликається вручну з консолі: benchmarkRender(2000).
+// Будує count карток двома способами і повертає час кожного в мілісекундах, потім повертає каталог.
 function benchmarkRender(count) {
   const many = [];
   for (let i = 0; i < count; i++) {
     many.push(albums[i % albums.length]);
   }
-  console.time("render: по одній картці");
+  const start = performance.now();
   renderCards(many, "", false);
   cardsBox.offsetHeight; // змушує браузер одразу перерахувати розкладку, інакше він відклав би її за межі заміру
-  console.timeEnd("render: по одній картці");
-  console.time("render: DocumentFragment");
+  const middle = performance.now();
   renderCards(many, "", true);
   cardsBox.offsetHeight;
-  console.timeEnd("render: DocumentFragment");
+  const end = performance.now();
   applyFilters();
+  return { oneByOne: Math.round(middle - start), fragment: Math.round(end - middle) };
 }
 
-// ===== Виведення на сторінку і обробники подій =====
+// ----- Бонус: сторінка «Статистика» з публічним API MusicBrainz (працює без ключа) -----
+
+// Повертає перший знайдений запис виконавця з MusicBrainz.
+async function loadArtistInfo(name) {
+  const url = "https://musicbrainz.org/ws/2/artist/?fmt=json&limit=1&query=artist:" + encodeURIComponent(`"${name}"`);
+  const response = await fetch(url);
+  // MusicBrainz дозволяє приблизно один запит на секунду і на частіші відповідає 503.
+  if (response.status === 503) {
+    throw new Error("HTTP 503: сервер просить робити запити рідше, зачекайте кілька секунд");
+  }
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+  }
+  const data = await response.json();
+  if (!Array.isArray(data.artists) || data.artists.length === 0) {
+    throw new Error("виконавця не знайдено");
+  }
+  return data.artists[0];
+}
+
+// Показує на сторінці статистики 6 полів відповіді API для обраного виконавця.
+async function showArtist(name) {
+  loader.hidden = false;
+  loadErrorBox.hidden = true;
+  artistInfo.replaceChildren();
+  try {
+    const artist = await loadArtistInfo(name);
+    const lifeSpan = artist["life-span"] ?? {};
+    const tags = Array.isArray(artist.tags) ? artist.tags.slice(0, 3).map((tag) => tag.name).join(", ") : "";
+    artistInfo.append(
+      sectionHeading(artist.name),
+      definitionList([
+        ["Тип", artist.type ?? "невідомо"],
+        ["Країна", artist.country ?? "невідомо"],
+        ["Місто чи регіон", artist["begin-area"]?.name ?? artist.area?.name ?? "невідомо"],
+        ["Початок діяльності", lifeSpan.begin ?? "невідомо"],
+        ["Діяльність завершено", lifeSpan.ended === true ? `так${lifeSpan.end ? ", " + lifeSpan.end : ""}` : "ні"],
+        ["Теги", tags === "" ? "немає" : tags]
+      ])
+    );
+  } catch (error) {
+    loadErrorBox.hidden = false;
+    loadErrorBox.textContent =
+      "Не вдалося отримати дані з MusicBrainz. Перевірте з'єднання й спробуйте ще раз. Технічні подробиці: " + error.message;
+  } finally {
+    loader.hidden = true;
+  }
+}
+
+// Запуск сторінки статистики: виконавці беруться з data.json, далі по одному запиту до API.
+async function initStats() {
+  loader.hidden = false;
+  try {
+    albums = addIds(await loadData());
+    const artists = albums.map((item) => item.artist);
+    for (const name of artists.filter((artist, index) => artists.indexOf(artist) === index)) {
+      const option = document.createElement("option");
+      option.value = name;
+      option.textContent = name;
+      artistSelect.append(option);
+    }
+    await showArtist(artistSelect.value);
+  } catch (error) {
+    showLoadError(error);
+  } finally {
+    loader.hidden = true;
+  }
+}
+
+// ===== Запуск і обробники подій =====
 
 // --- Шапка на всіх сторінках: меню і тема ---
 
@@ -720,106 +921,64 @@ document.addEventListener("click", (event) => {
   if (!event.target.closest("#menu, #burger")) setMenu(false);
 });
 
-applyTheme(isDark());
-themeButton.addEventListener("click", () => applyTheme(!isDark()));
+// Спершу сховище, потім система: збережений вибір — це рішення людини, і воно має перемагати
+// системну схему; системна потрібна лише тоді, коли людина ще нічого не обирала.
+const savedTheme = localStorage.getItem("theme"); // "dark" | "light" | null
+if (savedTheme === "dark" || savedTheme === "light") {
+  applyTheme(savedTheme === "dark");
+} else {
+  applyTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+}
+themeButton.addEventListener("click", () => {
+  const next = !isDark();
+  applyTheme(next);
+  localStorage.setItem("theme", next ? "dark" : "light");
+});
 
 // --- Каталог ---
 
 if (cardsBox !== null) {
-  // Демонстрація ЛР8: ті самі функції, тепер для дев'яти записів.
-  const breakcore = filterByGenre(albums, "брейккор");
-  const missingGenre = filterByGenre(albums, "кантрі");
-  const recent = filterByYearFrom(albums, 2024);
-
-  const byYear = sortByYear(albums);
-  const byTitle = sortByTitle(albums);
-
-  const stats = statsForAlbums(albums);
-
-  const searches = ["love", "KATAMARI", "vaporwave"];
-  const newest = topBy(albums, "year");
-  const problems = validate(albums);
-
-  show("out-count", `Альбомів у каталозі: ${albums.length}`);
-  show("out-numbered", numberedList(albums));
-  show("out-categories", albums.map((item) => `${item.album} → ${categoryOf(item)}`));
-  show("out-filter", [
-    ...describeFound("Жанр «брейккор»", breakcore),
-    ...describeFound("Жанр «кантрі»", missingGenre),
-    ...describeFound("Видані з 2024 року", recent)
-  ]);
-  show("out-sorted", [
-    "За роком:",
-    byYear.map((item) => `  ${item.year} — ${item.album}`).join("\n"),
-    "За назвою:",
-    byTitle.map((item) => `  ${item.album}`).join("\n"),
-    "Вихідний порядок (масив не змінено):",
-    albums.map((item) => `  ${item.id}. ${item.album}`).join("\n")
-  ]);
-  show("out-stats", [
-    `Альбомів: ${stats.count}`,
-    `Загальна тривалість: ${formatDuration(stats.total)}`,
-    `Середня тривалість альбому: ${stats.average} хв`,
-    `Найдовший альбом: ${stats.max.album} (${formatDuration(albumSeconds(stats.max))})`,
-    `Найдовший трек добірки: ${longestTrackOf(stats.longestTrackAlbum).title} — ${stats.longestTrackAlbum.album} (${longestTrackOf(stats.longestTrackAlbum).length})`,
-    `Найвища середня оцінка: ${stats.topRated.album} (${averageRating(stats.topRated).toFixed(1)} з 10)`,
-    `Різних жанрів: ${stats.categories}`,
-    "Середня оцінка кожного альбому:",
-    albums.map((item) => `  ${item.album}: ${averageRating(item).toFixed(1)} (джерел: ${item.ratings.length})`).join("\n")
-  ]);
-
-  show("out-search", searches.map((query) => describeFound(`Запит «${query}»`, searchByText(albums, query)).join("\n")));
-  show("out-top", [
-    "Топ-3 за роком:",
-    newest.map((item) => `  ${item.year} — ${item.album}`).join("\n"),
-    "Топ-2 за роком:",
-    topBy(albums, "year", 2).map((item) => `  ${item.year} — ${item.album}`).join("\n")
-  ]);
-  show("out-lines", albums.map(cardLine));
-  show("out-groups", Object.entries(countByCategory(albums)).map((entry) => `${entry[0]}: ${entry[1]}`));
-  show("out-validate", problems.length === 0 ? "Помилок не знайдено" : problems);
-
-  // Картки каталогу.
-  applyFilters();
+  initCatalog();
 
   // Пошук слухає input, а не change: change спрацьовує лише після виходу з поля чи Enter,
   // а input — на кожен введений символ, тож список оновлюється під час набирання.
-  // Debounce (бонус): пошук запускається лише через 300 мс після останнього натискання.
+  // Debounce: пошук запускається лише через 300 мс після останнього натискання.
   let searchTimer;
   searchInput.addEventListener("input", () => {
-    inputEvents++;
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
-      applyFilters();
-      console.log(`Подій input: ${inputEvents}, запусків пошуку: ${searchRuns}`);
-    }, 300);
+    searchTimer = setTimeout(applyFilters, 300);
   });
   genreSelect.addEventListener("change", applyFilters);
+  onlyFavoritesBox.addEventListener("change", applyFilters);
 
-  // Сортування (бонус): один обробник на групі кнопок, порядок береться з data-sort.
+  // Сортування: один обробник на групі кнопок, порядок береться з data-sort.
   sortBox.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-sort]");
     if (!button) return;
-    sortOrder = button.dataset.sort;
-    for (const other of sortBox.querySelectorAll("button[data-sort]")) {
-      const active = other === button;
-      other.classList.toggle("active", active);
-      other.setAttribute("aria-pressed", String(active));
-    }
+    setSortButton(button.dataset.sort);
     applyFilters();
   });
 
+  // Скидання чистить і поля, і збережений стан фільтрів.
   resetButton.addEventListener("click", () => {
     searchInput.value = "";
     genreSelect.value = "all";
-    sortBox.querySelector('button[data-sort="default"]').click();
-    showToast("Фільтр скинуто");
+    onlyFavoritesBox.checked = false;
+    setSortButton("default");
+    applyFilters();
+    localStorage.removeItem("filters");
+    showToast("Фільтри скинуто");
   });
 
   // Делегування: один слухач на контейнері .cards. Клік по будь-якому елементу картки
   // спливає до контейнера, а він сам не перемальовується, тож слухач працює і для карток,
-  // які renderCards створила пізніше, після кожного пошуку чи сортування.
+  // які renderCards створила пізніше, після завантаження, пошуку чи сортування.
   cardsBox.addEventListener("click", (event) => {
+    const fav = event.target.closest(".fav");
+    if (fav) {
+      toggleFavorite(Number(fav.dataset.id));
+      return; // сердечко не відкриває модалку
+    }
     if (event.target.closest("a")) return; // «Замовити» — звичайне посилання на форму
     const card = event.target.closest(".card");
     if (!card) return;
@@ -829,6 +988,13 @@ if (cardsBox !== null) {
   });
 
   document.getElementById("d-close").addEventListener("click", () => dlg.close());
+}
+
+// --- Статистика ---
+
+if (artistInfo !== null) {
+  initStats();
+  artistSelect.addEventListener("change", () => showArtist(artistSelect.value));
 }
 
 // --- Форма замовлення ---

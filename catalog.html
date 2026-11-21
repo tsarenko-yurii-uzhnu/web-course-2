@@ -24,6 +24,7 @@
                 <li><a href="catalog.html" class="current" aria-current="page">Каталог</a></li>
                 <li><a href="about.html">Про проєкт</a></li>
                 <li><a href="form.html">Замовлення</a></li>
+                <li><a href="stats.html">Статистика</a></li>
             </ul>
         </nav>
         <button type="button" id="theme" class="theme-toggle" aria-pressed="false">🌙 Темна тема</button>
@@ -192,7 +193,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- ЛР9: пошук, жанр і сортування; картки малює renderCards() з масиву albums у js/app.js -->
+                <!-- ЛР10: повідомлення про помилку завантаження data.json і про дані з кешу -->
+                <p id="load-error" class="load-error" role="alert" hidden></p>
+                <p id="cache-note" class="cache-note" role="status" hidden></p>
+                <!-- Пошук, жанр, «тільки обране» і сортування; картки малює renderCards() з даних data.json (js/app.js) -->
                 <div class="controls">
                     <div class="controls__field">
                         <label for="q">Пошук</label>
@@ -200,15 +204,9 @@
                     </div>
                     <div class="controls__field">
                         <label for="filter">Жанр</label>
+                        <!-- Опції жанрів будує fillGenreOptions() з даних -->
                         <select id="filter">
                             <option value="all">усі</option>
-                            <option value="брейккор">брейккор</option>
-                            <option value="габбер">габбер</option>
-                            <option value="джангл">джангл</option>
-                            <option value="драм-енд-бейс">драм-енд-бейс</option>
-                            <option value="ембієнт">ембієнт</option>
-                            <option value="транс">транс</option>
-                            <option value="футворк">футворк</option>
                         </select>
                     </div>
                     <div class="controls__sort" id="sort" role="group" aria-label="Сортування">
@@ -217,7 +215,11 @@
                         <button type="button" data-sort="year" aria-pressed="false">за роком</button>
                         <button type="button" data-sort="rating" aria-pressed="false">за оцінкою</button>
                     </div>
-                    <button type="button" id="reset">Скинути</button>
+                    <div class="controls__check">
+                        <input type="checkbox" id="only-fav">
+                        <label for="only-fav">Тільки обране</label>
+                    </div>
+                    <button type="button" id="reset">Скинути фільтри</button>
                     <p id="count" class="controls__count" aria-live="polite"></p>
                 </div>
                 <p id="empty" class="empty" hidden>Нічого не знайдено. Спробуйте інший запит.</p>
@@ -279,15 +281,15 @@
                 </div>
             </section>
 
-            <!-- ЛР9: одне модальне вікно на весь каталог. Порожні поля заповнює js/app.js
+            <!-- Одне модальне вікно на весь каталог. Порожні контейнери заповнює js/app.js
                  даними картки, по якій клацнули (делегування); Esc закриває вікно без коду -->
             <dialog id="details" class="modal" aria-labelledby="d-title">
                 <div class="modal__body">
                     <h2 id="d-title"></h2>
-                    <p id="d-line1" class="modal__meta"></p>
-                    <p id="d-line2" class="modal__meta"></p>
-                    <p id="d-line3" class="modal__meta"></p>
-                    <ol id="d-tracks" class="tracklist"></ol>
+                    <div id="d-main"></div>     <!-- прості й обчислювані поля -->
+                    <div id="d-object"></div>   <!-- вкладений об'єкт label -->
+                    <div id="d-list"></div>     <!-- масив оцінок -->
+                    <div id="d-table"></div>    <!-- масив треків таблицею -->
                     <button id="d-close" type="button">Закрити</button>
                 </div>
             </dialog>
@@ -796,20 +798,6 @@
 
         <!-- Зона side (grid-area: side): зворотний зв'язок -->
         <aside class="layout__aside">
-            <!-- Фільтр за жанром без JavaScript: вибрана радіокнопка через :has() ховає картки з іншими жанрами (data-genres) -->
-            <section class="genre-filter">
-                <h2>Фільтр за жанром</h2>
-                <ul>
-                    <li><input type="radio" name="genre" id="genre-all" value="all" checked><label for="genre-all">Усі жанри</label></li>
-                    <li><input type="radio" name="genre" id="genre-breakcore" value="breakcore"><label for="genre-breakcore">Breakcore</label></li>
-                    <li><input type="radio" name="genre" id="genre-gabber" value="gabber"><label for="genre-gabber">Gabber</label></li>
-                    <li><input type="radio" name="genre" id="genre-ambient" value="ambient"><label for="genre-ambient">Ambient</label></li>
-                    <li><input type="radio" name="genre" id="genre-jungle" value="jungle"><label for="genre-jungle">Jungle</label></li>
-                    <li><input type="radio" name="genre" id="genre-trance" value="trance"><label for="genre-trance">Trance</label></li>
-                    <li><input type="radio" name="genre" id="genre-drum-n-bass" value="drum-n-bass"><label for="genre-drum-n-bass">Drum n Bass</label></li>
-                </ul>
-            </section>
-
             <section>
                 <h2>Зворотний зв'язок</h2>
                 <p>Маєте запитання щодо релізів, стану вінілу або пропозиції щодо співпраці?

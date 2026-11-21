@@ -2082,27 +2082,8 @@ body > header nav {
   }
 }
 
-/* --- Фільтр за жанром в aside (без JavaScript): радіокнопка в aside і картки
-   в main — нащадки одного .layout, тож :has() на ньому вмикає потрібне правило --- */
-.genre-filter ul {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.genre-filter li {
-  margin: 0;
-}
-
-.layout:has(#genre-breakcore:checked) .card:not([data-genres~="breakcore"]) { display: none; }
-.layout:has(#genre-gabber:checked) .card:not([data-genres~="gabber"]) { display: none; }
-.layout:has(#genre-ambient:checked) .card:not([data-genres~="ambient"]) { display: none; }
-.layout:has(#genre-jungle:checked) .card:not([data-genres~="jungle"]) { display: none; }
-.layout:has(#genre-trance:checked) .card:not([data-genres~="trance"]) { display: none; }
-.layout:has(#genre-drum-n-bass:checked) .card:not([data-genres~="drum-n-bass"]) { display: none; }
+/* Фільтр за жанром в aside без JavaScript (ЛР7) прибрано в ЛР10: його замінив фільтр
+   у панелі над каталогом, жанри якого будуються з data.json */
 
 /* ==========================================================================
    21. Світіння при наведенні (значення — у змінній --glow-accent;
@@ -2220,8 +2201,8 @@ body > header nav a:hover {
   overflow-wrap: anywhere;
 }
 
-/* Лімітоване видання: бейдж-«пігулка» без заливки, лише з рамкою акценту */
-.card__badge--limited {
+/* Хіт (середня оцінка від 4,75): бейдж-«пігулка» без заливки, лише з рамкою акценту */
+.card__badge--hot {
   background-color: var(--color-surface);
   color: var(--color-accent);
   border: 1px solid var(--color-accent);
@@ -2296,7 +2277,97 @@ input[type="checkbox"].invalid {
 }
 
 /* ==========================================================================
-   24. Зменшення руху: користувачам із prefers-reduced-motion переходи й
+   24. ЛР10: помилка завантаження, кеш, обране, деталізація в модалці, статистика
+   ========================================================================== */
+
+/* Повідомлення про помилку завантаження: помітне тло й контрастний текст з палітри */
+.load-error {
+  padding: var(--space-md);
+  border: 1px solid var(--color-danger);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  background-color: var(--color-danger-bg);
+  color: var(--color-text);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cache-note {
+  margin: 0 0 var(--space);
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.controls__check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Кнопка-сердечко: квадратна, прозора, обране підсвічене рамкою акценту */
+.fav {
+  margin-left: auto;
+  padding: var(--space-xs) var(--space-sm);
+  background-color: transparent;
+  border-color: var(--color-border);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.fav[aria-pressed="true"] {
+  border-color: var(--color-accent);
+}
+
+/* Модалка ЛР10 показує таблицю треків, тож вона ширша, ніж у ЛР6 */
+.modal {
+  width: min(92%, 40rem);
+}
+
+/* Пари «підпис — значення» у модалці й на сторінці статистики: дві колонки */
+.details-list {
+  display: grid;
+  grid-template-columns: minmax(7rem, max-content) 1fr;
+  gap: var(--space-xs) var(--space);
+  margin: 0;
+}
+
+.details-list dt {
+  font-size: 1rem;
+}
+
+.details-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+#d-main,
+#d-object,
+#d-list,
+#d-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.modal h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ratings {
+  margin: 0;
+  padding-left: var(--space-lg);
+}
+
+.stats__info {
+  margin-top: var(--space);
+}
+
+/* ==========================================================================
+   25. Зменшення руху: користувачам із prefers-reduced-motion переходи й
        анімації скорочуються практично до нуля
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
