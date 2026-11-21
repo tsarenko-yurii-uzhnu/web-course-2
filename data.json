@@ -1,0 +1,163 @@
+[
+    {
+      "album": "Hybrid Theory",
+      "artist": "Linkin Park",
+      "genre": "Nu Metal",
+      "year": 2000,
+      "label": {
+        "name": "Warner Bros.",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "Papercut", "length": "3:05" },
+        { "title": "In the End", "length": "3:36" },
+        { "title": "Crawling", "length": "3:29" }
+      ],
+      "ratings": [5, 4, 5, 5]
+    },
+    {
+      "album": "21",
+      "artist": "Adele",
+      "genre": "Pop",
+      "year": 2011,
+      "label": {
+        "name": "XL Recordings",
+        "country": "UK"
+      },
+      "tracks": [
+        { "title": "Rolling in the Deep", "length": "3:48" },
+        { "title": "Rumour Has It", "length": "3:32" },
+        { "title": "Someone Like You", "length": "4:45" }
+      ],
+      "ratings": [5, 5, 4, 4]
+    },
+    {
+      "album": "Random Access Memories",
+      "artist": "Daft Punk",
+      "genre": "Electronic",
+      "year": 2013,
+      "label": {
+        "name": "Columbia",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "Give Life Back to Music", "length": "4:35" },
+        { "title": "Instant Crush", "length": "5:37" },
+        { "title": "Get Lucky", "length": "6:09" }
+      ],
+      "ratings": [5, 4, 5, 5]
+    },
+    {
+      "album": "Back in Black",
+      "artist": "AC/DC",
+      "genre": "Hard Rock",
+      "year": 1980,
+      "label": {
+        "name": "Atlantic",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "Hells Bells", "length": "5:12" },
+        { "title": "Shoot to Thrill", "length": "5:17" },
+        { "title": "Back in Black", "length": "4:14" }
+      ],
+      "ratings": [5, 5, 4, 5]
+    },
+    {
+      "album": "Nevermind",
+      "artist": "Nirvana",
+      "genre": "Grunge",
+      "year": 1991,
+      "label": {
+        "name": "DGC Records",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "Smells Like Teen Spirit", "length": "5:01" },
+        { "title": "In Bloom", "length": "4:15" },
+        { "title": "Come as You Are", "length": "3:38" }
+      ],
+      "ratings": [5, 4, 4, 5]
+    },
+    {
+      "album": "The Eminem Show",
+      "artist": "Eminem",
+      "genre": "Hip-Hop",
+      "year": 2002,
+      "label": {
+        "name": "Shady Records",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "Cleanin' Out My Closet", "length": "4:58" },
+        { "title": "Without Me", "length": "4:50" },
+        { "title": "Sing for the Moment", "length": "5:40" }
+      ],
+      "ratings": [5, 5, 4, 5]
+    },
+    {
+      "album": "Thriller",
+      "artist": "Michael Jackson",
+      "genre": "Pop",
+      "year": 1982,
+      "label": {
+        "name": "Epic Records",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "Thriller", "length": "5:57" },
+        { "title": "Beat It", "length": "4:18" },
+        { "title": "Billie Jean", "length": "4:54" }
+      ],
+      "ratings": [5, 5, 5, 5]
+    },
+    {
+      "album": "American Idiot",
+      "artist": "Green Day",
+      "genre": "Punk Rock",
+      "year": 2004,
+      "label": {
+        "name": "Reprise Records",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "American Idiot", "length": "2:54" },
+        { "title": "Holiday", "length": "3:52" },
+        { "title": "Wake Me Up When September Ends", "length": "4:45" }
+      ],
+      "ratings": [4, 5, 5, 4]
+    },
+    {
+      "album": "A Night at the Opera",
+      "artist": "Queen",
+      "genre": "Rock",
+      "year": 1975,
+      "label": {
+        "name": "EMI",
+        "country": "UK"
+      },
+      "tracks": [
+        { "title": "Bohemian Rhapsody", "length": "5:55" },
+        { "title": "Love of My Life", "length": "3:38" },
+        { "title": "You're My Best Friend", "length": "2:52" }
+      ],
+      "ratings": [5, 5, 4, 5]
+    },
+    {
+      "album": "Future Nostalgia",
+      "artist": "Dua Lipa",
+      "genre": "Pop",
+      "year": 2020,
+      "label": {
+        "name": "Warner Records",
+        "country": "USA"
+      },
+      "tracks": [
+        { "title": "Don't Start Now", "length": "3:03" },
+        { "title": "Levitating", "length": "3:24" },
+        { "title": "Hallucinate", "length": "3:28" }
+      ],
+      "ratings": [5, 4, 5, 4]
+    }
+  ]
+  
