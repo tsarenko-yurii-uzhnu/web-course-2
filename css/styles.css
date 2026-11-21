@@ -404,6 +404,23 @@ body > header nav a.current:visited {
   color: var(--color-brand);
 }
 
+/* ЛР10: п'ятий пункт «Статистика» не вміщався на планшеті, і шапка ставала трирядковою.
+   Ущільнюємо меню лише на 768–1199px, щоб лого й меню знову стояли в одному рядку */
+@media (min-width: 768px) and (max-width: 1199px) {
+  body > header {
+    column-gap: var(--space);
+  }
+
+  body > header nav .menu {
+    gap: var(--space-xs);
+  }
+
+  body > header nav a {
+    padding: var(--space-sm);
+    font-size: 0.875rem;
+  }
+}
+
 /* Пункт 4.6 методички: letter-spacing рівно в одному правилі з uppercase */
 nav a, th {
   text-transform: uppercase;
