@@ -118,6 +118,8 @@ img, video, iframe {
   --color-chrome: var(--color-brand);       /* фон шапки та рядків thead/tfoot */
   --color-on-chrome: var(--color-bg);       /* текст на шапці та thead/tfoot */
   --color-btn-hover: var(--color-brand);    /* фон кнопок при наведенні */
+  --vinyl: hsl(0, 0%, 7%);                  /* чорний вініл платівки в картці */
+  --vinyl-groove: hsl(0, 0%, 17%);          /* борозни на ній */
   --glow-accent: none;                      /* світіння кнопок і плиток при наведенні */
 }
 
@@ -405,8 +407,8 @@ body > header nav a.current:visited {
 }
 
 /* ЛР10: п'ятий пункт «Статистика» не вміщався на планшеті, і шапка ставала трирядковою.
-   Ущільнюємо меню лише на 768–1199px, щоб лого й меню знову стояли в одному рядку */
-@media (min-width: 768px) and (max-width: 1199px) {
+   Від 768px меню стоїть щільніше, щоб лого й меню були в одному рядку */
+@media (min-width: 768px) {
   body > header {
     column-gap: var(--space);
   }
@@ -1310,7 +1312,10 @@ a[href^="http"]::after {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  transition: transform 250ms ease, opacity 250ms ease;
+  /* Перехід стоїть на базовому правилі, тому картка плавно і піднімається, і повертається.
+     Тінь та кольори теж у списку, інакше вони змінювалися б стрибком. */
+  transition: transform 250ms ease, box-shadow 250ms ease,
+              border-color 250ms ease, background-color 250ms ease;
   /* overflow: hidden потрібен разом із border-radius, щоб кути зображення
      обрізалися по закругленню рамки й не виступали за неї. */
   overflow: hidden;
@@ -1327,6 +1332,47 @@ a[href^="http"]::after {
     transform: translateY(-6px);
     border-color: var(--color-accent);
     box-shadow: var(--shadow-lift);
+  }
+}
+
+/* Вкладений ефект (легенда варіанта): у кутку обкладинки лежить платівка з цією самою
+   обкладинкою замість етикетки. Під час наведення на картку або фокуса всередині неї
+   платівка робить оберт, як на диску програвача, а потім плавно повертається. */
+.card__cover {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.card__disc {
+  position: absolute;
+  right: var(--space-sm);
+  bottom: var(--space-sm);
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    conic-gradient(rgb(255 255 255 / 22%), transparent 12% 38%, rgb(255 255 255 / 22%) 50%, transparent 62% 88%, rgb(255 255 255 / 22%)),
+    repeating-radial-gradient(circle, var(--vinyl) 0 2px, var(--vinyl-groove) 2px 3px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 45%);
+  transition: transform 1200ms ease, box-shadow 250ms ease;
+}
+
+.card__disc img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.cards .card:focus-within .card__disc {
+  transform: rotate(360deg);
+}
+
+@media (hover: hover) {
+  .cards .card:hover .card__disc {
+    transform: rotate(360deg);
   }
 }
 
@@ -1894,12 +1940,15 @@ body:has(#offers:target) .page-nav a[href="#offers"] {
   to { opacity: 1; }
 }
 
+/* both залишає елемент у стані from до початку і в стані to після кінця анімації;
+   без нього вікно на мить блимнуло б готовим до першого кадру або смикнулося б наприкінці.
+   Тло коротше (200ms) за вікно (280ms): сторінка спершу темніє, а вікно її наздоганяє. */
 .modal[open] {
   animation: modal-pop 280ms ease-out both;
 }
 
 .modal[open]::backdrop {
-  animation: backdrop-fade 280ms ease-out both;
+  animation: backdrop-fade 200ms ease-out both;
 }
 
 /* Вміст вікна — flex-колонка: проміжки між блоками дає gap */
@@ -2113,11 +2162,6 @@ button:not(:disabled):hover,
 body > header nav a:hover {
   box-shadow: var(--glow-accent);
 }
-
-.cards .card:hover {
-    border-color: var(--color-accent);
-    box-shadow: var(--shadow-lift);
-  }
 
 /* ==========================================================================
    22. ЛР8: блок «Демонстрація роботи» (вивід js/app.js)
@@ -2395,10 +2439,18 @@ input[type="checkbox"].invalid {
     scroll-behavior: auto !important;
   }
 
+  /* Замість руху лишається безпечний відгук: картка міняє тло, рамку й тінь,
+     а платівка не крутиться, лише отримує обідок кольору акценту */
   .cards .card:hover,
   .cards .card:focus-within {
     transform: none;
-    background-color: var(--color-surface);
+    background-color: var(--color-row-hover);
+  }
+
+  .cards .card:hover .card__disc,
+  .cards .card:focus-within .card__disc {
+    transform: none;
+    box-shadow: 0 0 0 3px var(--color-accent);
   }
 }
 

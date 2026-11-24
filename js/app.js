@@ -387,6 +387,20 @@ function createCard(item, needle) {
   img.alt = `Фото-заглушка до альбому ${item.album} — ${item.artist}`;
   img.loading = "lazy";
 
+  // Платівка в кутку обкладинки: обертається через CSS, коли картка під курсором або у фокусі.
+  const discLabel = document.createElement("img");
+  discLabel.src = img.src;
+  discLabel.alt = "";
+  discLabel.loading = "lazy";
+  const disc = document.createElement("span");
+  disc.className = "card__disc";
+  disc.setAttribute("aria-hidden", "true");
+  disc.append(discLabel);
+
+  const cover = document.createElement("div");
+  cover.className = "card__cover";
+  cover.append(img, disc);
+
   const body = document.createElement("div");
   body.className = "card__body";
 
@@ -435,7 +449,7 @@ function createCard(item, needle) {
 
   actions.append(order, more, fav);
   body.append(title, excerpt, meta, label, actions);
-  card.append(badge, img, body);
+  card.append(badge, cover, body);
   return card;
 }
 
