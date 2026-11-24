@@ -1187,16 +1187,17 @@ a[href^="http"]::after {
 .skeleton-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min-col)), 1fr));
-  gap: var(--gap);
+  gap: var(--space-lg);
   width: 100%;
 }
 
+/* Скелет повторює форму справжньої картки: фото тієї самої висоти на всю ширину,
+   далі назва, рядки опису й кнопка з такими самими відступами */
 .skeleton-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space);
   min-width: 0;
-  padding: var(--space-sm);
+  overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   background-color: var(--color-surface);
@@ -1206,6 +1207,7 @@ a[href^="http"]::after {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  padding: var(--space-md);
 }
 
 .skeleton {
@@ -1224,22 +1226,29 @@ a[href^="http"]::after {
 }
 
 .skeleton--image {
-  aspect-ratio: 1;
-  border-radius: var(--radius);
+  height: var(--card-img-height);
 }
 
 .skeleton--line {
   width: 100%;
-  height: var(--space);
+  height: 1.6rem;         /* висота рядка тексту в картці */
   border-radius: var(--radius);
 }
 
 .skeleton--title {
   width: 78%;
+  height: 4.6rem;         /* назва в картці займає до трьох рядків */
+  border-radius: var(--radius);
 }
 
 .skeleton--short {
   width: 55%;
+}
+
+.skeleton--button {
+  width: 8rem;
+  height: 2.5rem;
+  border-radius: var(--radius);
 }
 
 @keyframes skeleton-shimmer {
@@ -1600,7 +1609,7 @@ a[href^="http"]::after {
   background:
     repeating-radial-gradient(circle at 92% 8%, transparent 0 7px, rgb(0 0 0 / 3%) 7px 8px),
     linear-gradient(160deg, color-mix(in srgb, var(--color-bg) 92%, transparent), color-mix(in srgb, var(--color-surface) 70%, transparent)),
-    url("../images/breakcore-pod-vodochku-vinyl.jpg") center / cover no-repeat,
+    url("../images/breakcore-pod-vodochku-vinyl-1200.jpg") center / cover no-repeat,
     var(--color-surface);
 }
 
@@ -2016,12 +2025,14 @@ body > header nav {
   box-shadow: var(--shadow-lift);
 }
 
-.card--featured .card__img {
+.layout__main .card--featured .card__img {
   height: calc(var(--card-img-height) * 1.5);
 }
 
-/* Контейнерний запит перебудовує широку картку-хіт, не змінюючи сітку каталогу. */
-@container (min-width: 500px) {
+/* Контейнерний запит: картка .card--featured горизонтальна, коли широкий саме її контейнер
+   (.catalog), а не вікно. Тому на одному екрані вона горизонтальна в main і вертикальна
+   в aside. Медіазапит бачить лише ширину вікна, а вона в обох карток однакова. */
+@container (min-width: 420px) {
   .cards .card--featured {
     flex-direction: row;
   }
@@ -2152,12 +2163,12 @@ body > header nav {
   margin: 0;
 }
 
-.layout:has(#genre-breakcore:checked) .card:not([data-genres~="breakcore"]) { display: none; }
-.layout:has(#genre-gabber:checked) .card:not([data-genres~="gabber"]) { display: none; }
-.layout:has(#genre-ambient:checked) .card:not([data-genres~="ambient"]) { display: none; }
-.layout:has(#genre-jungle:checked) .card:not([data-genres~="jungle"]) { display: none; }
-.layout:has(#genre-trance:checked) .card:not([data-genres~="trance"]) { display: none; }
-.layout:has(#genre-drum-n-bass:checked) .card:not([data-genres~="drum-n-bass"]) { display: none; }
+.layout:has(#genre-breakcore:checked) .layout__main .card:not([data-genres~="breakcore"]) { display: none; }
+.layout:has(#genre-gabber:checked) .layout__main .card:not([data-genres~="gabber"]) { display: none; }
+.layout:has(#genre-ambient:checked) .layout__main .card:not([data-genres~="ambient"]) { display: none; }
+.layout:has(#genre-jungle:checked) .layout__main .card:not([data-genres~="jungle"]) { display: none; }
+.layout:has(#genre-trance:checked) .layout__main .card:not([data-genres~="trance"]) { display: none; }
+.layout:has(#genre-drum-n-bass:checked) .layout__main .card:not([data-genres~="drum-n-bass"]) { display: none; }
 
 /* ==========================================================================
    21. Світіння при наведенні (значення — у змінній --glow-accent;
@@ -2199,8 +2210,17 @@ body > header nav a:hover {
 }
 
 @media print {
-  :root {
+  /* Палітра паперу: діє і тоді, коли в системі або кнопкою ввімкнено темну тему,
+     інакше підписи діаграми друкувалися б білим по білому */
+  :root,
+  .dark-theme {
     color-scheme: light !important;
+    --color-bg: #fff !important;
+    --color-surface: #fff !important;
+    --color-text: #000 !important;
+    --color-brand: #000 !important;
+    --color-muted: #000 !important;
+    --color-border: #000 !important;
   }
 
   *,
@@ -2230,6 +2250,17 @@ body > header nav a:hover {
   .loader,
   .spinner,
   .skeleton-grid {
+    display: none !important;
+  }
+
+  /* Розгортаємо всі <details>: на папері їх не натиснеш */
+  details::details-content {
+    content-visibility: visible;
+    block-size: auto;
+  }
+
+  .card__disc,
+  .to-top {
     display: none !important;
   }
 
