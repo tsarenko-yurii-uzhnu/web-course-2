@@ -79,7 +79,7 @@ img, video, iframe {
   /* Нові змінні розмірів (ЛР 5): жодних «магічних чисел» у відступах і сітці */
   --color-on-dark: hsl(0, 0%, 100%);  /* білий текст на темних плашках (теги авторів, SVG-діаграма) */
   --space-xs: 0.25rem;      /* найменший відступ: бейджі, дрібні проміжки */
-  --page-width: 1160px;     /* максимальна ширина вмісту сторінки (макет із двома бічними колонками) */
+  --page-width: 1240px;     /* максимальна ширина вмісту сторінки (макет із двома бічними колонками) */
   /* Бічний відступ шапки й підвалу: вміст вирівнюється по краях макета,
      а фон шапки лишається на всю ширину вікна */
   --page-inset: max(var(--space), calc((100% - var(--page-width)) / 2 + var(--space)));
@@ -89,7 +89,7 @@ img, video, iframe {
   /* Змінні макета (ЛР 6): проміжки й ширини колонок беруться лише звідси */
   --gap: 2rem;          /* проміжок між зонами макета, картками сітки та елементами flex-рядків */
   --min-col: 260px;     /* мінімальна ширина колонки сітки каталогу */
-  --sidebar: 13rem;     /* ширина бічних колонок десктопного макета (nav і side) */
+  --sidebar: clamp(10rem, 16vw, 13rem); /* ширина бічних колонок десктопного макета: на 1024px вужча, щоб карткам лишилося місце */
   --gap-tag: 2px;       /* тонкий проміжок між частинами спільного тега авторів */
   --header-offset: 5rem;   /* висота липкої шапки з запасом: під неї «прилипає» зміст, і до неї скролляться якорі */
 
@@ -272,7 +272,7 @@ body > header {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap);
+  gap: var(--space-sm);   /* на телефоні лого, «Меню» і «Тема» мають стати в один рядок */
   padding: var(--space-sm) var(--page-inset);
   background-color: var(--color-chrome);
   color: var(--color-on-chrome);
@@ -289,63 +289,49 @@ body > header nav {
   background-color: var(--color-chrome);
 }
 
-/* Вміст диктує Flex: пункти меню йдуть у рядок, проміжок дає лише gap.
-   Без старих хаків розкладки та без margin на <li> */
-body > header nav .menu {
+/* База - телефон: меню складене в <details>, а список один на всі ширини.
+   Відкритий список випадає під шапкою (absolute відносно липкої шапки),
+   тому сама шапка не стає вищою. Класи .nav__toggle і .nav__list - як у практичній. */
+.nav__list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  list-style: none;
+  flex-direction: column;
+  gap: var(--space-xs);
   margin: 0;
-  padding: 0;
+  padding: var(--space-sm) var(--space);
+  list-style: none;
+  background-color: var(--color-chrome);
+  box-shadow: var(--shadow-lift);
 }
 
-body > header nav .menu--desktop {
+/* Кнопка меню: 44px - найменша зручна зона натискання пальцем */
+.nav__toggle {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-sm);
+  border: 1px solid var(--color-on-chrome);
+  border-radius: var(--radius);
+  color: var(--color-on-chrome);
+  list-style: none;       /* трикутник замінює значок ☰ у тексті */
+  cursor: pointer;
+}
+
+.nav__toggle::-webkit-details-marker {
   display: none;
 }
 
-body > header .menu-disclosure .menu {
-  flex-direction: column;
-}
-
-body > header .menu-disclosure summary {
-  cursor: pointer;
-  padding: var(--space-sm) var(--space);
-  border-radius: var(--radius);
-  color: var(--color-on-chrome);
-  list-style-position: inside;
-}
-
-body > header .menu-disclosure summary:hover {
+.nav__toggle:hover {
   background-color: var(--color-accent);
   color: var(--color-bg);
 }
 
-body > header .menu-disclosure summary:focus-visible {
-  outline: 2px solid var(--color-accent);
+.nav__toggle:focus-visible {
+  outline: 3px solid var(--color-accent);
   outline-offset: 2px;
-}
-
-body > header .menu-disclosure:not([open]) .menu {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  body > header .menu-disclosure {
-    display: none;
-  }
-
-  body > header nav .menu--desktop {
-    display: flex;
-  }
-
-  body > header nav .menu--desktop {
-    flex-direction: row;
-  }
-
-  body > header .menu-disclosure summary {
-    display: none;
-  }
 }
 
 body > header .logo:link,
@@ -356,11 +342,52 @@ body > header nav a:visited {
   text-decoration: none;
 }
 
-/* Посилання лишаються плитками: блок із власним padding */
+/* Посилання лишаються плитками: на телефоні на всю ширину і не нижчі за 44px */
 body > header nav a {
-  display: block;
-  padding: var(--space-sm) var(--space);
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-sm);
   border-radius: var(--radius);
+}
+
+/* Від планшета кнопка не потрібна, а список стає рядком. Закритий <details> ховає вміст
+   через псевдоелемент ::details-content, тож його показуємо явно, і другий список для
+   широкого екрана не потрібен. Якщо браузер ще не знає ::details-content, правило під
+   @supports не спрацює, і меню далі відкриватиметься кнопкою. */
+@media (min-width: 768px) {
+  @supports selector(::details-content) {
+    .nav__toggle {
+      display: none;
+    }
+
+    .nav details::details-content {
+      content-visibility: visible;
+    }
+
+    .nav details > .nav__list {
+      position: static;
+      flex-direction: row;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+
+  /* На 768-1023px чотири пункти стоять щільніше, щоб шапка лишалась однорядковою */
+  body > header nav a {
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  body > header {
+    gap: var(--gap);
+  }
+
+  body > header nav a {
+    padding: var(--space-sm) var(--space);
+    font-size: 1rem;
+  }
 }
 
 body > header .logo:hover {
@@ -984,10 +1011,11 @@ body > footer p,
   border-radius: var(--radius);
 }
 
-/* Планшет: дві колонки; зміст і підвал розтягнуті на обидві */
+/* Планшет: дві зони, main удвічі ширший за side (2fr 1fr), тож картки не вузькі;
+   зміст і підвал розтягнуті на обидві */
 @media (min-width: 768px) {
   .layout {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     grid-template-areas:
       "nav  nav"
       "main side"
@@ -1001,6 +1029,7 @@ body > footer p,
    бо за замовчуванням колонка розтягується на всю висоту рядка. */
 @media (min-width: 1024px) {
   .layout {
+    gap: var(--space-lg);
     grid-template-columns: var(--sidebar) 1fr var(--sidebar);
     grid-template-areas:
       "nav  main side"
@@ -1128,8 +1157,8 @@ a[href^="http"]::after {
    а шапка (z-index: 10) лишається над усім блоком */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
-  gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min-col)), 1fr));
+  gap: var(--space-lg);
   margin: 0;
   transform: scale(1);
 }
@@ -1229,19 +1258,21 @@ a[href^="http"]::after {
   to { transform: rotate(360deg); }
 }
 
-/* База - телефон: --min-col = 260px, колонка вузька, тож картка одна в ряд.
-   Від планшета main займає лише частину екрана, тому мінімальну ширину колонки
-   зменшено: у планшетній розкладці виходить дві картки, у десктопній — три
-   (макет обмежений --page-width, тож четверта вже не поміщається). */
+/* База - телефон: --min-col = 260px, тож на 360px картка одна в ряд.
+   Далі кількістю колонок керує лише --min-col: на планшеті 13rem дає дві картки,
+   на десктопі 11.25rem - три. Скелет бере ті самі значення, тому його сітка
+   збігається зі справжньою. */
 @media (min-width: 768px) {
-  .cards {
-    --min-col: 8.75rem;
+  .cards,
+  .skeleton-grid {
+    --min-col: 13rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .cards {
-    --min-col: 9rem;
+  .cards,
+  .skeleton-grid {
+    --min-col: 11.25rem;
   }
 }
 
@@ -1328,11 +1359,13 @@ a[href^="http"]::after {
   padding: var(--space-md);
 }
 
-/* Назва — рівно в один рядок; усе, що не вмістилося, замінюють три крапки */
+/* Назва — щонайбільше два рядки: на вузькій картці один рядок обрізав її майже всю.
+   Усе, що не вмістилося, замінюють три крапки. */
 .card__title {
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
   margin: 0;
   font-size: 1.1rem;
   line-height: 1.4;
@@ -1901,16 +1934,12 @@ body:has(dialog[open]) {
 
 /* --- Перемикач теми в шапці: кнопка стоїть праворуч поруч із меню --- */
 body > header nav {
-  margin-left: 0;
-}
-
-@media (min-width: 768px) {
-  body > header nav {
-    margin-left: auto;
-  }
+  margin-left: auto;
 }
 
 .theme-toggle {
+  min-height: 44px;
+  padding-block: 0;
   background-color: transparent;
   color: var(--color-on-chrome);
   border-color: var(--color-on-chrome);
@@ -2141,7 +2170,6 @@ body > header nav a:hover {
   }
 
   body > header nav,
-  .menu-disclosure,
   .theme-toggle,
   .layout__nav,
   .layout__aside,
